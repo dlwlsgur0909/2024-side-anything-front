@@ -3,6 +3,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
+const mode = ref('JOIN');
 
 // 아이디, 비밀번호
 const username = ref('');
@@ -12,6 +13,8 @@ const email = ref('');
 
 const isUsernameUnique = ref(false);
 const isEmailUnique = ref(false);
+
+const authentication = ref('');
 
 // 회원가입
 async function join() {
@@ -29,8 +32,13 @@ async function join() {
   axios
     .post("http://localhost:8080/auth/join", request)
     .then(res => {
-      console.log(res);
+      alert(`${email.value}로 인증번호를 발송했습니다.`)
+      mode.value = 'VERIFY';
     })
+    .catch((e) => {
+      alert(e.response.data.errorMessage);
+    }) 
+
 }
 
 // 회원가입 유효성 검사
@@ -99,12 +107,29 @@ async function duplicateEmailCheck() {
   isEmailUnique.value = response.data;
 }
 
+// 인증
+function verify() {
+
+  const request = {
+    username: username.value,
+    authentication: authentication.value
+  }
+
+  axios
+    .post("http://localhost:8080/auth/verify", request)
+    .then(res => {
+      alert('인증되었습니다');
+    })
+    .catch((e) => {
+      alert(e.response.data.errorMessage);
+    })
+}
 
 </script>
 
 <template>
   <div class="main-container">
-    <div class="join-container">
+    <div class="join-container" v-if="mode === 'JOIN'">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
       </div>
@@ -121,7 +146,14 @@ async function duplicateEmailCheck() {
         <button @click="join()">회원가입</button>
         <button @click="cancel()">취소</button>
       </div>
-  
+    </div>
+    <div class="verify-container" v-if="mode === 'VERIFY'">
+      <div class="authentication-section">
+        <input class="authentication-input-box" type="text" placeholder="인증번호" v-model="authentication">
+      </div>
+      <div class="button-section">
+        <button @click="verify()">인증</button>
+      </div>
     </div>
   </div>
 
@@ -136,7 +168,8 @@ async function duplicateEmailCheck() {
 
 }
 
-.join-container {
+.join-container,
+.verify-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -148,7 +181,8 @@ async function duplicateEmailCheck() {
 .id-section,
 .password-section,
 .password-confirm-section,
-.email-section {
+.email-section,
+.authentication-section {
   display: flex;
   justify-content: center;
 }
@@ -156,7 +190,8 @@ async function duplicateEmailCheck() {
 .id-input-box,
 .password-input-box,
 .password-confirm-input-box,
-.email-input-box {
+.email-input-box,
+.authentication-input-box {
   height: 30px;
   width: 80%;
 }
