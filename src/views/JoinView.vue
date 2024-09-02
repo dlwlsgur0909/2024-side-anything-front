@@ -9,45 +9,16 @@ const username = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 const email = ref('');
-const isUnique = ref(false);
 
-const passedUsername = ref('');
-
-function duplicateCheck() {
-
-  if(!username.value?.trim()) {
-    alert("아이디를 입력하세요");
-    return;
-  }
-
-  const request = {
-    username: username.value
-  };
-
-  axios
-    .post('http://localhost:8080/auth/duplicate', request)
-    .then(res => {
-      if(res.data === true) {
-        alert('사용 가능한 아이디 입니다');
-        isUnique.value = true;
-        passedUsername.value = username.value;
-      }else {
-        alert("이미 사용중인 아이디 입니다");
-        isUnique.value = false;
-        passedUsername.value = '';
-      }
-    })
-}
-
+const isUsernameUnique = ref(false);
+const isEmailUnique = ref(false);
 
 // 회원가입
+async function join() {
 
-function join() {
-
-  if(!validateJoin()) {
+  if(!await validateJoin()) {
     return;
   }
-
 
   const request = {
     username: username.value,
@@ -63,28 +34,41 @@ function join() {
 }
 
 // 회원가입 유효성 검사
-function validateJoin() {
+async function validateJoin() {
 
   if(!username.value?.trim()) {
-    alert('아이디를 입력하세요');
-    isUnique.value = false;
-    passedUsername.value = '';
+    alert("아이디를 입력하세요");
     return false;
-  }else if(!password.value?.trim()) {
+  }else {
+    await duplicateUsernameCheck();
+    if(!isUsernameUnique.value) {
+      alert('이미 사용중인 아이디입니다');
+      return false;
+    }
+  }
+
+  if(!password.value?.trim()) {
     alert('비밀번호를 입력하세요');
     return false;
-  }else if(!passwordConfirm.value?.trim()) {
+  }
+
+  if(!passwordConfirm.value?.trim()) {
     alert('비밀번호 확인을 입력하세요');
     return false;
-  }else if(!email.value?.trim()) {
+  }
+  
+  if(!email.value?.trim()) {
     alert('이메일을 입력하세요');
     return false;
-  }else if(!isUnique.value || username.value !== passedUsername.value) {
-    alert('중복확인을 해주세요');
-    isUnique.value = false;
-    passedUsername.value = '';
-    return false;
-  }else if(password.value !== passwordConfirm.value) {
+  }else {
+    await duplicateEmailCheck()
+    if(!isEmailUnique.value) {
+      alert('이미 사용중인 이메일입니다')
+      return false;
+    }
+  }
+  
+  if(password.value !== passwordConfirm.value) {
     alert('비밀번호가 일치하지 않습니다');
     return false;
   }
@@ -93,6 +77,27 @@ function validateJoin() {
 
 }
 
+// 아이디 중복 검사
+async function duplicateUsernameCheck() {
+
+  const request = {
+    usernameOrEmail: username.value
+  };
+
+  const response = await axios.post('http://localhost:8080/auth/duplicate/username', request)
+  isUsernameUnique.value = response.data;
+}
+
+// 이메일 중복 검사
+async function duplicateEmailCheck() {
+
+  const request = {
+    usernameOrEmail: email.value
+  };
+
+  const response = await axios.post('http://localhost:8080/auth/duplicate/email', request)
+  isEmailUnique.value = response.data;
+}
 
 
 </script>
@@ -113,8 +118,8 @@ function validateJoin() {
         <input class="email-input-box" type="text" placeholder="이메일" v-model="email">
       </div>
       <div class="button-section">
-        <button @click="duplicateCheck()">중복확인</button>
         <button @click="join()">회원가입</button>
+        <button @click="cancel()">취소</button>
       </div>
   
     </div>
