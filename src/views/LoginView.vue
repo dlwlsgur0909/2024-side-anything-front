@@ -2,26 +2,87 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
+import Authentication from '../components/Authentication.vue';
+import { useAuthStore } from '../js/auth.js';
 
 
 const router = useRouter();
 const route = useRoute();
+const auth = useAuthStore();
 
 
 // 아이디, 비밀번호
 const username = ref();
 const password = ref();
 
+// 인증여부
+const isVerified = ref(true);
+
 // 회원가입
-
 function join() {
-
   router.push('/join');
-  console.log(router);
-  console.log(route);
-  
+}
 
+// 로그인
+function login() {
+
+  if(!validateLogin()) {
+    return;
+  }
+
+  const request = {
+    username: username.value,
+    password: password.value
+  }
+
+  auth.login(request,
+    (data) => {
+      auth.setMember(data);
+      router.push('/');
+    },
+    async (error) => {
+      alert(error.response.data.errorMessage);
+      if(error.response.data.errorCode === '403') {
+        await sendEmail();
+        isVerified.value = false;
+      }
+    }
+  )
+}
+
+// 로그인 정보 유효성 검사
+function validateLogin() {
+
+  if(!username.value?.trim()) {
+    alert('아이디를 입력해주세요');
+    return false;
+  }
+
+  if(!password.value?.trim()) {
+    alert('비밀번호를 입력해주세요');
+    return false;
+  }
+
+  return true;
+}
+
+// 인증메일 발송
+async function sendEmail() {
+
+  const request = {
+    usernameOrEmail: username.value,
+  };
+
+  await axios
+    .post("http://localhost:8080/auth/send", request)
+    .then((res) => {
+      alert('인증메일이 발송되었습니다');
+    })
+    .catch(e => {
+      alert(e.response.data.errorMessage);
+      isVerified.value = true;
+    })
 }
 
 
@@ -29,7 +90,7 @@ function join() {
 
 <template>
   <div class="main-container">
-    <div class="login-container">
+    <div class="login-container" v-if="isVerified">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
       </div>
@@ -41,8 +102,12 @@ function join() {
         <button @click="join()">회원가입</button>
         <button>ID/PW 찾기</button>
       </div>
-  
     </div>
+    <Authentication 
+      v-if="!isVerified"
+      :username="username"
+      :password="password"
+    />
   </div>
 
 </template>

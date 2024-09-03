@@ -2,7 +2,8 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
+import Authentication from '../components/Authentication.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -17,13 +18,6 @@ const email = ref('');
 
 const isUsernameUnique = ref(false);
 const isEmailUnique = ref(false);
-
-const duration = ref(3);
-const timer = ref('');
-const isTimeOut = ref(false);
-
-const authentication = ref('');
-const isVerified = ref(false);
 
 // 회원가입
 async function join() {
@@ -43,7 +37,6 @@ async function join() {
     .then(res => {
       alert(`${email.value}로 인증번호를 발송했습니다.`)
       mode.value = 'VERIFY';
-      startTimer();
     })
     .catch((e) => {
       alert(e.response.data.errorMessage);
@@ -117,74 +110,10 @@ async function duplicateEmailCheck() {
   isEmailUnique.value = response.data;
 }
 
-// 인증시간 타이머
-function startTimer() {
 
-  let time = duration.value * 60;
-
-  const intervalTimer = setInterval(() => {
-
-    time--;
-
-    const minute = Math.floor(time / 60);
-    const second = ('0' + time % 60).slice(-2);
-    
-    timer.value = `${minute}분 ${second}초`;
-
-
-    if(isVerified.value === true) {
-      isTimeOut.value = false;
-      clearInterval(intervalTimer);
-    }
-
-    if(time === 0) {
-      alert('인증시간이 만료되었습니다. 다시 시도해주세요');
-      isTimeOut.value = true;
-      clearInterval(intervalTimer);
-    }
-
-  }, 1000);
-
-}
-
-// 인증메일 재발송
-function resendEmail() {
-
-  const request = {
-    usernameOrEmail: username.value,
-  }
-
-  axios
-    .post("http://localhost:8080/auth/resend", request)
-    .then(res => {
-      alert('메일이 재발송 되었습니다');
-      isTimeOut.value = false;
-      startTimer();
-    })
-    .catch(e => {
-      alert(e.response.data.errorMessage);
-    })
-
-}
-
-// 인증
-function verify() {
-
-  const request = {
-    username: username.value,
-    authentication: authentication.value
-  }
-
-  axios
-    .post("http://localhost:8080/auth/verify", request)
-    .then(res => {
-      alert('인증되었습니다');
-      isVerified.value = true;
-      router.push('/login');
-    })
-    .catch((e) => {
-      alert(e.response.data.errorMessage);
-    })
+// 취소 -> 로그인 페이지
+function cancel() {
+  router.push('/login');
 }
 
 </script>
@@ -209,16 +138,8 @@ function verify() {
         <button @click="cancel()">취소</button>
       </div>
     </div>
-    <div class="verify-container" v-if="mode === 'VERIFY'">
-      <div class="authentication-section">
-        <input class="authentication-input-box" type="text" placeholder="인증번호" v-model="authentication">
-        {{ timer }}
-      </div>
-      <div class="button-section">
-        <button @click="verify()" v-if="isTimeOut === false">인증</button>
-        <button @click="resendEmail()" v-if="isTimeOut === true">재전송</button>
-      </div>
-    </div>
+
+    <Authentication v-if="mode === 'VERIFY'" :username="username" />
   </div>
 
 </template>

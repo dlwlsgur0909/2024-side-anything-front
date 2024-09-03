@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../views/LoginView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '../js/auth.js';
+import LoginView from '../views/LoginView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,19 +11,28 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    },
-    {
       path: '/join',
       name: 'join',
       component: () => import ('../views/JoinView.vue')
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('../views/HomeView.vue')
     }
   ]
+})
+
+const allowedPathList = ['login', 'join']
+
+router.beforeEach((to, from) => {
+  const auth = useAuthStore();
+  const toName = to.name;
+
+  if(!allowedPathList.includes(toName) && !auth.isLogin) {
+    alert('로그인 후 이용해주세요');
+    return {name: 'login'};
+  }
 })
 
 export default router
