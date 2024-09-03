@@ -19,11 +19,16 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/find',
+      name: 'find',
+      component: () => import('../views/FindView.vue')
     }
   ]
 })
 
-const allowedPathList = ['login', 'join']
+const allowedPathList = ['login', 'join', 'find'];
 
 router.beforeEach((to, from) => {
   const auth = useAuthStore();

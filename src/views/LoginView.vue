@@ -100,7 +100,7 @@ async function sendEmail() {
       <div class="button-section">
         <button @click="login()">로그인</button>
         <button @click="join()">회원가입</button>
-        <button>ID/PW 찾기</button>
+        <button @click="router.push('/find')">ID/PW 찾기</button>
       </div>
     </div>
     <Authentication 
