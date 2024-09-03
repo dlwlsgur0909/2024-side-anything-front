@@ -26,6 +26,10 @@ export const useAuthStore = defineStore({
             .catch(e => {
               onReject(e);
             })
+        },
+        logout() {
+            localStorage.removeItem('member');
+            this.setMember(null);
         }
     }
 
