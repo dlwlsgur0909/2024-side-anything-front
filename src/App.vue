@@ -1,10 +1,12 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { useAuthStore } from './js/auth.js';
-
+import globalRouter from './router/globalRouter.js';
 
 const auth = useAuthStore();
+const router = useRouter();
+globalRouter.router = router;
 
 if(auth.member) {
   auth.setMember(auth.member);
