@@ -11,13 +11,23 @@ function logout() {
   router.push('/login');
 }
 
+function myInfo() {
+  router.push({
+    name: 'member',
+    params: {
+      username: auth.member.username
+    },
+  });
+}
 
 </script>
 
 <template>
   <div class="home">
     <h1>This is Home page</h1>
+    <button @click="myInfo()">내 정보</button>
     <button @click="logout()">로그아웃</button>
+    <button @click="admin()">관리자</button>
   </div>
 </template>
 

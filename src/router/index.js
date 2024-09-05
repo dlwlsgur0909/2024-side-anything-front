@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
 import LoginView from '../views/LoginView.vue';
+import { onMounted } from 'vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/find',
       name: 'find',
       component: () => import('../views/FindView.vue')
+    },
+    {
+      path: '/member/:username',
+      name: 'member',
+      component: () => import('../views/MemberView.vue'),
+      props: true
     }
   ]
 })
