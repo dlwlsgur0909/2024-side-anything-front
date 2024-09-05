@@ -22,13 +22,13 @@ const customAxios = () => {
             return response;
         },
         async (error) => {
-
-            if(error.response.data?.errorMessage === 'UNAUTHORIZED') {
+            console.log(error);
+            if(error?.status === 401) {
                 if(await auth.reissue()) {
                     return await instance(error.config);
                 }else {
-                    
                     globalRouter.router.push('/login');
+                    return Promise.reject(error);
                 }
             }else {
                 return Promise.reject(error);

@@ -8,8 +8,10 @@ const auth = useAuthStore();
 const router = useRouter();
 globalRouter.router = router;
 
-if(auth.member) {
-  auth.setMember(auth.member);
+if(!!auth.member) {
+  auth.reissue();
+}else {
+  auth.setMember(null);
 }
 
 </script>

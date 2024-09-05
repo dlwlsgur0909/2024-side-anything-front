@@ -5,7 +5,7 @@ export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
         member: JSON.parse(localStorage.getItem('member')),
-        isLogin: false,
+        isLogin: !!JSON.parse(localStorage.getItem('member'))
     }),
     actions: {
         setMember(member) {
@@ -51,7 +51,7 @@ export const useAuthStore = defineStore({
 						});
 
 					return result;
-        }
+        },
     }
 
 })
