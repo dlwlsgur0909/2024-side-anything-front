@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import globalRouter from '../router/globalRouter.js';
 
 export const useAuthStore = defineStore({
     id: 'auth',
@@ -48,6 +49,7 @@ export const useAuthStore = defineStore({
 						.catch(e => {
 							this.logout();
 							alert('로그인이 만료되었습니다. 다시 로그인 해주세요.');
+							globalRouter.router.push('/login');
 						});
 
 					return result;
