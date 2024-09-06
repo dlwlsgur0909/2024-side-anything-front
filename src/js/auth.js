@@ -12,47 +12,47 @@ export const useAuthStore = defineStore({
         setMember(member) {
             this.member = member;
             if(member === null) {
-							this.isLogin = false;
+				this.isLogin = false;
             }else {
-							this.isLogin = true;
-							localStorage.setItem('member', JSON.stringify(member));
+				this.isLogin = true;
+				localStorage.setItem('member', JSON.stringify(member));
             }
         },
         login(data, onSuccess, onReject) {
             axios
-							.post("http://localhost:8080/auth/login", data)
-							.then(res => {
-								onSuccess(res.data);
-							})
-							.catch(e => {
-								onReject(e);
-							})
+				.post("http://localhost:8080/auth/login", data)
+				.then(res => {
+					onSuccess(res.data);
+				})
+				.catch(e => {
+					onReject(e);
+				})
         },
         logout() {
-					this.setMember(null);
-					localStorage.removeItem('member');
+			this.setMember(null);
+			localStorage.removeItem('member');
         },
         async reissue() {
 
-					const request = {
-							refreshToken: this.member.refreshToken
-					};
+			const request = {
+					refreshToken: this.member.refreshToken
+			};
 
-					let result = false;
-					
-					await axios
-						.post("http://localhost:8080/auth/reissue", request)
-						.then(res => {
-							this.setMember(res.data);
-							result = true;
-						})
-						.catch(e => {
-							this.logout();
-							alert('로그인이 만료되었습니다. 다시 로그인 해주세요.');
-							globalRouter.router.push('/login');
-						});
+			let result = false;
+			
+			await axios
+				.post("http://localhost:8080/auth/reissue", request)
+				.then(res => {
+					this.setMember(res.data);
+					result = true;
+				})
+				.catch(e => {
+					this.logout();
+					alert(e.response.data.errorMessage);
+					globalRouter.router.push('/login');
+				});
 
-					return result;
+			return result;
         },
     }
 
