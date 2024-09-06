@@ -41,7 +41,7 @@ function findUsername() {
   };
 
   axios
-    .post("http://localhost:8080/auth/find/username", request)
+    .post("http://localhost:8090/auth/find/username", request)
     .then(res => {
       alert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`);
     })
@@ -67,7 +67,7 @@ function findPassword() {
   };
 
   axios
-    .post('http://localhost:8080/auth/find/password', request)
+    .post('http://localhost:8090/auth/find/password', request)
     .then(res =>{
       alert(`${email.value}로 초기화된 비밀번호를 전송했습니다`);
     })

@@ -75,7 +75,7 @@ async function sendEmail() {
   };
 
   await axios
-    .post("http://localhost:8080/auth/send", request)
+    .post("http://localhost:8090/auth/send", request)
     .then((res) => {
       alert('인증메일이 발송되었습니다');
     })

@@ -33,7 +33,7 @@ async function join() {
   }
 
   axios
-    .post("http://localhost:8080/auth/join", request)
+    .post("http://localhost:8090/auth/join", request)
     .then(res => {
       alert(`${email.value}로 인증번호를 발송했습니다.`)
       mode.value = 'VERIFY';
@@ -95,7 +95,7 @@ async function duplicateUsernameCheck() {
     usernameOrEmail: username.value
   };
 
-  const response = await axios.post('http://localhost:8080/auth/duplicate/username', request)
+  const response = await axios.post('http://localhost:8090/auth/duplicate/username', request)
   isUsernameUnique.value = response.data;
 }
 
@@ -106,7 +106,7 @@ async function duplicateEmailCheck() {
     usernameOrEmail: email.value
   };
 
-  const response = await axios.post('http://localhost:8080/auth/duplicate/email', request)
+  const response = await axios.post('http://localhost:8090/auth/duplicate/email', request)
   isEmailUnique.value = response.data;
 }
 
