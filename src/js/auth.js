@@ -31,6 +31,7 @@ export const useAuthStore = defineStore({
         logout() {
 			this.setMember(null);
 			localStorage.removeItem('member');
+			globalRouter.router.push('/login');
         },
         async reissue() {
 
