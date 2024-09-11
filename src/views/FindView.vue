@@ -70,6 +70,7 @@ function findPassword() {
     .post('http://localhost:8090/auth/find/password', request)
     .then(res =>{
       alert(`${email.value}로 초기화된 비밀번호를 전송했습니다`);
+      router.push('/login');
     })
     .catch(e =>{
       alert(e.response.data.errorMessage);
@@ -92,8 +93,8 @@ function findPassword() {
     </div>
 
     <div class="button-section">
-      <button @click="changeMode('ID')">ID 찾기</button>
-      <button @click="changeMode('PASSWORD')">비밀번호 찾기</button>
+      <button @click="changeMode('ID')" v-if="mode === 'PASSWORD'">ID 찾기</button>
+      <button @click="changeMode('PASSWORD')" v-if="mode === 'ID'">비밀번호 찾기</button>
       <button @click="router.push('/login')">취소</button>
     </div>
   </div>
