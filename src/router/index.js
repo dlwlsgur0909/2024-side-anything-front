@@ -37,6 +37,12 @@ const router = createRouter({
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
     }
+    ,
+    {
+      path: '/:pathMatch(.*)',
+      name: 'notFound',
+      component: () => import('../views/NotFound.vue'),
+    }
   ]
 })
 
@@ -50,6 +56,7 @@ router.beforeEach((to, from) => {
     alert('로그인 후 이용해주세요');
     return {name: 'login'};
   }
+
 })
 
 export default router
