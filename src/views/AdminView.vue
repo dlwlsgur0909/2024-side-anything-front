@@ -19,8 +19,7 @@ function adminDetail() {
     username.value = res.data.username;
   })
   .catch(e => {
-    alert(e.response.data.errorMessage);
-    router.back();
+    router.push('/');
   })
 
 }
@@ -33,9 +32,6 @@ function findMemberList() {
   .get('http://localhost:8090/admin/members')
   .then(res => {
     memberList.value = res.data.memberList;
-  })
-  .catch(e => {
-    console.log(e);
   })
 
 }

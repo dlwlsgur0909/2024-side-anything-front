@@ -53,7 +53,13 @@ router.beforeEach((to, from) => {
   const toName = to.name;
 
   if(!allowedNames.includes(toName) && !auth.isLogin) {
-    alert('로그인 후 이용해주세요');
+
+    if(auth.reissued) {
+      auth.reissued = false;
+    }else {
+      alert('로그인 후 이용해주세요'); 
+    }
+
     return {name: 'login'};
   }
 

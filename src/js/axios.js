@@ -25,9 +25,13 @@ const customAxios = () => {
             if(error?.status === 401) {
                 if(await auth.reissue()) {
                     return await instance(error.config);
+                }else {
+                    return Promise.reject();
                 }
+
             }else {
-                return Promise.reject(error);
+                alert(error.response.data.errorMessage);
+                return Promise.reject();
             }
         }
     );

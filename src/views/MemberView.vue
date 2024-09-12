@@ -46,7 +46,7 @@ function memberDetail() {
     createdAt.value = res.data.createdAt;
   })
   .catch(e => {
-    alert(e.response.data.errorMessage);
+    console.log('member detail');
     router.push('/');
   })
   
@@ -86,9 +86,6 @@ function changePassword() {
   .then(res => {
     alert('비밀번호가 변경되었습니다');
     changeMode('DETAIL');
-  })
-  .catch(e => {
-    alert(e.response.data.errorMessage);
   })
 
 }

@@ -6,7 +6,8 @@ export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
         member: JSON.parse(localStorage.getItem('member')),
-        isLogin: !!JSON.parse(localStorage.getItem('member'))
+        isLogin: !!JSON.parse(localStorage.getItem('member')),
+		reissued: false,
     }),
     actions: {
         setMember(member) {
@@ -15,6 +16,7 @@ export const useAuthStore = defineStore({
 				this.isLogin = false;
             }else {
 				this.isLogin = true;
+				this.reissued = false;
 				localStorage.setItem('member', JSON.stringify(member));
             }
         },
@@ -49,6 +51,7 @@ export const useAuthStore = defineStore({
 				})
 				.catch(e => {
 					this.logout();
+					this.reissued = true;
 					alert(e.response.data.errorMessage);
 					globalRouter.router.push('/login');
 				});
