@@ -41,7 +41,7 @@ function findUsername() {
   };
 
   axios
-    .post("http://localhost:8080/auth/find/username", request)
+    .post("http://localhost:8090/auth/find/username", request)
     .then(res => {
       alert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`);
     })
@@ -67,9 +67,10 @@ function findPassword() {
   };
 
   axios
-    .post('http://localhost:8080/auth/find/password', request)
+    .post('http://localhost:8090/auth/find/password', request)
     .then(res =>{
       alert(`${email.value}로 초기화된 비밀번호를 전송했습니다`);
+      router.push('/login');
     })
     .catch(e =>{
       alert(e.response.data.errorMessage);
@@ -92,8 +93,8 @@ function findPassword() {
     </div>
 
     <div class="button-section">
-      <button @click="changeMode('ID')">ID 찾기</button>
-      <button @click="changeMode('PASSWORD')">비밀번호 찾기</button>
+      <button @click="changeMode('ID')" v-if="mode === 'PASSWORD'">ID 찾기</button>
+      <button @click="changeMode('PASSWORD')" v-if="mode === 'ID'">비밀번호 찾기</button>
       <button @click="router.push('/login')">취소</button>
     </div>
   </div>

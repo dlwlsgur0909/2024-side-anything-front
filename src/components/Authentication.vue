@@ -67,7 +67,7 @@ const request = {
 }
 
 axios
-  .post("http://localhost:8080/auth/send", request)
+  .post("http://localhost:8090/auth/send", request)
   .then(res => {
     alert('메일이 재발송 되었습니다');
     isTimeOut.value = false;
@@ -88,7 +88,7 @@ const request = {
 }
 
 axios
-  .post("http://localhost:8080/auth/verify", request)
+  .post("http://localhost:8090/auth/verify", request)
   .then(res => {
     alert('인증되었습니다');
     isVerified.value = true;
