@@ -85,6 +85,15 @@ async function sendEmail() {
     })
 }
 
+// 소셜 로그인
+
+function naverLogin() {
+
+  console.log('Naver Login Called');
+  window.location.href = 'http://localhost:8090/oauth2/authorization/naver';
+
+}
+
 
 </script>
 
@@ -101,6 +110,7 @@ async function sendEmail() {
         <button @click="login()">로그인</button>
         <button @click="join()">회원가입</button>
         <button @click="router.push('/find')">ID/PW 찾기</button>
+        <button @click="naverLogin()">Naver로 로그인</button>
       </div>
     </div>
     <Authentication 

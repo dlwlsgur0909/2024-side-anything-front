@@ -58,6 +58,27 @@ export const useAuthStore = defineStore({
 
 			return result;
         },
+		async socialLogin() {
+
+			let result = false;
+
+			await axios
+				.get('http://localhost:8090/auth/login-success',
+					{withCredentials: true}
+				)
+				.then(res => {
+					this.setMember(res.data);
+					result = true;
+				})
+				.catch(error => {
+					this.logout();
+					this.reissued = false;
+					alert(e.response.data.errorMessage);
+					globalRouter.router.push('/login');
+				})
+
+			return result;
+		}
     }
 
 })

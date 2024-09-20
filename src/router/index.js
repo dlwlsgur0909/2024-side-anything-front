@@ -36,8 +36,15 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
-    }
-    ,
+    },
+    {
+      path: '/login-success',
+      name: 'loginSuccess', 
+    },
+    {
+      path: '/login-fail',
+      name: 'loginFail',
+    },
     {
       path: '/:pathMatch(.*)',
       name: 'notFound',
@@ -48,9 +55,26 @@ const router = createRouter({
 
 const allowedNames = ['login', 'join', 'find'];
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
+
   const auth = useAuthStore();
   const toName = to.name;
+
+  console.log(to);
+  console.log(toName);
+
+  if(toName === 'loginFail' && to.query?.error === '403') {
+    alert('이미 가입된 이메일입니다.');
+    return {name: 'login'};
+  }
+
+  if(toName === 'loginSuccess') {
+    if(await auth.socialLogin()) {
+      return {name: 'home'};
+    }
+  }
+
+  
 
   if(!allowedNames.includes(toName) && !auth.isLogin) {
 
