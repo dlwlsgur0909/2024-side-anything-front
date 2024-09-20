@@ -6,14 +6,14 @@ import { useRouter, useRoute } from 'vue-router';
 import Authentication from '../components/Authentication.vue';
 
 const router = useRouter();
-const route = useRoute();
 
 const mode = ref('JOIN');
 
-// 아이디, 비밀번호
+// 아이디, 비밀번호, 이름, 이메일
 const username = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
+const name = ref('');
 const email = ref('');
 
 const isUsernameUnique = ref(false);
@@ -29,6 +29,7 @@ async function join() {
   const request = {
     username: username.value,
     password: password.value,
+    name: name.value,
     email: email.value
   }
 
@@ -65,6 +66,11 @@ async function validateJoin() {
 
   if(!passwordConfirm.value?.trim()) {
     alert('비밀번호 확인을 입력하세요');
+    return false;
+  }
+
+  if(!name.value?.trim()) {
+    alert('이름을 입력하세요');
     return false;
   }
   
@@ -130,6 +136,9 @@ function cancel() {
       <div class="password-confirm-section">
         <input class="password-confirm-input-box" type="password" placeholder="비밀번호 확인" v-model="passwordConfirm">
       </div>
+      <div class="name-section">
+        <input class="name-input-box" type="text" placeholder="이름" v-model="name">
+      </div>
       <div class="email-section">
         <input class="email-input-box" type="text" placeholder="이메일" v-model="email">
       </div>
@@ -166,6 +175,7 @@ function cancel() {
 .id-section,
 .password-section,
 .password-confirm-section,
+.name-section,
 .email-section {
   display: flex;
   justify-content: center;
@@ -179,6 +189,7 @@ function cancel() {
 .id-input-box,
 .password-input-box,
 .password-confirm-input-box,
+.name-input-box,
 .email-input-box,
 .authentication-input-box {
   height: 30px;
