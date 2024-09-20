@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
 import LoginView from '../views/LoginView.vue';
-import { onMounted } from 'vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,9 +59,6 @@ router.beforeEach(async (to, from) => {
   const auth = useAuthStore();
   const toName = to.name;
 
-  console.log(to);
-  console.log(toName);
-
   if(toName === 'loginFail' && to.query?.error === '403') {
     alert('이미 가입된 이메일입니다.');
     return {name: 'login'};
@@ -73,8 +69,6 @@ router.beforeEach(async (to, from) => {
       return {name: 'home'};
     }
   }
-
-  
 
   if(!allowedNames.includes(toName) && !auth.isLogin) {
 
