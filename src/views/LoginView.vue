@@ -3,14 +3,13 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
-import Authentication from '../components/Authentication.vue';
 import { useAuthStore } from '../js/auth.js';
+import Authentication from '../components/Authentication.vue';
+import CommonButton from '../components/common/CommonButton.vue';
 
 
 const router = useRouter();
-const route = useRoute();
 const auth = useAuthStore();
-
 
 // 아이디, 비밀번호
 const username = ref();
@@ -95,11 +94,45 @@ function googleLogin() {
   window.location.href = 'http://localhost:8090/oauth2/authorization/google';
 }
 
+// 버튼 설정
+const buttonConfig = {
+
+  login: {
+    label: '로그인',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  join: {
+    label: '회원가입',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  find: {
+    label: 'ID/PW 찾기',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  naverLogin: {
+    label: 'Naver로 로그인',
+    fontColor: 'black',
+    backgroundColor: '#fff',
+    icon: 'naver-logo.png',
+  },
+  googleLogin: {
+    label: 'Google로 로그인',
+    fontColor: 'black',
+    backgroundColor: 'white',
+    icon: 'google-logo.png',
+  },
+
+}
+
 
 </script>
 
 <template>
   <div class="main-container">
+
     <div class="login-container" v-if="isVerified">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
@@ -108,11 +141,38 @@ function googleLogin() {
         <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password">
       </div>
       <div class="button-section">
-        <button @click="login()">로그인</button>
-        <button @click="join()">회원가입</button>
-        <button @click="router.push('/find')">ID/PW 찾기</button>
-        <button @click="naverLogin()">Naver 로그인</button>
-        <button @click="googleLogin()">Google 로그인</button>
+        <CommonButton 
+          @click="login()"
+          :label="buttonConfig.login.label" 
+          :fontColor="buttonConfig.login.fontColor" 
+          :backgroundColor="buttonConfig.login.backgroundColor" 
+        />
+        <CommonButton 
+          @click="join()"
+          :label="buttonConfig.join.label" 
+          :fontColor="buttonConfig.join.fontColor" 
+          :backgroundColor="buttonConfig.join.backgroundColor" 
+        />
+        <CommonButton 
+          @click="router.push('/find')"
+          :label="buttonConfig.find.label" 
+          :fontColor="buttonConfig.find.fontColor" 
+          :backgroundColor="buttonConfig.find.backgroundColor" 
+        />
+        <CommonButton 
+          @click="naverLogin()"
+          :label="buttonConfig.naverLogin.label" 
+          :fontColor="buttonConfig.naverLogin.fontColor" 
+          :backgroundColor="buttonConfig.naverLogin.backgroundColor"
+          :icon="buttonConfig.naverLogin.icon"
+        />
+        <CommonButton 
+          @click="googleLogin()"
+          :label="buttonConfig.googleLogin.label" 
+          :fontColor="buttonConfig.googleLogin.fontColor" 
+          :backgroundColor="buttonConfig.googleLogin.backgroundColor" 
+          :icon="buttonConfig.googleLogin.icon"
+        />
       </div>
     </div>
     <Authentication 
@@ -129,14 +189,13 @@ function googleLogin() {
 .main-container {
   width: 80%;
   padding: 5%;
-  border: 1px solid #333;
-
 }
 
 .login-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
+  width: 100%;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -145,7 +204,7 @@ function googleLogin() {
 .id-section,
 .password-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .id-input-box,
@@ -155,8 +214,10 @@ function googleLogin() {
 
 .button-section {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 10px;
+  /* border: 1px solid red; */
 }
 
 </style>
