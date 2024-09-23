@@ -59,11 +59,18 @@ router.beforeEach(async (to, from) => {
   const auth = useAuthStore();
   const toName = to.name;
 
-  if(toName === 'loginFail' && to.query?.error === '403') {
-    alert('이미 가입된 이메일입니다.');
-    return {name: 'login'};
+  // 소셜 로그인 실패 처리
+  if(toName === 'loginFail') {
+    if(to.query?.error === '403') {
+      alert('이미 가입된 이메일입니다.');
+    }else {
+      alert('소셜 로그인에 실패했습니다.');
+    }
+
+    return {name: 'login'}
   }
 
+  // 소셜 로그인 성공 처리
   if(toName === 'loginSuccess') {
     if(await auth.socialLogin()) {
       return {name: 'home'};
