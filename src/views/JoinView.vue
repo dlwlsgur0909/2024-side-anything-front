@@ -192,11 +192,14 @@ const buttonConfig = {
 .main-container {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
   width: 80%;
+  height: 98vh;
 }
 
 .logo-section {
-  padding-bottom: 50px;
+  padding-top: 110px;
 }
 
 .main-logo {
