@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
 import Authentication from '../components/Authentication.vue';
+import CommonButton from '../components/common/CommonButton.vue';
 
 const router = useRouter();
 
@@ -122,10 +123,31 @@ function cancel() {
   router.push('/login');
 }
 
+// 버튼 설정
+const buttonConfig = {
+
+  join: {
+    label: '회원가입',
+    fontColor: '#fff',
+    backgroundColor: "#524FE1",
+  },
+  cancel: {
+    label: '취소',
+    fontColor: '#fff',
+    backgroundColor: '#E34444',
+  }
+
+}
+
 </script>
 
 <template>
   <div class="main-container">
+
+    <div class="logo-section">
+      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+    </div>
+
     <div class="join-container" v-if="mode === 'JOIN'">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
@@ -143,8 +165,20 @@ function cancel() {
         <input class="email-input-box" type="text" placeholder="이메일" v-model="email">
       </div>
       <div class="button-section">
-        <button @click="join()">회원가입</button>
-        <button @click="cancel()">취소</button>
+        <CommonButton
+          class="join-button"
+          @click="join()" 
+          :label="buttonConfig.join.label" 
+          :fontColor="buttonConfig.join.fontColor"
+          :backgroundColor="buttonConfig.join.backgroundColor"
+        />
+        <CommonButton
+          class="cancel-button"
+          @click="cancel()"
+          :label="buttonConfig.cancel.label"
+          :fontColor="buttonConfig.cancel.fontColor"
+          :backgroundColor="buttonConfig.cancel.backgroundColor"
+        />
       </div>
     </div>
 
@@ -156,17 +190,24 @@ function cancel() {
 <style scoped>
 
 .main-container {
+  display: flex;
+  flex-direction: column;
   width: 80%;
-  padding: 5%;
-  border: 1px solid #333;
+}
 
+.logo-section {
+  padding-bottom: 50px;
+}
+
+.main-logo {
+  width: 100%;
 }
 
 .join-container,
 .verify-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -178,6 +219,7 @@ function cancel() {
 .name-section,
 .email-section {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -193,13 +235,19 @@ function cancel() {
 .email-input-box,
 .authentication-input-box {
   height: 30px;
-  width: 80%;
+  border: 0;
+  border-radius: 10px;
 }
 
 .button-section {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
+}
+
+.join-button, 
+.cancel-button {
+  flex-basis: 45%;
 }
 
 </style>

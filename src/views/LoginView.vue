@@ -193,9 +193,15 @@ const buttonConfig = {
 .main-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 80%;
-  padding: 5%;
+}
+
+.logo-section {
+  padding-bottom: 50px;
+}
+
+.main-logo {
+  width: 100%;
 }
 
 .login-container {
@@ -216,6 +222,8 @@ const buttonConfig = {
 .id-input-box,
 .password-input-box {
   height: 30px;
+  border: 0;
+  border-radius: 10px;
 }
 
 .button-section {
@@ -223,15 +231,6 @@ const buttonConfig = {
   flex-direction: column;
   justify-content: center;
   gap: 10px;
-  /* border: 1px solid red; */
-}
-
-.logo-section {
-  padding-bottom: 50px;
-}
-
-.main-logo {
-  width: 100%;
 }
 
 </style>
