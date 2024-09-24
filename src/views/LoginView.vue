@@ -133,6 +133,10 @@ const buttonConfig = {
 <template>
   <div class="main-container">
 
+    <div class="logo-section">
+      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+    </div>
+
     <div class="login-container" v-if="isVerified">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
@@ -187,6 +191,9 @@ const buttonConfig = {
 <style scoped>
 
 .main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 80%;
   padding: 5%;
 }
@@ -195,7 +202,6 @@ const buttonConfig = {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 100%;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -218,6 +224,14 @@ const buttonConfig = {
   justify-content: center;
   gap: 10px;
   /* border: 1px solid red; */
+}
+
+.logo-section {
+  padding-bottom: 50px;
+}
+
+.main-logo {
+  width: 100%;
 }
 
 </style>
