@@ -1,12 +1,4 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '../../js/auth.js';
-
-const route = useRoute();
-const router = useRouter();
-const auth = useAuthStore();
 
 const props = defineProps({
   label: {
@@ -74,8 +66,8 @@ function getImageUrl() {
 
 .common-button:hover {
   cursor: pointer;
-  font-weight: bold;
   border: 1px solid black;
+  box-shadow: 1px 1px 3px black;
 }
 
 .common-button-logo {
