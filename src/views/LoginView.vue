@@ -224,7 +224,7 @@ const buttonConfig = {
 
 .id-input-box,
 .password-input-box {
-  height: 30px;
+  height: 40px;
   border: 0;
   border-radius: 10px;
 }

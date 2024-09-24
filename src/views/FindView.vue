@@ -192,7 +192,7 @@ const buttonConfig = {
 
 .email-input-box,
 .id-input-box {
-  height: 30px;
+  height: 40px;
   border: 0;
   border-radius: 10px;
 }

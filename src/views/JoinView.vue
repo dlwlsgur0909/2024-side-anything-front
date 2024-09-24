@@ -237,7 +237,7 @@ const buttonConfig = {
 .name-input-box,
 .email-input-box,
 .authentication-input-box {
-  height: 30px;
+  height: 40px;
   border: 0;
   border-radius: 10px;
 }
