@@ -3,10 +3,13 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
+import { useAlertStore } from '../js/alert';
 
-const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+
+const alert = useAlertStore();
+
 
 const props = defineProps({
   username: {
@@ -49,7 +52,7 @@ function startTimer() {
     }
 
     if(time === 0) {
-      alert('인증시간이 만료되었습니다. 다시 시도해주세요');
+      alert.openAlert('인증시간이 만료되었습니다. 다시 시도해주세요');
       isTimeOut.value = true;
       clearInterval(intervalTimer);
     }
@@ -69,12 +72,12 @@ const request = {
 axios
   .post("http://localhost:8090/auth/send", request)
   .then(res => {
-    alert('메일이 재발송 되었습니다');
+    alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
     isTimeOut.value = false;
     startTimer();
   })
   .catch(e => {
-    alert(e.response.data.errorMessage);
+    alert.openAlert(e.response.data.errorMessage);
   })
 
 }
@@ -90,7 +93,7 @@ const request = {
 axios
   .post("http://localhost:8090/auth/verify", request)
   .then(res => {
-    alert('인증되었습니다');
+    alert.openAlert('인증되었습니다', 'authentication-icon.png');
     isVerified.value = true;
 
     if(!!props.password?.trim()) {
@@ -106,7 +109,7 @@ axios
           router.push('/');
         },
         (error) => {
-          alert(error.response.data.errorMessage);
+          alert.openAlert(error.response.data.errorMessage);
           router.go(0);
         }
       );
@@ -116,7 +119,7 @@ axios
 
   })
   .catch((e) => {
-    alert(e.response.data.errorMessage);
+    alert.openAlert(e.response.data.errorMessage);
   })
 }
 
@@ -148,7 +151,7 @@ axios
 .verify-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -157,17 +160,35 @@ axios
 .authentication-section {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .authentication-input-box {
-  height: 30px;
-  width: 80%;
+  height: 40px;
+  width: 70%;
 }
 
 .button-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* justify-content: center; */
   gap: 10px;
+}
+
+.button-section>button {
+  height: 30px;
+  border: 0;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #000;
+  color: #fff;
+}
+
+.button-section>button:hover {
+  cursor: pointer;
+  border: 1px solid black;
+  box-shadow: 1px 1px 3px black;
 }
 
 
