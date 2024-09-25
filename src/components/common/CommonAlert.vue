@@ -79,6 +79,12 @@ function confirm() {
   display: flex;
   justify-content: center;
   align-items: center;
+
+}
+
+.message-section {
+  text-align: center;
+  word-break: keep-all;
 }
 
 .alert-icon {
