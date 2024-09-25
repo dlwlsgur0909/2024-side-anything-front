@@ -15,10 +15,10 @@ const props = defineProps({
 function getImageUrl() {
 
   if(!!props.icon) {
-    return new URL(`/src/assets/icon/${props.icon}`, import.meta.url).href;
+    return new URL(`/src/assets/icons/${props.icon}`, import.meta.url).href;
   }
 
-  return new URL(`/src/assets/icon/warning-icon.png`, import.meta.url).href;
+  return new URL(`/src/assets/icons/warning-icon.png`, import.meta.url).href;
 }
 
 const emit = defineEmits(['confirm']);
