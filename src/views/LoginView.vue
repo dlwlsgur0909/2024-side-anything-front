@@ -3,14 +3,15 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
-import Authentication from '../components/Authentication.vue';
 import { useAuthStore } from '../js/auth.js';
+import { useAlertStore } from '../js/alert.js';
+import Authentication from '../components/Authentication.vue';
+import CommonButton from '../components/common/CommonButton.vue';
 
 
 const router = useRouter();
-const route = useRoute();
 const auth = useAuthStore();
-
+const alert = useAlertStore();
 
 // 아이디, 비밀번호
 const username = ref();
@@ -42,7 +43,7 @@ function login() {
       router.push('/');
     },
     async (error) => {
-      alert(error.response.data.errorMessage);
+      alert.openAlert(error.response.data.errorMessage);
       if(error.response.data.errorCode === '403') {
         await sendEmail();
         isVerified.value = false;
@@ -55,12 +56,12 @@ function login() {
 function validateLogin() {
 
   if(!username.value?.trim()) {
-    alert('아이디를 입력해주세요');
+    alert.openAlert('아이디를 입력해주세요');
     return false;
   }
 
   if(!password.value?.trim()) {
-    alert('비밀번호를 입력해주세요');
+    alert.openAlert('비밀번호를 입력해주세요');
     return false;
   }
 
@@ -77,12 +78,55 @@ async function sendEmail() {
   await axios
     .post("http://localhost:8090/auth/send", request)
     .then((res) => {
-      alert('인증메일이 발송되었습니다');
+      alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
     })
     .catch(e => {
-      alert(e.response.data.errorMessage);
+      alert.openAlert(e.response.data.errorMessage);
       isVerified.value = true;
     })
+}
+
+// 소셜 로그인
+
+function naverLogin() {
+  window.location.href = 'http://localhost:8090/oauth2/authorization/naver';
+}
+
+function googleLogin() {
+  window.location.href = 'http://localhost:8090/oauth2/authorization/google';
+}
+
+// 버튼 설정
+const buttonConfig = {
+
+  login: {
+    label: '로그인',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  join: {
+    label: '회원가입',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  find: {
+    label: 'ID/PW 찾기',
+    fontColor: 'black',
+    backgroundColor: 'white',
+  },
+  naverLogin: {
+    label: 'Naver로 로그인',
+    fontColor: 'black',
+    backgroundColor: '#fff',
+    icon: 'naver-logo.png',
+  },
+  googleLogin: {
+    label: 'Google로 로그인',
+    fontColor: 'black',
+    backgroundColor: 'white',
+    icon: 'google-logo.png',
+  },
+
 }
 
 
@@ -90,6 +134,11 @@ async function sendEmail() {
 
 <template>
   <div class="main-container">
+
+    <div class="logo-section">
+      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+    </div>
+
     <div class="login-container" v-if="isVerified">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
@@ -98,9 +147,38 @@ async function sendEmail() {
         <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password">
       </div>
       <div class="button-section">
-        <button @click="login()">로그인</button>
-        <button @click="join()">회원가입</button>
-        <button @click="router.push('/find')">ID/PW 찾기</button>
+        <CommonButton 
+          @click="login()"
+          :label="buttonConfig.login.label" 
+          :fontColor="buttonConfig.login.fontColor" 
+          :backgroundColor="buttonConfig.login.backgroundColor" 
+        />
+        <CommonButton 
+          @click="join()"
+          :label="buttonConfig.join.label" 
+          :fontColor="buttonConfig.join.fontColor" 
+          :backgroundColor="buttonConfig.join.backgroundColor" 
+        />
+        <CommonButton 
+          @click="router.push('/find')"
+          :label="buttonConfig.find.label" 
+          :fontColor="buttonConfig.find.fontColor" 
+          :backgroundColor="buttonConfig.find.backgroundColor" 
+        />
+        <CommonButton 
+          @click="naverLogin()"
+          :label="buttonConfig.naverLogin.label" 
+          :fontColor="buttonConfig.naverLogin.fontColor" 
+          :backgroundColor="buttonConfig.naverLogin.backgroundColor"
+          :icon="buttonConfig.naverLogin.icon"
+        />
+        <CommonButton 
+          @click="googleLogin()"
+          :label="buttonConfig.googleLogin.label" 
+          :fontColor="buttonConfig.googleLogin.fontColor" 
+          :backgroundColor="buttonConfig.googleLogin.backgroundColor" 
+          :icon="buttonConfig.googleLogin.icon"
+        />
       </div>
     </div>
     <Authentication 
@@ -115,16 +193,26 @@ async function sendEmail() {
 <style scoped>
 
 .main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
   width: 80%;
-  padding: 5%;
-  border: 1px solid #333;
+  height: 98vh;
+}
 
+.logo-section {
+  padding-top: 110px;
+}
+
+.main-logo {
+  width: 100%;
 }
 
 .login-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -133,16 +221,19 @@ async function sendEmail() {
 .id-section,
 .password-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .id-input-box,
 .password-input-box {
-  height: 30px;
+  height: 40px;
+  border: 0;
+  border-radius: 10px;
 }
 
 .button-section {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 10px;
 }

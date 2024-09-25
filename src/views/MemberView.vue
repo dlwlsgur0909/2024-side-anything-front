@@ -3,6 +3,7 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { inject } from 'vue';
+import { useAuthStore } from '../js/auth.js';
 
 const props = defineProps({
   username: {
@@ -11,6 +12,7 @@ const props = defineProps({
   }
 });
 
+const auth = useAuthStore();
 const router = useRouter();
 const customAxios = inject('customAxios');
 
@@ -46,7 +48,7 @@ function memberDetail() {
     createdAt.value = res.data.createdAt;
   })
   .catch(e => {
-    alert(e.response.data.errorMessage);
+    console.log('member detail');
     router.push('/');
   })
   
@@ -87,9 +89,6 @@ function changePassword() {
     alert('비밀번호가 변경되었습니다');
     changeMode('DETAIL');
   })
-  .catch(e => {
-    alert(e.response.data.errorMessage);
-  })
 
 }
 
@@ -118,7 +117,7 @@ function validateChangePassword() {
   <div class="main-container">
     <div class="my-info-container" v-if="mode === 'DETAIL'">
       <div class="my-info-header">
-        {{ props.username }}님의 정보
+        {{ auth.member.name }}님의 정보
       </div>
       <div class="id-section">
         <span class="id-label">아이디</span>

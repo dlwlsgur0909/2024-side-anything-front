@@ -3,17 +3,20 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
+import { useAlertStore } from '../js/alert.js';
 import Authentication from '../components/Authentication.vue';
+import CommonButton from '../components/common/CommonButton.vue';
 
 const router = useRouter();
-const route = useRoute();
+const alert = useAlertStore();
 
 const mode = ref('JOIN');
 
-// 아이디, 비밀번호
+// 아이디, 비밀번호, 이름, 이메일
 const username = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
+const name = ref('');
 const email = ref('');
 
 const isUsernameUnique = ref(false);
@@ -29,17 +32,18 @@ async function join() {
   const request = {
     username: username.value,
     password: password.value,
+    name: name.value,
     email: email.value
   }
 
   axios
     .post("http://localhost:8090/auth/join", request)
     .then(res => {
-      alert(`${email.value}로 인증번호를 발송했습니다.`)
+      alert.openAlert(`${email.value}로 인증번호를 발송했습니다.`, 'email-icon.png');
       mode.value = 'VERIFY';
     })
     .catch((e) => {
-      alert(e.response.data.errorMessage);
+      alert.openAlert(e.response.data.errorMessage);
     }) 
 
 }
@@ -48,39 +52,44 @@ async function join() {
 async function validateJoin() {
 
   if(!username.value?.trim()) {
-    alert("아이디를 입력하세요");
+    alert.openAlert("아이디를 입력하세요");
     return false;
   }else {
     await duplicateUsernameCheck();
     if(!isUsernameUnique.value) {
-      alert('이미 사용중인 아이디입니다');
+      alert.openAlert('이미 사용중인 아이디입니다');
       return false;
     }
   }
 
   if(!password.value?.trim()) {
-    alert('비밀번호를 입력하세요');
+    alert.openAlert('비밀번호를 입력하세요');
     return false;
   }
 
   if(!passwordConfirm.value?.trim()) {
-    alert('비밀번호 확인을 입력하세요');
+    alert.openAlert('비밀번호 확인을 입력하세요');
+    return false;
+  }
+
+  if(!name.value?.trim()) {
+    alert.openAlert('이름을 입력하세요');
     return false;
   }
   
   if(!email.value?.trim()) {
-    alert('이메일을 입력하세요');
+    alert.openAlert('이메일을 입력하세요');
     return false;
   }else {
     await duplicateEmailCheck()
     if(!isEmailUnique.value) {
-      alert('이미 사용중인 이메일입니다')
+      alert.openAlert('이미 사용중인 이메일입니다')
       return false;
     }
   }
   
   if(password.value !== passwordConfirm.value) {
-    alert('비밀번호가 일치하지 않습니다');
+    alert.openAlert('비밀번호가 일치하지 않습니다');
     return false;
   }
 
@@ -116,10 +125,31 @@ function cancel() {
   router.push('/login');
 }
 
+// 버튼 설정
+const buttonConfig = {
+
+  join: {
+    label: '회원가입',
+    fontColor: '#fff',
+    backgroundColor: "#524FE1",
+  },
+  cancel: {
+    label: '취소',
+    fontColor: '#fff',
+    backgroundColor: '#E34444',
+  }
+
+}
+
 </script>
 
 <template>
   <div class="main-container">
+
+    <div class="logo-section">
+      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+    </div>
+
     <div class="join-container" v-if="mode === 'JOIN'">
       <div class="id-section">
         <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
@@ -130,12 +160,27 @@ function cancel() {
       <div class="password-confirm-section">
         <input class="password-confirm-input-box" type="password" placeholder="비밀번호 확인" v-model="passwordConfirm">
       </div>
+      <div class="name-section">
+        <input class="name-input-box" type="text" placeholder="이름" v-model="name">
+      </div>
       <div class="email-section">
         <input class="email-input-box" type="text" placeholder="이메일" v-model="email">
       </div>
       <div class="button-section">
-        <button @click="join()">회원가입</button>
-        <button @click="cancel()">취소</button>
+        <CommonButton
+          class="join-button"
+          @click="join()" 
+          :label="buttonConfig.join.label" 
+          :fontColor="buttonConfig.join.fontColor"
+          :backgroundColor="buttonConfig.join.backgroundColor"
+        />
+        <CommonButton
+          class="cancel-button"
+          @click="cancel()"
+          :label="buttonConfig.cancel.label"
+          :fontColor="buttonConfig.cancel.fontColor"
+          :backgroundColor="buttonConfig.cancel.backgroundColor"
+        />
       </div>
     </div>
 
@@ -147,17 +192,27 @@ function cancel() {
 <style scoped>
 
 .main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
   width: 80%;
-  padding: 5%;
-  border: 1px solid #333;
+  height: 98vh;
+}
 
+.logo-section {
+  padding-top: 110px;
+}
+
+.main-logo {
+  width: 100%;
 }
 
 .join-container,
 .verify-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding: 20px;
   background: #e6e5e5;
   border-radius: 10px;
@@ -166,8 +221,10 @@ function cancel() {
 .id-section,
 .password-section,
 .password-confirm-section,
+.name-section,
 .email-section {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -179,16 +236,23 @@ function cancel() {
 .id-input-box,
 .password-input-box,
 .password-confirm-input-box,
+.name-input-box,
 .email-input-box,
 .authentication-input-box {
-  height: 30px;
-  width: 80%;
+  height: 40px;
+  border: 0;
+  border-radius: 10px;
 }
 
 .button-section {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
+}
+
+.join-button, 
+.cancel-button {
+  flex-basis: 45%;
 }
 
 </style>

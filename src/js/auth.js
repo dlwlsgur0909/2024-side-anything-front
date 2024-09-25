@@ -1,12 +1,15 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import globalRouter from '../router/globalRouter.js';
+import { useAlertStore } from './alert.js';
 
 export const useAuthStore = defineStore({
+	
     id: 'auth',
     state: () => ({
         member: JSON.parse(localStorage.getItem('member')),
-        isLogin: !!JSON.parse(localStorage.getItem('member'))
+        isLogin: !!JSON.parse(localStorage.getItem('member')),
+		reissued: false,
     }),
     actions: {
         setMember(member) {
@@ -15,6 +18,7 @@ export const useAuthStore = defineStore({
 				this.isLogin = false;
             }else {
 				this.isLogin = true;
+				this.reissued = false;
 				localStorage.setItem('member', JSON.stringify(member));
             }
         },
@@ -36,7 +40,7 @@ export const useAuthStore = defineStore({
         async reissue() {
 
 			const request = {
-					refreshToken: this.member.refreshToken
+				refreshToken: this.member.refreshToken
 			};
 
 			let result = false;
@@ -49,12 +53,34 @@ export const useAuthStore = defineStore({
 				})
 				.catch(e => {
 					this.logout();
-					alert(e.response.data.errorMessage);
+					this.reissued = true;
+					useAlertStore().openAlert(e.response.data.errorMessage);
 					globalRouter.router.push('/login');
 				});
 
 			return result;
         },
+		async socialLogin() {
+
+			let result = false;
+
+			await axios
+				.get('http://localhost:8090/auth/login-success',
+					{withCredentials: true}
+				)
+				.then(res => {
+					this.setMember(res.data);
+					result = true;
+				})
+				.catch(e => {
+					this.logout();
+					this.reissued = false;
+					useAlertStore().openAlert(e.response.data.errorMessage);
+					globalRouter.router.push('/login');
+				})
+
+			return result;
+		}
     }
 
 })
