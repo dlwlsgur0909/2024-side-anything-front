@@ -4,12 +4,14 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
+import { useAlertStore } from '../js/alert.js';
 import Authentication from '../components/Authentication.vue';
 import CommonButton from '../components/common/CommonButton.vue';
 
 
 const router = useRouter();
 const auth = useAuthStore();
+const alert = useAlertStore();
 
 // 아이디, 비밀번호
 const username = ref();
@@ -41,7 +43,7 @@ function login() {
       router.push('/');
     },
     async (error) => {
-      alert(error.response.data.errorMessage);
+      alert.openAlert(error.response.data.errorMessage);
       if(error.response.data.errorCode === '403') {
         await sendEmail();
         isVerified.value = false;
@@ -54,12 +56,12 @@ function login() {
 function validateLogin() {
 
   if(!username.value?.trim()) {
-    alert('아이디를 입력해주세요');
+    alert.openAlert('아이디를 입력해주세요');
     return false;
   }
 
   if(!password.value?.trim()) {
-    alert('비밀번호를 입력해주세요');
+    alert.openAlert('비밀번호를 입력해주세요');
     return false;
   }
 
@@ -76,10 +78,10 @@ async function sendEmail() {
   await axios
     .post("http://localhost:8090/auth/send", request)
     .then((res) => {
-      alert('인증메일이 발송되었습니다');
+      alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
     })
     .catch(e => {
-      alert(e.response.data.errorMessage);
+      alert.openAlert(e.response.data.errorMessage);
       isVerified.value = true;
     })
 }
