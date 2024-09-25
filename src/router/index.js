@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
+import { useAlertStore } from '../js/alert.js';
 import LoginView from '../views/LoginView.vue';
 
 const router = createRouter({
@@ -56,15 +57,16 @@ const allowedNames = ['login', 'join', 'find'];
 
 router.beforeEach(async (to, from) => {
 
+  const alert = useAlertStore();
   const auth = useAuthStore();
   const toName = to.name;
 
   // 소셜 로그인 실패 처리
   if(toName === 'loginFail') {
     if(to.query?.error === '403') {
-      alert('이미 가입된 이메일입니다.');
+      alert.openAlert('이미 가입된 이메일입니다.');
     }else {
-      alert('소셜 로그인에 실패했습니다.');
+      alert.openAlert('소셜 로그인에 실패했습니다.');
     }
 
     return {name: 'login'}
@@ -82,7 +84,7 @@ router.beforeEach(async (to, from) => {
     if(auth.reissued) {
       auth.reissued = false;
     }else {
-      alert('로그인 후 이용해주세요'); 
+      alert.openAlert('로그인 후 이용해주세요'); 
     }
 
     return {name: 'login'};

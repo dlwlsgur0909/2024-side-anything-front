@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import globalRouter from '../router/globalRouter.js';
+import { useAlertStore } from './alert.js';
 
 export const useAuthStore = defineStore({
+	
     id: 'auth',
     state: () => ({
         member: JSON.parse(localStorage.getItem('member')),
@@ -38,7 +40,7 @@ export const useAuthStore = defineStore({
         async reissue() {
 
 			const request = {
-					refreshToken: this.member.refreshToken
+				refreshToken: this.member.refreshToken
 			};
 
 			let result = false;
@@ -52,7 +54,7 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					this.logout();
 					this.reissued = true;
-					alert(e.response.data.errorMessage);
+					useAlertStore().openAlert(e.response.data.errorMessage);
 					globalRouter.router.push('/login');
 				});
 
@@ -70,10 +72,10 @@ export const useAuthStore = defineStore({
 					this.setMember(res.data);
 					result = true;
 				})
-				.catch(error => {
+				.catch(e => {
 					this.logout();
 					this.reissued = false;
-					alert(e.response.data.errorMessage);
+					useAlertStore().openAlert(e.response.data.errorMessage);
 					globalRouter.router.push('/login');
 				})
 
