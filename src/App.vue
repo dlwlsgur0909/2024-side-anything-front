@@ -2,10 +2,14 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from './js/auth.js';
 import globalRouter from './router/globalRouter.js';
+import CommonAlert from './components/common/CommonAlert.vue';
+import { useAlertStore } from './js/alert.js';
 
 const auth = useAuthStore();
 const router = useRouter();
 globalRouter.router = router;
+
+const alert = useAlertStore();
 
 if(!!auth.member) {
   auth.reissue();
@@ -21,6 +25,13 @@ if(!!auth.member) {
       <RouterView />
     </div>
   </div>
+
+  <CommonAlert
+    v-if="alert.isOpen"
+    :message="alert.message"
+    :icon="alert.icon"
+    @confirm="alert.confirmAlert()"
+  />
 </template>
 
 <style scoped>
