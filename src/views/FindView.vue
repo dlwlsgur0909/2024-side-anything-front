@@ -3,9 +3,11 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAlertStore } from '../js/alert.js';
 import CommonButton from '../components/common/CommonButton.vue';
 
 const router = useRouter();
+const alert = useAlertStore();
 
 const mode = ref('ID');
 
@@ -17,8 +19,6 @@ function changeMode(newMode) {
   username.value = '';
   email.value = '';
 }
-
-
 
 function find() {
 
@@ -33,7 +33,7 @@ function find() {
 function findUsername() {
 
   if(!email.value?.trim()) {
-    alert('이메일을 입력해주세요');
+    alert.openAlert('이메일을 입력해주세요');
     return;
   }
 
@@ -44,21 +44,21 @@ function findUsername() {
   axios
     .post("http://localhost:8090/auth/find/username", request)
     .then(res => {
-      alert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`);
+      alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`, 'info-icon.png');
     })
     .catch(e => {
-      alert(e.response.data.errorMessage);
+      alert.openAlert(e.response.data.errorMessage);
     })
 }
 
 function findPassword() {
   if(!email.value?.trim()) {
-    alert('이메일을 입력해주세요');
+    alert.openAlert('이메일을 입력해주세요');
     return;
   }
 
   if(!username.value?.trim()) {
-    alert('아이디를 입력해주세요');
+    alert.openAlert('아이디를 입력해주세요');
     return;
   }
 
@@ -70,11 +70,11 @@ function findPassword() {
   axios
     .post('http://localhost:8090/auth/find/password', request)
     .then(res =>{
-      alert(`${email.value}로 초기화된 비밀번호를 전송했습니다`);
+      alert.openAlert(`${email.value}로 초기화된 비밀번호를 전송했습니다`, 'email-icon.png');
       router.push('/login');
     })
     .catch(e =>{
-      alert(e.response.data.errorMessage);
+      alert.openAlert(e.response.data.errorMessage);
     })
 }
 
