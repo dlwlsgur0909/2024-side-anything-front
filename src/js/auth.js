@@ -22,6 +22,7 @@ export const useAuthStore = defineStore({
             }
         },
         async login(data, onSuccess, onReject) {
+			globalStore.spinner.startSpinner();
 
             await axios
 				.post("http://localhost:8090/auth/login", data)
@@ -31,6 +32,8 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					onReject(e);
 				})
+			
+			globalStore.spinner.stopSpinner();
         },
         logout() {
 			this.setMember(null);
