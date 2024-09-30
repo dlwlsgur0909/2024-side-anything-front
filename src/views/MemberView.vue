@@ -13,7 +13,6 @@ const props = defineProps({
 });
 
 const auth = useAuthStore();
-const router = useRouter();
 const customAxios = inject('customAxios');
 
 const mode = ref('DETAIL');
