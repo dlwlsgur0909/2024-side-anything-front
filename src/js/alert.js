@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import globalRouter from '../router/globalRouter.js';
 
 export const useAlertStore = defineStore({
     id: 'alert',

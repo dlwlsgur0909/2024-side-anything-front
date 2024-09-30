@@ -2,13 +2,9 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
-import { useAlertStore } from '../js/alert.js';
+import globalStore from '../stores/globalStore.js';
 import Authentication from '../components/Authentication.vue';
 import CommonButton from '../components/common/CommonButton.vue';
-
-const router = useRouter();
-const alert = useAlertStore();
 
 const mode = ref('JOIN');
 
@@ -39,11 +35,11 @@ async function join() {
   axios
     .post("http://localhost:8090/auth/join", request)
     .then(res => {
-      alert.openAlert(`${email.value}로 인증번호를 발송했습니다.`, 'email-icon.png');
+      globalStore.alert.openAlert(`${email.value}로 인증번호를 발송했습니다.`, 'email-icon.png');
       mode.value = 'VERIFY';
     })
     .catch((e) => {
-      alert.openAlert(e.response.data.errorMessage);
+      globalStore.alert.openAlert(e.response.data.errorMessage);
     }) 
 
 }
@@ -52,44 +48,44 @@ async function join() {
 async function validateJoin() {
 
   if(!username.value?.trim()) {
-    alert.openAlert("아이디를 입력하세요");
+    globalStore.alert.openAlert("아이디를 입력하세요");
     return false;
   }else {
     await duplicateUsernameCheck();
     if(!isUsernameUnique.value) {
-      alert.openAlert('이미 사용중인 아이디입니다');
+      globalStore.alert.openAlert('이미 사용중인 아이디입니다');
       return false;
     }
   }
 
   if(!password.value?.trim()) {
-    alert.openAlert('비밀번호를 입력하세요');
+    globalStore.alert.openAlert('비밀번호를 입력하세요');
     return false;
   }
 
   if(!passwordConfirm.value?.trim()) {
-    alert.openAlert('비밀번호 확인을 입력하세요');
+    globalStore.alert.openAlert('비밀번호 확인을 입력하세요');
     return false;
   }
 
   if(!name.value?.trim()) {
-    alert.openAlert('이름을 입력하세요');
+    globalStore.alert.openAlert('이름을 입력하세요');
     return false;
   }
   
   if(!email.value?.trim()) {
-    alert.openAlert('이메일을 입력하세요');
+    globalStore.alert.openAlert('이메일을 입력하세요');
     return false;
   }else {
     await duplicateEmailCheck()
     if(!isEmailUnique.value) {
-      alert.openAlert('이미 사용중인 이메일입니다')
+      globalStore.alert.openAlert('이미 사용중인 이메일입니다')
       return false;
     }
   }
   
   if(password.value !== passwordConfirm.value) {
-    alert.openAlert('비밀번호가 일치하지 않습니다');
+    globalStore.alert.openAlert('비밀번호가 일치하지 않습니다');
     return false;
   }
 
@@ -122,7 +118,7 @@ async function duplicateEmailCheck() {
 
 // 취소 -> 로그인 페이지
 function cancel() {
-  router.push('/login');
+  globalStore.router.push('/login');
 }
 
 // 버튼 설정

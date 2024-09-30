@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { useAuthStore } from './auth.js';
-import { useAlertStore } from './alert.js';
-import globalRouter from '@/router/globalRouter.js';
+import globalStore from '../stores/globalStore.js';
 
 const customAxios = () => {
     const instance = axios.create();
     const auth = useAuthStore();
-    const alert = useAlertStore();
 
     instance.interceptors.request.use(
         (config) => {
@@ -32,7 +30,7 @@ const customAxios = () => {
                 }
 
             }else {
-                alert.openAlert(error.response.data.errorMessage);
+                globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }

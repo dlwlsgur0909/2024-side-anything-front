@@ -1,13 +1,12 @@
 <script setup>
 
 import { useAuthStore } from '../js/auth.js';
-import { useRouter } from 'vue-router';
+import globalStore from '../stores/globalStore.js';
 
-const router = useRouter();
 const auth = useAuthStore();
 
 function myInfo() {
-  router.push({
+  globalStore.router.push({
     name: 'member',
     params: {
       username: auth.member.username
@@ -16,7 +15,7 @@ function myInfo() {
 }
 
 function admin() {
-  router.push('/admin');
+  globalStore.router.push('/admin');
 }
 
 </script>

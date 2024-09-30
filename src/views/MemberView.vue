@@ -1,9 +1,9 @@
 <script setup>
 
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { inject } from 'vue';
 import { useAuthStore } from '../js/auth.js';
+import globalStore from '../stores/globalStore.js';
 
 const props = defineProps({
   username: {
@@ -49,7 +49,7 @@ function memberDetail() {
   })
   .catch(e => {
     console.log('member detail');
-    router.push('/');
+    globalStore.router.push('/');
   })
   
 }
@@ -62,7 +62,7 @@ function cancel() {
   if(mode.value === 'PASSWORD') {
     changeMode('DETAIL');
   }else {
-    router.push('/');
+    globalStore.router.push('/');
   }
 
 }

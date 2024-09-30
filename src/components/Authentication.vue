@@ -1,15 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
-import { useAlertStore } from '../js/alert';
+import globalStore from '../stores/globalStore.js';
 
-const router = useRouter();
 const auth = useAuthStore();
-
-const alert = useAlertStore();
-
 
 const props = defineProps({
   username: {
@@ -52,7 +47,7 @@ function startTimer() {
     }
 
     if(time === 0) {
-      alert.openAlert('인증시간이 만료되었습니다. 다시 시도해주세요');
+      globalStore.alert.openAlert('인증시간이 만료되었습니다. 다시 시도해주세요');
       isTimeOut.value = true;
       clearInterval(intervalTimer);
     }
@@ -72,12 +67,12 @@ const request = {
 axios
   .post("http://localhost:8090/auth/send", request)
   .then(res => {
-    alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
+    globalStore.alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
     isTimeOut.value = false;
     startTimer();
   })
   .catch(e => {
-    alert.openAlert(e.response.data.errorMessage);
+    globalStore.alert.openAlert(e.response.data.errorMessage);
   })
 
 }
@@ -93,7 +88,7 @@ const request = {
 axios
   .post("http://localhost:8090/auth/verify", request)
   .then(res => {
-    alert.openAlert('인증되었습니다', 'authentication-icon.png');
+    globalStore.alert.openAlert('인증되었습니다', 'authentication-icon.png');
     isVerified.value = true;
 
     if(!!props.password?.trim()) {
@@ -106,20 +101,20 @@ axios
       auth.login(request,
         (data) => {
           auth.setMember(data);
-          router.push('/');
+          globalStore.router.push('/');
         },
         (error) => {
-          alert.openAlert(error.response.data.errorMessage);
-          router.go(0);
+          globalStore.alert.openAlert(error.response.data.errorMessage);
+          globalStore.router.go(0);
         }
       );
     }else {
-      router.push('/login');
+      globalStore.router.push('/login');
     }
 
   })
   .catch((e) => {
-    alert.openAlert(e.response.data.errorMessage);
+    globalStore.alert.openAlert(e.response.data.errorMessage);
   })
 }
 
