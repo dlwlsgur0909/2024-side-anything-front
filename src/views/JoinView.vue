@@ -25,6 +25,8 @@ async function join() {
     return;
   }
 
+  globalStore.spinner.startSpinner();
+
   const request = {
     username: username.value,
     password: password.value,
@@ -32,7 +34,7 @@ async function join() {
     email: email.value
   }
 
-  axios
+  await axios
     .post("http://localhost:8090/auth/join", request)
     .then(res => {
       globalStore.alert.openAlert(`${email.value}로 인증번호를 발송했습니다.`, 'email-icon.png');
@@ -41,7 +43,8 @@ async function join() {
     .catch((e) => {
       globalStore.alert.openAlert(e.response.data.errorMessage);
     }) 
-
+  
+  globalStore.spinner.stopSpinner();
 }
 
 // 회원가입 유효성 검사

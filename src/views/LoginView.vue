@@ -33,17 +33,23 @@ function login() {
     password: password.value
   }
 
+  globalStore.spinner.startSpinner();
+
   auth.login(request,
     (data) => {
       auth.setMember(data);
       globalStore.router.push('/');
+      globalStore.spinner.stopSpinner();
     },
     async (error) => {
-      globalStore.alert.openAlert(error.response.data.errorMessage);
       if(error.response.data.errorCode === '403') {
+        globalStore.alert.openAlert(error.response.data.errorMessage, null, false);
         await sendEmail();
         isVerified.value = false;
+      }else {
+        globalStore.alert.openAlert(error.response.data.errorMessage);
       }
+      globalStore.spinner.stopSpinner();
     }
   )
 }
@@ -83,7 +89,6 @@ async function sendEmail() {
 }
 
 // 소셜 로그인
-
 function naverLogin() {
   window.location.href = 'http://localhost:8090/oauth2/authorization/naver';
 }

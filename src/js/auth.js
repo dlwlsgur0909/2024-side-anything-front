@@ -21,10 +21,8 @@ export const useAuthStore = defineStore({
 				localStorage.setItem('member', JSON.stringify(member));
             }
         },
-        async login(data, onSuccess, onReject) {
-			globalStore.spinner.startSpinner();
-
-            await axios
+        login(data, onSuccess, onReject) {
+            axios
 				.post("http://localhost:8090/auth/login", data)
 				.then(res => {
 					onSuccess(res.data);
@@ -32,8 +30,6 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					onReject(e);
 				})
-			
-			globalStore.spinner.stopSpinner();
         },
         logout() {
 			this.setMember(null);
