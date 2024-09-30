@@ -3,16 +3,18 @@ import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from './js/auth.js';
 import { useAlertStore } from './js/alert.js';
 import { useSpinnerStore } from './js/spinner.js';
-import globalRouter from './router/globalRouter.js';
+import globalStore from './stores/globalStore.js';
 import CommonAlert from './components/common/CommonAlert.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
-globalRouter.router = router;
-
 const alert = useAlertStore();
 const spinner = useSpinnerStore();
+
+globalStore.router = router;
+globalStore.alert = alert;
+globalStore.spinner = spinner;
 
 if(!!auth.member) {
   auth.reissue();
