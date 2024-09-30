@@ -35,6 +35,7 @@ if(!!auth.member) {
     v-if="alert.isOpen"
     :message="alert.message"
     :icon="alert.icon"
+    :isConfirm="alert.isConfirm"
     @confirm="alert.confirmAlert()"
   />
 

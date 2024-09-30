@@ -9,6 +9,10 @@ const props = defineProps({
   icon: {
     type: String,
     required: false,
+  },
+  isConfirm: {
+    type: Boolean,
+    required: false,
   }
 })
 
@@ -44,7 +48,7 @@ function confirm() {
         {{ props.message }}
       </div>
     </div>
-    <div class="button-section">
+    <div class="button-section" v-if="props.isConfirm">
       <button class="confirm-button" @click="confirm()">확인</button>
     </div>
   </div>
