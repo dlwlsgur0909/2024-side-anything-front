@@ -40,16 +40,15 @@ const newPasswordConfirm = ref('');
 function memberDetail() {
 
   customAxios
-  .get(`http://localhost:8090/members/${props.username}`)
-  .then(res => {
-    username.value = res.data.username;
-    email.value = res.data.email;
-    createdAt.value = res.data.createdAt;
-  })
-  .catch(e => {
-    console.log('member detail');
-    globalStore.router.push('/');
-  })
+    .get(`http://localhost:8090/members/${props.username}`)
+    .then(res => {
+      username.value = res.data.username;
+      email.value = res.data.email;
+      createdAt.value = res.data.createdAt;
+    })
+    .catch(e => {
+      globalStore.router.push('/');
+    })
   
 }
 
@@ -116,7 +115,7 @@ function validateChangePassword() {
   <div class="main-container">
     <div class="my-info-container" v-if="mode === 'DETAIL'">
       <div class="my-info-header">
-        {{ auth.member.name }}님의 정보
+        {{ username }}님의 정보
       </div>
       <div class="id-section">
         <span class="id-label">아이디</span>
