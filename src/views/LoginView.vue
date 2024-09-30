@@ -2,16 +2,12 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
-import { useAlertStore } from '../js/alert.js';
+import globalStore from '../stores/globalStore.js';
 import Authentication from '../components/Authentication.vue';
 import CommonButton from '../components/common/CommonButton.vue';
 
-
-const router = useRouter();
 const auth = useAuthStore();
-const alert = useAlertStore();
 
 // 아이디, 비밀번호
 const username = ref();
@@ -22,7 +18,7 @@ const isVerified = ref(true);
 
 // 회원가입
 function join() {
-  router.push('/join');
+  globalStore.router.push('/join');
 }
 
 // 로그인
@@ -37,17 +33,23 @@ function login() {
     password: password.value
   }
 
+  globalStore.spinner.startSpinner();
+
   auth.login(request,
     (data) => {
       auth.setMember(data);
-      router.push('/');
+      globalStore.router.push('/');
+      globalStore.spinner.stopSpinner();
     },
     async (error) => {
-      alert.openAlert(error.response.data.errorMessage);
       if(error.response.data.errorCode === '403') {
+        globalStore.alert.openAlert(error.response.data.errorMessage, null, false);
         await sendEmail();
         isVerified.value = false;
+      }else {
+        globalStore.alert.openAlert(error.response.data.errorMessage);
       }
+      globalStore.spinner.stopSpinner();
     }
   )
 }
@@ -56,12 +58,12 @@ function login() {
 function validateLogin() {
 
   if(!username.value?.trim()) {
-    alert.openAlert('아이디를 입력해주세요');
+    globalStore.alert.openAlert('아이디를 입력해주세요');
     return false;
   }
 
   if(!password.value?.trim()) {
-    alert.openAlert('비밀번호를 입력해주세요');
+    globalStore.alert.openAlert('비밀번호를 입력해주세요');
     return false;
   }
 
@@ -78,16 +80,15 @@ async function sendEmail() {
   await axios
     .post("http://localhost:8090/auth/send", request)
     .then((res) => {
-      alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
+      globalStore.alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
     })
     .catch(e => {
-      alert.openAlert(e.response.data.errorMessage);
+      globalStore.alert.openAlert(e.response.data.errorMessage);
       isVerified.value = true;
     })
 }
 
 // 소셜 로그인
-
 function naverLogin() {
   window.location.href = 'http://localhost:8090/oauth2/authorization/naver';
 }
@@ -160,7 +161,7 @@ const buttonConfig = {
           :backgroundColor="buttonConfig.join.backgroundColor" 
         />
         <CommonButton 
-          @click="router.push('/find')"
+          @click="globalStore.router.push('/find')"
           :label="buttonConfig.find.label" 
           :fontColor="buttonConfig.find.fontColor" 
           :backgroundColor="buttonConfig.find.backgroundColor" 

@@ -1,10 +1,9 @@
 <script setup>
 
 import { useAuthStore } from '../js/auth.js';
-import { useRouter } from 'vue-router';
 import { inject, ref } from 'vue';
+import globalStore from '../stores/globalStore.js';
 
-const router = useRouter();
 const auth = useAuthStore();
 const customAxios = inject('customAxios');
 
@@ -19,7 +18,7 @@ function adminDetail() {
     username.value = res.data.username;
   })
   .catch(e => {
-    router.push('/');
+   globalStore.router.push('/');
   })
 
 }

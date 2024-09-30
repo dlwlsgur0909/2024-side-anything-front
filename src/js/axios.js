@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { useAuthStore } from './auth.js';
-import { useAlertStore } from './alert.js';
-import globalRouter from '@/router/globalRouter.js';
+import globalStore from '../stores/globalStore.js';
 
 const customAxios = () => {
     const instance = axios.create();
     const auth = useAuthStore();
-    const alert = useAlertStore();
 
     instance.interceptors.request.use(
         (config) => {
+            globalStore.spinner.startSpinner();
             const accessToken = auth.member.accessToken;
             config.headers['Authorization'] = `Bearer ${accessToken}`;
             return config;
@@ -21,6 +20,7 @@ const customAxios = () => {
 
     instance.interceptors.response.use(
         (response) => {
+            globalStore.spinner.stopSpinner();
             return response;
         },
         async (error) => {
@@ -28,11 +28,12 @@ const customAxios = () => {
                 if(await auth.reissue()) {
                     return await instance(error.config);
                 }else {
+                    globalStore.spinner.stopSpinner();
                     return Promise.reject();
                 }
-
             }else {
-                alert.openAlert(error.response.data.errorMessage);
+                globalStore.spinner.stopSpinner();
+                globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }

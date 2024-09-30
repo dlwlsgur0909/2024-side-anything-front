@@ -1,9 +1,9 @@
 <script setup>
 
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { inject } from 'vue';
 import { useAuthStore } from '../js/auth.js';
+import globalStore from '../stores/globalStore.js';
 
 const props = defineProps({
   username: {
@@ -13,7 +13,6 @@ const props = defineProps({
 });
 
 const auth = useAuthStore();
-const router = useRouter();
 const customAxios = inject('customAxios');
 
 const mode = ref('DETAIL');
@@ -41,16 +40,15 @@ const newPasswordConfirm = ref('');
 function memberDetail() {
 
   customAxios
-  .get(`http://localhost:8090/members/${props.username}`)
-  .then(res => {
-    username.value = res.data.username;
-    email.value = res.data.email;
-    createdAt.value = res.data.createdAt;
-  })
-  .catch(e => {
-    console.log('member detail');
-    router.push('/');
-  })
+    .get(`http://localhost:8090/members/${props.username}`)
+    .then(res => {
+      username.value = res.data.username;
+      email.value = res.data.email;
+      createdAt.value = res.data.createdAt;
+    })
+    .catch(e => {
+      globalStore.router.push('/');
+    })
   
 }
 
@@ -62,7 +60,7 @@ function cancel() {
   if(mode.value === 'PASSWORD') {
     changeMode('DETAIL');
   }else {
-    router.push('/');
+    globalStore.router.push('/');
   }
 
 }
@@ -117,7 +115,7 @@ function validateChangePassword() {
   <div class="main-container">
     <div class="my-info-container" v-if="mode === 'DETAIL'">
       <div class="my-info-header">
-        {{ auth.member.name }}님의 정보
+        {{ username }}님의 정보
       </div>
       <div class="id-section">
         <span class="id-label">아이디</span>

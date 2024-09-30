@@ -1,15 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../js/auth.js';
-import { useAlertStore } from '../js/alert';
+import globalStore from '../stores/globalStore.js';
 
-const router = useRouter();
 const auth = useAuthStore();
-
-const alert = useAlertStore();
-
 
 const props = defineProps({
   username: {
@@ -52,7 +47,7 @@ function startTimer() {
     }
 
     if(time === 0) {
-      alert.openAlert('인증시간이 만료되었습니다. 다시 시도해주세요');
+      globalStore.alert.openAlert('인증시간이 만료되었습니다. 다시 시도해주세요');
       isTimeOut.value = true;
       clearInterval(intervalTimer);
     }
@@ -63,64 +58,72 @@ function startTimer() {
 startTimer();
 
 // 인증메일 재발송
-function resendEmail() {
+async function resendEmail() {
 
-const request = {
-  usernameOrEmail: props.username,
-}
+  globalStore.spinner.startSpinner();
 
-axios
-  .post("http://localhost:8090/auth/send", request)
-  .then(res => {
-    alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
-    isTimeOut.value = false;
-    startTimer();
-  })
-  .catch(e => {
-    alert.openAlert(e.response.data.errorMessage);
-  })
+  const request = {
+    usernameOrEmail: props.username,
+  }
 
+  await axios
+    .post("http://localhost:8090/auth/send", request)
+    .then(res => {
+      globalStore.alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
+      isTimeOut.value = false;
+      startTimer();
+    })
+    .catch(e => {
+      globalStore.alert.openAlert(e.response.data.errorMessage);
+    })
+
+  globalStore.spinner.stopSpinner();
 }
 
 // 인증
 function verify() {
 
-const request = {
-  username: props.username,
-  authentication: authentication.value
-}
+  if(!authentication.value) {
+    globalStore.alert.openAlert('인증번호를 입력해주세요');
+    return;
+  }
 
-axios
-  .post("http://localhost:8090/auth/verify", request)
-  .then(res => {
-    alert.openAlert('인증되었습니다', 'authentication-icon.png');
-    isVerified.value = true;
+  const request = {
+    username: props.username,
+    authentication: authentication.value
+  }
 
-    if(!!props.password?.trim()) {
+  axios
+    .post("http://localhost:8090/auth/verify", request)
+    .then(res => {
+      globalStore.alert.openAlert('인증되었습니다', 'authentication-icon.png');
+      isVerified.value = true;
 
-      const request = {
-        username: props.username,
-        password: props.password,
-      };
+      if(!!props.password?.trim()) {
 
-      auth.login(request,
-        (data) => {
-          auth.setMember(data);
-          router.push('/');
-        },
-        (error) => {
-          alert.openAlert(error.response.data.errorMessage);
-          router.go(0);
-        }
-      );
-    }else {
-      router.push('/login');
-    }
+        const request = {
+          username: props.username,
+          password: props.password,
+        };
 
-  })
-  .catch((e) => {
-    alert.openAlert(e.response.data.errorMessage);
-  })
+        auth.login(request,
+          (data) => {
+            auth.setMember(data);
+            globalStore.router.push('/');
+          },
+          (error) => {
+            globalStore.alert.openAlert(error.response.data.errorMessage);
+            globalStore.router.go(0);
+          }
+        );
+      }else {
+        globalStore.router.push('/login');
+      }
+
+    })
+    .catch((e) => {
+      globalStore.alert.openAlert(e.response.data.errorMessage);
+    })
 }
 
 

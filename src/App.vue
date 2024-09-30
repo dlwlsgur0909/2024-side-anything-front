@@ -1,15 +1,20 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from './js/auth.js';
-import globalRouter from './router/globalRouter.js';
-import CommonAlert from './components/common/CommonAlert.vue';
 import { useAlertStore } from './js/alert.js';
+import { useSpinnerStore } from './js/spinner.js';
+import globalStore from './stores/globalStore.js';
+import CommonAlert from './components/common/CommonAlert.vue';
+import CommonSpinner from './components/common/CommonSpinner.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
-globalRouter.router = router;
-
 const alert = useAlertStore();
+const spinner = useSpinnerStore();
+
+globalStore.router = router;
+globalStore.alert = alert;
+globalStore.spinner = spinner;
 
 if(!!auth.member) {
   auth.reissue();
@@ -30,8 +35,14 @@ if(!!auth.member) {
     v-if="alert.isOpen"
     :message="alert.message"
     :icon="alert.icon"
+    :isConfirm="alert.isConfirm"
     @confirm="alert.confirmAlert()"
   />
+
+  <CommonSpinner
+    v-if="spinner.isLoading"
+  />
+
 </template>
 
 <style scoped>

@@ -2,12 +2,8 @@
 
 import axios from 'axios';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAlertStore } from '../js/alert.js';
+import globalStore from '../stores/globalStore.js';
 import CommonButton from '../components/common/CommonButton.vue';
-
-const router = useRouter();
-const alert = useAlertStore();
 
 const mode = ref('ID');
 
@@ -33,7 +29,7 @@ function find() {
 function findUsername() {
 
   if(!email.value?.trim()) {
-    alert.openAlert('이메일을 입력해주세요');
+    globalStore.alert.openAlert('이메일을 입력해주세요');
     return;
   }
 
@@ -44,21 +40,21 @@ function findUsername() {
   axios
     .post("http://localhost:8090/auth/find/username", request)
     .then(res => {
-      alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`, 'info-icon.png');
+      globalStore.alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`, 'info-icon.png');
     })
     .catch(e => {
-      alert.openAlert(e.response.data.errorMessage);
+      globalStore.alert.openAlert(e.response.data.errorMessage);
     })
 }
 
 function findPassword() {
   if(!email.value?.trim()) {
-    alert.openAlert('이메일을 입력해주세요');
+    globalStore.alert.openAlert('이메일을 입력해주세요');
     return;
   }
 
   if(!username.value?.trim()) {
-    alert.openAlert('아이디를 입력해주세요');
+    globalStore.alert.openAlert('아이디를 입력해주세요');
     return;
   }
 
@@ -70,11 +66,11 @@ function findPassword() {
   axios
     .post('http://localhost:8090/auth/find/password', request)
     .then(res =>{
-      alert.openAlert(`${email.value}로 초기화된 비밀번호를 전송했습니다`, 'email-icon.png');
-      router.push('/login');
+      globalStore.alert.openAlert(`${email.value}로 초기화된 비밀번호를 전송했습니다`, 'email-icon.png');
+      globalStore.router.push('/login');
     })
     .catch(e =>{
-      alert.openAlert(e.response.data.errorMessage);
+      globalStore.alert.openAlert(e.response.data.errorMessage);
     })
 }
 
@@ -145,7 +141,7 @@ const buttonConfig = {
       />
       <CommonButton
         class="cancel-button"
-        @click="router.push('/login')"
+        @click="globalStore.router.push('/login')"
         :label="buttonConfig.cancel.label"
         :fontColor="buttonConfig.cancel.fontColor"
         :backgroundColor="buttonConfig.cancel.backgroundColor"
