@@ -28,7 +28,8 @@ export default ({mode}) => {
     },
     server: {
       proxy: {
-        '/auth' : backendConfig,
+        '/auth': backendConfig,
+        '/oauth2': backendConfig, 
       }
     }
   })
