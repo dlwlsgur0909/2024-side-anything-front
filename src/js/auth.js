@@ -23,7 +23,7 @@ export const useAuthStore = defineStore({
         },
         login(data, onSuccess, onReject) {
             axios
-				.post("http://localhost:8090/auth/login", data)
+				.post("/auth/login", data)
 				.then(res => {
 					onSuccess(res.data);
 				})
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore({
 			let result = false;
 			
 			await axios
-				.post("http://localhost:8090/auth/reissue", request)
+				.post("/auth/reissue", request)
 				.then(res => {
 					this.setMember(res.data);
 					result = true;
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore({
 			let result = false;
 
 			await axios
-				.get('http://localhost:8090/auth/login-success',
+				.get('/auth/login-success',
 					{withCredentials: true}
 				)
 				.then(res => {
