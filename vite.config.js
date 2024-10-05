@@ -8,9 +8,6 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default ({mode}) => {
 
   const env = loadEnv(mode, '', '');
-  // console.log(env);
-
-  console.log(env);
 
   const backendConfig = {
     target:
@@ -18,8 +15,6 @@ export default ({mode}) => {
     changeOrigin: true,
     secure: false,
   }
-
-  console.log(backendConfig);
 
   return defineConfig({
     plugins: [
