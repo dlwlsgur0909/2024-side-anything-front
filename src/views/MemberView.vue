@@ -40,7 +40,7 @@ const newPasswordConfirm = ref('');
 function memberDetail() {
 
   customAxios
-    .get(`http://localhost:8090/members/${props.username}`)
+    .get(`/members/${props.username}`)
     .then(res => {
       username.value = res.data.username;
       email.value = res.data.email;
@@ -82,9 +82,9 @@ function changePassword() {
   };
 
   customAxios
-  .patch('http://localhost:8090/members/password', request)
+  .patch('/members/password', request)
   .then(res => {
-    alert('비밀번호가 변경되었습니다');
+    globalStore.alert.openAlert('비밀번호가 변경되었습니다', 'authentication-icon.png');
     changeMode('DETAIL');
   })
 
@@ -93,16 +93,16 @@ function changePassword() {
 function validateChangePassword() {
 
   if(!originalPassword.value.trim()) {
-    alert('기존 비밀번호를 입력해주세요');
+    globalStore.alert.openAlert('기존 비밀번호를 입력해주세요');
     return false;
   }else if(!newPassword.value.trim()) {
-    alert('새 비밀번호를 입력해주세요');
+    globalStore.alert.openAlert('새 비밀번호를 입력해주세요');
     return false;
   }else if(!newPasswordConfirm.value.trim()) {
-    alert('새 비밀번호 확인을 입력해주세요');
+    globalStore.alert.openAlert('새 비밀번호 확인을 입력해주세요');
     return false;
   }else if(newPassword.value !== newPasswordConfirm.value) {
-    alert('비밀번호가 일치하지 않습니다');
+    globalStore.alert.openAlert('비밀번호가 일치하지 않습니다');
     return false;
   }
 

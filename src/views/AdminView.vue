@@ -13,7 +13,7 @@ const memberList = ref([]);
 function adminDetail() {
 
   customAxios
-  .get('http://localhost:8090/admin')
+  .get('/admin')
   .then(res => {
     username.value = res.data.username;
   })
@@ -28,7 +28,7 @@ adminDetail();
 function findMemberList() {
 
   customAxios
-  .get('http://localhost:8090/admin/members')
+  .get('/admin/members')
   .then(res => {
     memberList.value = res.data.memberList;
   })

@@ -67,7 +67,7 @@ async function resendEmail() {
   }
 
   await axios
-    .post("http://localhost:8090/auth/send", request)
+    .post("/auth/send", request)
     .then(res => {
       globalStore.alert.openAlert('메일이 재발송 되었습니다', 'email-icon.png');
       isTimeOut.value = false;
@@ -94,7 +94,7 @@ function verify() {
   }
 
   axios
-    .post("http://localhost:8090/auth/verify", request)
+    .post("/auth/verify", request)
     .then(res => {
       globalStore.alert.openAlert('인증되었습니다', 'authentication-icon.png');
       isVerified.value = true;

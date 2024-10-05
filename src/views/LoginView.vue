@@ -78,7 +78,7 @@ async function sendEmail() {
   };
 
   await axios
-    .post("http://localhost:8090/auth/send", request)
+    .post("/auth/send", request)
     .then((res) => {
       globalStore.alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
     })
@@ -90,11 +90,11 @@ async function sendEmail() {
 
 // 소셜 로그인
 function naverLogin() {
-  window.location.href = 'http://localhost:8090/oauth2/authorization/naver';
+  window.location.href = '/oauth2/authorization/naver';
 }
 
 function googleLogin() {
-  window.location.href = 'http://localhost:8090/oauth2/authorization/google';
+  window.location.href = '/oauth2/authorization/google';
 }
 
 // 버튼 설정

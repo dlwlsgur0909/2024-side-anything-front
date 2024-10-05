@@ -38,7 +38,7 @@ function findUsername() {
   };
 
   axios
-    .post("http://localhost:8090/auth/find/username", request)
+    .post("/auth/find/username", request)
     .then(res => {
       globalStore.alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`, 'info-icon.png');
     })
@@ -47,7 +47,7 @@ function findUsername() {
     })
 }
 
-function findPassword() {
+async function findPassword() {
   if(!email.value?.trim()) {
     globalStore.alert.openAlert('이메일을 입력해주세요');
     return;
@@ -58,13 +58,15 @@ function findPassword() {
     return;
   }
 
+  globalStore.spinner.startSpinner();
+
   const request = {
     email: email.value,
     username: username.value,
   };
 
-  axios
-    .post('http://localhost:8090/auth/find/password', request)
+  await axios
+    .post('/auth/find/password', request)
     .then(res =>{
       globalStore.alert.openAlert(`${email.value}로 초기화된 비밀번호를 전송했습니다`, 'email-icon.png');
       globalStore.router.push('/login');
@@ -72,6 +74,8 @@ function findPassword() {
     .catch(e =>{
       globalStore.alert.openAlert(e.response.data.errorMessage);
     })
+
+  globalStore.spinner.stopSpinner();
 }
 
 // 버튼 설정
