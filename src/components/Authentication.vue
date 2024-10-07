@@ -179,7 +179,7 @@ function verify() {
 }
 
 .button-section>button {
-  height: 30px;
+  height: 40px;
   border: 0;
   border-radius: 5px;
   font-size: 14px;
