@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { inject } from 'vue';
 import { useAuthStore } from '../js/auth.js';
 import globalStore from '../stores/globalStore.js';
+import CommonButton from '../components/common/CommonButton.vue';
 
 const props = defineProps({
   username: {
@@ -26,10 +27,11 @@ function changeMode(newMode) {
   mode.value = newMode;
 }
 
-// 아이디, 이메일, 가입일
-const username = ref('');
+// 이메일, 가입일
+const name = ref('');
 const email = ref('');
 const createdAt = ref('');
+const isSnsMember = ref(false);
 
 // 기존 비밀번호, 새 비밀번호, 새 비밀번호 확인
 const originalPassword = ref('');
@@ -42,9 +44,10 @@ function memberDetail() {
   customAxios
     .get(`/members/${props.username}`)
     .then(res => {
-      username.value = res.data.username;
+      name.value = res.data.name;
       email.value = res.data.email;
       createdAt.value = res.data.createdAt;
+      isSnsMember.value = res.data.isSnsMember;
     })
     .catch(e => {
       globalStore.router.push('/');
@@ -109,17 +112,28 @@ function validateChangePassword() {
   return true;
 }
 
+const buttonConfig = {
+
+  changePassword: {
+    label: '비밀번호 변경',
+    fontColor: '#fff',
+    backgroundColor: "#524FE1",
+  },
+  cancel: {
+    label: '취소',
+    fontColor: '#fff',
+    backgroundColor: '#E34444',
+  }
+
+}
+
 </script>
 
 <template>
   <div class="main-container">
     <div class="my-info-container" v-if="mode === 'DETAIL'">
       <div class="my-info-header">
-        {{ username }}님의 정보
-      </div>
-      <div class="id-section">
-        <span class="id-label">아이디</span>
-        <input class="id-input-box" type="text" v-model="username" disabled>
+        {{ name }}님의 정보
       </div>
       <div class="email-section">
         <span class="email-label">이메일</span>
@@ -149,8 +163,21 @@ function validateChangePassword() {
     </div>
 
     <div class="button-section">
-        <button @click="changePassword()">비밀번호 변경</button>
-        <button @click="cancel()">취소</button>
+      <CommonButton
+        class="change-password-button"
+        v-if="!isSnsMember"
+        @click="changePassword()"
+        :label="buttonConfig.changePassword.label"
+        :fontColor="buttonConfig.changePassword.fontColor"
+        :backgroundColor="buttonConfig.changePassword.backgroundColor"
+      />
+      <CommonButton
+        class="cancel-button"
+        @click="cancel()"
+        :label="buttonConfig.cancel.label"
+        :fontColor="buttonConfig.cancel.fontColor"
+        :backgroundColor="buttonConfig.cancel.backgroundColor"
+      />
     </div>
 
   </div>
@@ -160,32 +187,29 @@ function validateChangePassword() {
 <style scoped>
 
 .main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 80%;
   padding: 5%;
-  border: 1px solid #333;
+  background: #e6e5e5;
+  border-radius: 10px;
 }
 
 .my-info-container,
 .change-password-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  background: #e6e5e5;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  gap: 20px;
 }
 
 .my-info-header,
 .change-password-header {
-  display: flex;
-  justify-content: center;
   font-size: 18px;
   font-weight: 800;
+  text-align: center;
 }
 
-.id-section,
 .email-section,
 .created-at-section,
 .original-password-section,
@@ -193,11 +217,9 @@ function validateChangePassword() {
 .new-password-confirm-section {
   display: flex;
   flex-direction: column;
-  width: 50%;
   gap: 5px;
 }
 
-.id-label,
 .email-label,
 .created-at-label,
 .original-password-label,
@@ -207,7 +229,6 @@ function validateChangePassword() {
   font-weight: 700;
 }
 
-.id-input-box,
 .email-input-box,
 .created-at-input-box,
 .original-password-input-box,
@@ -220,10 +241,13 @@ function validateChangePassword() {
   display: flex;
   justify-content: center;
   gap: 10px;
-  padding-bottom: 20px;
-  background: #e6e5e5;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
 }
+
+.cancel-button,
+.change-password-button {
+  flex-grow: 0.5;
+}
+
+
 
 </style>
