@@ -64,8 +64,8 @@ export const useAuthStore = defineStore({
 			let result = false;
 
 			await axios
-				.get('/auth/login-success',
-					{withCredentials: true}
+				.get('/auth/login-success'
+					// {withCredentials: true}
 				)
 				.then(res => {
 					this.setMember(res.data);
