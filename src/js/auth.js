@@ -79,7 +79,6 @@ export const useAuthStore = defineStore({
 					result = true;
 				})
 				.catch(e => {
-					console.log(e);
 					this.logout();
 					this.reissued = false;
 				})
