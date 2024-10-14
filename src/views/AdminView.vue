@@ -45,7 +45,7 @@ function findMemberList() {
     <button @click="auth.logout()">로그아웃</button>
     <div class="member-list-section">
       <div v-for="(member, index) in memberList" :key="member.id">
-        {{ index+1 }}번 회원 {{ `${member.username} ${member.email} ${member.createdAt}`}}
+        {{ index+1 }}번 회원 {{ `${member.email} ${member.createdAt}`}}
       </div>
     </div>
   </div>
