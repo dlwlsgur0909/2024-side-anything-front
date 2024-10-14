@@ -32,6 +32,15 @@ export const useAuthStore = defineStore({
 				})
         },
         logout() {
+
+			axios.post('/auth/logout')
+			.then(res => {
+				console.log(res);
+			})
+			.catch(e => {
+				console.log(e.response.data);
+			})
+
 			this.setMember(null);
 			localStorage.removeItem('member');
 			globalStore.router.push('/login');
@@ -72,10 +81,9 @@ export const useAuthStore = defineStore({
 					result = true;
 				})
 				.catch(e => {
+					console.log(e);
 					this.logout();
 					this.reissued = false;
-					globalStore.alert.openAlert(e.response.data.errorMessage);
-					globalStore.router.push('/login');
 				})
 
 			return result;
