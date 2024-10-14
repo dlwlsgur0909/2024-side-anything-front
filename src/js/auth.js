@@ -35,10 +35,8 @@ export const useAuthStore = defineStore({
 
 			axios.post('/auth/logout')
 			.then(res => {
-				console.log(res);
 			})
 			.catch(e => {
-				console.log(e.response.data);
 			})
 
 			this.setMember(null);
