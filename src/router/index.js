@@ -75,6 +75,9 @@ router.beforeEach(async (to, from) => {
   if(toName === 'loginSuccess') {
     if(await auth.socialLogin()) {
       return {name: 'home'};
+    }else {
+      globalStore.alert.openAlert('로그인 실패');
+      return {name: 'login'};
     }
   }
 
