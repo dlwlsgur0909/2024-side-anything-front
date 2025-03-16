@@ -45,6 +45,7 @@ export const useAuthStore = defineStore({
         },
         async reissue() {
 
+			// 쿠키 사용으로 request는 삭제해야할듯
 			const request = {
 				refreshToken: this.member.refreshToken
 			};
