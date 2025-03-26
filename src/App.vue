@@ -16,7 +16,7 @@ globalStore.router = router;
 globalStore.alert = alert;
 globalStore.spinner = spinner;
 
-if(!!auth.member) {
+if(!!localStorage.getItem("ACCESS")) {
   auth.reissue();
 }else {
   auth.setMember(null);
