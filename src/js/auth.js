@@ -8,7 +8,6 @@ export const useAuthStore = defineStore({
     state: () => ({
 		member: null,
         isLogin: !!localStorage.getItem('ACCESS'), // 로그인 여부
-		reissued: false, // 토큰 재발급 여부
     }),
     actions: {
         setMember(member) {
@@ -18,7 +17,6 @@ export const useAuthStore = defineStore({
 				localStorage.removeItem("ACCESS");
             }else {
 				this.isLogin = true;
-				this.reissued = false;
 				localStorage.setItem('ACCESS', member.accessToken)
             }
         },
@@ -57,8 +55,7 @@ export const useAuthStore = defineStore({
 					result = true;
 				})
 				.catch(e => {
-					this.setMember(null);
-					this.reissued = true;
+					this.logout();
 					globalStore.alert.openAlert(e.response.data.errorMessage);
 					globalStore.router.push('/login');
 				});
@@ -70,6 +67,7 @@ export const useAuthStore = defineStore({
 
 			let result = false;
 
+			// 소셜 로그인 성공 시 Access 쿠키 확인 필요
 			await axios
 				.get('/auth/login-success')
 				.then(res => {
@@ -78,7 +76,7 @@ export const useAuthStore = defineStore({
 				})
 				.catch(e => {
 					this.logout();
-					this.reissued = false;
+					globalStore.alert.openAlert(e.response.data.errorMessage);
 				})
 
 			return result;

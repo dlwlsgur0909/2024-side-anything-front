@@ -76,16 +76,13 @@ router.beforeEach(async (to, from) => {
     if(await auth.socialLogin()) {
       return {name: 'home'};
     }else {
-      globalStore.alert.openAlert('로그인 실패');
       return {name: 'login'};
     }
   }
 
   if(!allowedNames.includes(toName) && !auth.isLogin) {
 
-    if(auth.reissued) {
-      auth.reissued = false;
-    }else {
+    if(toName !== 'home') {
       globalStore.alert.openAlert('로그인 후 이용해주세요'); 
     }
 
