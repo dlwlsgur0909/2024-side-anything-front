@@ -34,6 +34,14 @@ const customAxios = () => {
         async (error) => {
             if(error?.status === 401) {
                 if(await auth.reissue()) {
+                    
+                    // 토큰 재발급 성공 시 Authorization 값 변경
+                    error.config.headers['Authorization'] = `Beaer ${auth.member.accessToken}`
+                    
+                    // 재요청 시 상대 경로로 요청하기 위해 BASE_URL 값 제거
+                    const path = error.config.url.replace(BASE_URL, '');
+                    error.config.url = path;
+
                     return await instance(error.config);
                 }else {
                     globalStore.spinner.stopSpinner();
