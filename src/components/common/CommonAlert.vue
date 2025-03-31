@@ -10,10 +10,6 @@ const props = defineProps({
     type: String,
     required: false,
   },
-  isConfirm: {
-    type: Boolean,
-    required: false,
-  }
 })
 
 function getImageUrl() {
@@ -25,10 +21,10 @@ function getImageUrl() {
   return new URL(`/src/assets/icons/warning-icon.png`, import.meta.url).href;
 }
 
-const emit = defineEmits(['confirm']);
+const emit = defineEmits(['closeAlert']);
 
-function confirm() {
-  emit('confirm');
+function closeAlert() {
+  emit('closeAlert');
 }
 
 
@@ -48,8 +44,8 @@ function confirm() {
         {{ props.message }}
       </div>
     </div>
-    <div class="button-section" v-if="props.isConfirm">
-      <button class="confirm-button" @click="confirm()">확인</button>
+    <div class="button-section">
+      <button class="confirm-button" @click="closeAlert()">확인</button>
     </div>
   </div>
 </template>

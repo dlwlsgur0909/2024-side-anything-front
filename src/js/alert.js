@@ -6,10 +6,9 @@ export const useAlertStore = defineStore({
 		isOpen: false,
 		message: '',
 		icon: null,
-		isConfirm: true,
     }),
     actions: {
-		openAlert(message, icon, isConfirm) {
+		openAlert(message, icon) {
 			this.isOpen = true;
 			this.message = message;
 
@@ -19,18 +18,11 @@ export const useAlertStore = defineStore({
 				this.icon = icon;
 			}
 
-			if(isConfirm === false) {
-				this.isConfirm = false;
-			}else {
-				this.isConfirm = true;
-			}
-
 		},
-        confirmAlert() {
+        closeAlert() {
             this.isOpen = false;
 			this.message = '';
 			this.icon = '';
-			this.isConfirm = true;
 		}
     }
 

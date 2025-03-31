@@ -43,7 +43,7 @@ function login() {
     },
     async (error) => {
       if(error.response.data.errorCode === '403') {
-        globalStore.alert.openAlert(error.response.data.errorMessage, null, false);
+        globalStore.alert.openAlert(error.response.data.errorMessage);
         await sendEmail();
         isVerified.value = false;
       }else {

@@ -35,8 +35,7 @@ if(!!localStorage.getItem("ACCESS")) {
     v-if="alert.isOpen"
     :message="alert.message"
     :icon="alert.icon"
-    :isConfirm="alert.isConfirm"
-    @confirm="alert.confirmAlert()"
+    @closeAlert="alert.closeAlert()"
   />
 
   <CommonSpinner
