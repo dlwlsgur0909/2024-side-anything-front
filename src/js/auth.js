@@ -67,9 +67,8 @@ export const useAuthStore = defineStore({
 
 			let result = false;
 
-			// 소셜 로그인 성공 시 Access 쿠키 확인 필요
 			await axios
-				.get('/auth/login-success')
+				.post('/auth/login-success')
 				.then(res => {
 					this.setMember(res.data);
 					result = true;
