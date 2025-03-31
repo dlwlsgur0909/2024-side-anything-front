@@ -9,8 +9,8 @@ export const useSpinnerStore = defineStore({
 		startSpinner() {
 			this.isLoading = true;
 		},
-        stopSpinner() {
-            this.isLoading = false;
+    stopSpinner() {
+      this.isLoading = false;
 		}
     }
 })

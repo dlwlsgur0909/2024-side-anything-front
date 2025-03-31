@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import globalStore from '../stores/globalStore.js';
+import globalStore from './globalStore.js';
 
 export const useAuthStore = defineStore({
 	

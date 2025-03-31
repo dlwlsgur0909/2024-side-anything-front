@@ -1,6 +1,6 @@
 <script setup>
 
-import { useAuthStore } from '../js/auth.js';
+import { useAuthStore } from '../stores/authStore.js';
 import { inject, ref } from 'vue';
 import globalStore from '../stores/globalStore.js';
 

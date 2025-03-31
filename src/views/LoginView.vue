@@ -2,7 +2,7 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useAuthStore } from '../js/auth.js';
+import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 import Authentication from '../components/Authentication.vue';
 import CommonButton from '../components/common/CommonButton.vue';

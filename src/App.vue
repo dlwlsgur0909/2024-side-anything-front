@@ -1,8 +1,8 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { useAuthStore } from './js/auth.js';
-import { useAlertStore } from './js/alert.js';
-import { useSpinnerStore } from './js/spinner.js';
+import { useAuthStore } from './stores/authStore.js';
+import { useAlertStore } from './stores/alertStore.js';
+import { useSpinnerStore } from './stores/spinnerStore.js';
 import globalStore from './stores/globalStore.js';
 import CommonAlert from './components/common/CommonAlert.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';

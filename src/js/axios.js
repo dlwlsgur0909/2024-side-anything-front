@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from './auth.js';
+import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 
 const customAxios = () => {
