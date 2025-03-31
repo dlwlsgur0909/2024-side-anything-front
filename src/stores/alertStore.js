@@ -22,7 +22,7 @@ export const useAlertStore = defineStore({
         closeAlert() {
             this.isOpen = false;
 			this.message = '';
-			this.icon = '';
+			this.icon = null;
 		}
     }
 
