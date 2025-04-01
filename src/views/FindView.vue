@@ -5,17 +5,21 @@ import { ref } from 'vue';
 import globalStore from '../stores/globalStore.js';
 import CommonButton from '../components/common/CommonButton.vue';
 
+// 아이디 찾기 mode = ID
+// 비밀번호 찾기 mode = PASSWORD
 const mode = ref('ID');
 
 const username = ref('');
 const email = ref('');
 
+// mode 변경
 function changeMode(newMode) {
   mode.value = newMode;
   username.value = '';
   email.value = '';
 }
 
+// 아이디/비밀번호 찾기
 function find() {
 
   if(mode.value === 'ID') {
@@ -26,6 +30,7 @@ function find() {
   
 }
 
+// 아이디 찾기
 function findUsername() {
 
   if(!email.value?.trim()) {
@@ -40,13 +45,14 @@ function findUsername() {
   axios
     .post("/auth/find/username", request)
     .then(res => {
-      globalStore.alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다.`, 'info-icon.png');
+      globalStore.alert.openAlert(`입력하신 이메일에 해당하는 아이디는 ${res.data}입니다`, 'info-icon.png');
     })
     .catch(e => {
       globalStore.alert.openAlert(e.response.data.errorMessage);
     })
 }
 
+// 비밀번호 찾기
 async function findPassword() {
   if(!email.value?.trim()) {
     globalStore.alert.openAlert('이메일을 입력해주세요');
@@ -68,7 +74,7 @@ async function findPassword() {
   await axios
     .post('/auth/find/password', request)
     .then(res =>{
-      globalStore.alert.openAlert(`${email.value}로 초기화된 비밀번호를 전송했습니다`, 'email-icon.png');
+      globalStore.alert.openAlert(`${email.value}로 임시 비밀번호를 전송했습니다`, 'email-icon.png');
       globalStore.router.push('/login');
     })
     .catch(e =>{
