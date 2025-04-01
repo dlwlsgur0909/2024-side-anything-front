@@ -61,10 +61,10 @@ function closeAlert() {
   top: 30vh;
   left: calc(50% - 170px);
   width: 340px;
-  height: 240px;
   padding: 20px;
   background: white;
   border-radius: 10px;
+  gap: 20px;
 
 }
 
@@ -79,12 +79,12 @@ function closeAlert() {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  
 }
 
 .message-section {
   text-align: center;
-  word-break: keep-all;
+  word-wrap: break-word;
 }
 
 .alert-icon {
