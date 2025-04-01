@@ -6,6 +6,8 @@ import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 import CommonButton from '../components/common/CommonButton.vue';
 
+// 새로고침 시 Home 화면으로 이동하는데 원인 파악 필요
+
 const props = defineProps({
   username: {
     type: String,
@@ -16,6 +18,8 @@ const props = defineProps({
 const auth = useAuthStore();
 const customAxios = inject('customAxios');
 
+// 내 정보 mode = DETAIL
+// 비밀번호 변경 mode = PASSWORD
 const mode = ref('DETAIL');
 
 function changeMode(newMode) {
@@ -68,6 +72,7 @@ function cancel() {
 
 }
 
+// 비밀번호 변경 
 function changePassword() {
 
   if(mode.value === 'DETAIL') {
@@ -90,9 +95,11 @@ function changePassword() {
     globalStore.alert.openAlert('비밀번호가 변경되었습니다', 'authentication-icon.png');
     changeMode('DETAIL');
   })
+  .catch(error => {})
 
 }
 
+// 비밀번호 변경 유효성 검사
 function validateChangePassword() {
 
   if(!originalPassword.value.trim()) {

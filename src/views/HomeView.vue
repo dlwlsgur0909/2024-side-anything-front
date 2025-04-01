@@ -14,6 +14,7 @@ function myInfo() {
   });
 }
 
+// 로그인 시 권한도 저장해서 admin이 아닌 경우 admin 버튼 숨김 처리 필요
 function admin() {
   globalStore.router.push('/admin');
 }
