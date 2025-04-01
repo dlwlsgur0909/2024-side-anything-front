@@ -5,7 +5,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import customAxios from './js/axios.js';
+import customAxios from './js/customAxios.js';
 
 const app = createApp(App)
 
