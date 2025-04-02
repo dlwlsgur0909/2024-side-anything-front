@@ -16,8 +16,7 @@ const customAxios = () => {
             config.url = BASE_URL + path;
 
             globalStore.spinner.startSpinner();
-
-            const accessToken = auth.member.accessToken;
+            const accessToken = localStorage.getItem('ACCESS');
             config.headers['Authorization'] = `Bearer ${accessToken}`;
             return config;
         },
@@ -32,6 +31,7 @@ const customAxios = () => {
             return response;
         },
         async (error) => {
+            console.log(error);
             if(error?.status === 401) {
                 if(await auth.reissue()) {
                     
@@ -49,7 +49,7 @@ const customAxios = () => {
                 }
             }else {
                 globalStore.spinner.stopSpinner();
-                globalStore.alert.openAlert(error.response.data.errorMessage);
+                // globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }
