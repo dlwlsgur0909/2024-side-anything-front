@@ -119,6 +119,7 @@ function validateChangePassword() {
   return true;
 }
 
+// 버튼 설정
 const buttonConfig = {
 
   changePassword: {
