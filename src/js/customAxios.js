@@ -49,7 +49,7 @@ const customAxios = () => {
                 }
             }else {
                 globalStore.spinner.stopSpinner();
-                // globalStore.alert.openAlert(error.response.data.errorMessage);
+                globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }
