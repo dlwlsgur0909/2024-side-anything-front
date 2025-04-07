@@ -151,19 +151,19 @@ const buttonConfig = {
 
     <div class="join-container" v-if="mode === 'JOIN'">
       <div class="id-section">
-        <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
+        <input class="id-input-box" type="text" placeholder="아이디" v-model="username" @keyup.enter="join()">
       </div>
       <div class="password-section">
-        <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password">
+        <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password" @keyup.enter="join()">
       </div>
       <div class="password-confirm-section">
-        <input class="password-confirm-input-box" type="password" placeholder="비밀번호 확인" v-model="passwordConfirm">
+        <input class="password-confirm-input-box" type="password" placeholder="비밀번호 확인" v-model="passwordConfirm" @keyup.enter="join()">
       </div>
       <div class="name-section">
-        <input class="name-input-box" type="text" placeholder="이름" v-model="name">
+        <input class="name-input-box" type="text" placeholder="이름" v-model="name" @keyup.enter="join()">
       </div>
       <div class="email-section">
-        <input class="email-input-box" type="text" placeholder="이메일" v-model="email">
+        <input class="email-input-box" type="text" placeholder="이메일" v-model="email" @keyup.enter="join()">
       </div>
       <div class="button-section">
         <CommonButton
