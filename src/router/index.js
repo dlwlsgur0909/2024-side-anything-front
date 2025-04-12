@@ -1,25 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
-import LoginView from '../views/LoginView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      name: 'home',
+      component: () => import('../views/HomeView.vue')
+    },
+    {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: () => import ('../views/LoginView.vue')
     },
     {
       path: '/join',
       name: 'join',
       component: () => import ('../views/JoinView.vue')
-    },
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue')
     },
     {
       path: '/find',
