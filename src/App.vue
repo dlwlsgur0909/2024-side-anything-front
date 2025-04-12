@@ -7,6 +7,8 @@ import globalStore from './stores/globalStore.js';
 import CommonAlert from './components/common/CommonAlert.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';
 
+import TopMenu from './components/menu/TopMenu.vue';
+
 const auth = useAuthStore();
 const router = useRouter();
 const alert = useAlertStore();
@@ -25,6 +27,7 @@ if(!!localStorage.getItem("ACCESS")) {
 </script>
 
 <template>
+  <TopMenu />
   <div class="wrapper">
     <div class="main-container">
       <RouterView />
