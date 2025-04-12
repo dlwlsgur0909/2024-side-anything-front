@@ -1,4 +1,35 @@
 <script setup>
+import { ref } from 'vue';
+import { useAuthStore } from '../../stores/authStore.js';
+import globalStore from '../../stores/globalStore.js';
+
+const menuList = ref(['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'])
+const selectedMenu = ref('HOME');
+
+const auth = useAuthStore();
+
+
+/* 상단 메뉴 클릭 이벤트 */ 
+
+function onClickHome() {
+	selectedMenu.value = 'HOME';
+
+	globalStore.router.push('/');
+}
+
+function onClickMyInfo() {
+
+	selectedMenu.value = 'MYINFO';
+
+  globalStore.router.push({
+    name: 'member',
+    params: {
+      username: auth.member.username
+    },
+  });
+}
+
+
 
 </script>
 
@@ -11,9 +42,24 @@
     </div>
 
     <div class="top-menu-item-section">
-        <div class="top-menu-item">내 정보</div>
+        
+			<div
+				class="top-menu-item" 
+				:class="selectedMenu === 'HOME' ? 'top-menu-item-selected' : ''"
+				@click="onClickHome()"
+			>
+				HOME	
+			</div>
+        
+			<div 
+				class="top-menu-item"
+				:class="selectedMenu === 'MYINFO' ? 'top-menu-item-selected' : ''"
+				@click="onClickMyInfo()"
+			>
+				내 정보
+			</div>
+
         <div class="top-menu-item">MY 포트폴리오</div>
-        <div class="top-menu-item">내 동료가 되라!</div>
         <div class="top-menu-item">자유게시판</div>
     </div>
 
@@ -68,8 +114,9 @@
     height: 80px;
 }
 
-.top-menu-item:hover {
-    color: #000;
+.top-menu-item:hover,
+.top-menu-item-selected {
+    color: rgb(170, 255, 227);
 }
 
 
