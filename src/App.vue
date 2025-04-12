@@ -27,7 +27,9 @@ if(!!localStorage.getItem("ACCESS")) {
 </script>
 
 <template>
-  <TopMenu />
+  <TopMenu 
+    v-if="auth.isLogin"
+  />
   <div class="wrapper">
     <div class="main-container">
       <RouterView />
