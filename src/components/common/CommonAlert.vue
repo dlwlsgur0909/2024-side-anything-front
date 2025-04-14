@@ -85,6 +85,7 @@ function closeAlert() {
 .message-section {
   text-align: center;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .alert-icon {
