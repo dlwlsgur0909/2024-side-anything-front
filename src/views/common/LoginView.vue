@@ -119,13 +119,13 @@ const buttonConfig = {
     label: 'Naver로 로그인',
     fontColor: 'black',
     backgroundColor: '#fff',
-    icon: 'naver-logo.png',
+    logo: 'naver-logo.png',
   },
   googleLogin: {
     label: 'Google로 로그인',
     fontColor: 'black',
     backgroundColor: 'white',
-    icon: 'google-logo.png',
+    logo: 'google-logo.png',
   },
 
 }
@@ -137,7 +137,7 @@ const buttonConfig = {
   <div class="main-container">
 
     <div class="logo-section">
-      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+      <img class="main-logo" src="../../assets/logo/side-anything.svg" alt="logo">
     </div>
 
     <div class="login-container" v-if="isVerified">
@@ -171,14 +171,14 @@ const buttonConfig = {
           :label="buttonConfig.naverLogin.label" 
           :fontColor="buttonConfig.naverLogin.fontColor" 
           :backgroundColor="buttonConfig.naverLogin.backgroundColor"
-          :icon="buttonConfig.naverLogin.icon"
+          :logo="buttonConfig.naverLogin.logo"
         />
         <CommonButton 
           @click="googleLogin()"
           :label="buttonConfig.googleLogin.label" 
           :fontColor="buttonConfig.googleLogin.fontColor" 
           :backgroundColor="buttonConfig.googleLogin.backgroundColor" 
-          :icon="buttonConfig.googleLogin.icon"
+          :logo="buttonConfig.googleLogin.logo"
         />
       </div>
     </div>

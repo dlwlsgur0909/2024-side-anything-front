@@ -63,7 +63,6 @@ function onClickMyInfo() {
         <div class="top-menu-item">자유게시판</div>
     </div>
 
-    <!-- <span>Loading...</span> -->
   </div>
 
 </template>
