@@ -31,7 +31,6 @@ const customAxios = () => {
             return response;
         },
         async (error) => {
-            console.log(error);
             if(error?.status === 401) {
                 if(await auth.reissue()) {
                     
@@ -49,7 +48,7 @@ const customAxios = () => {
                 }
             }else {
                 globalStore.spinner.stopSpinner();
-                // globalStore.alert.openAlert(error.response.data.errorMessage);
+                globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }

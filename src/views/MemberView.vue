@@ -1,7 +1,6 @@
 <script setup>
 
-import { ref } from 'vue';
-import { inject } from 'vue';
+import { ref, inject } from 'vue';
 import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 import CommonButton from '../components/common/CommonButton.vue';
@@ -158,15 +157,15 @@ const buttonConfig = {
       </div>
       <div class="original-password-section">
         <span class="original-password-label">기존 비밀번호</span>
-        <input class="original-password-input-box" type="password" v-model="originalPassword">
+        <input class="original-password-input-box" type="password" v-model="originalPassword" @keyup.enter="changePassword()">
       </div>
       <div class="new-password-section">
         <span class="new-password-label">새 비밀번호</span>
-        <input class="new-password-input-box" type="password" v-model="newPassword">
+        <input class="new-password-input-box" type="password" v-model="newPassword" @keyup.enter="changePassword()">
       </div>
       <div class="new-password-confirm-section">
         <span class="new-password-confirm-label">새 비밀번호 확인</span>
-        <input class="new-password-confirm-input-box" type="password" v-model="newPasswordConfirm">
+        <input class="new-password-confirm-input-box" type="password" v-model="newPasswordConfirm" @keyup.enter="changePassword()">
       </div>
     </div>
 

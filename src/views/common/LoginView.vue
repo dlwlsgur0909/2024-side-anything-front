@@ -2,10 +2,10 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import { useAuthStore } from '../stores/authStore.js';
-import globalStore from '../stores/globalStore.js';
-import Authentication from '../components/Authentication.vue';
-import CommonButton from '../components/common/CommonButton.vue';
+import { useAuthStore } from '../../stores/authStore.js';
+import globalStore from '../../stores/globalStore.js';
+import Authentication from '../../components/Authentication.vue';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 const auth = useAuthStore();
 
@@ -142,10 +142,10 @@ const buttonConfig = {
 
     <div class="login-container" v-if="isVerified">
       <div class="id-section">
-        <input class="id-input-box" type="text" placeholder="아이디" v-model="username">
+        <input class="id-input-box" type="text" placeholder="아이디" v-model="username" @keyup.enter="login()">
       </div>
       <div class="password-section">
-        <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password">
+        <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password" @keyup.enter="login()">
       </div>
       <div class="button-section">
         <CommonButton 

@@ -7,7 +7,7 @@ const auth = useAuthStore();
 
 function myInfo() {
   globalStore.router.push({
-    name: 'member',
+    name: 'Member',
     params: {
       username: auth.member.username
     },

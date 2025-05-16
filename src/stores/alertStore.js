@@ -10,14 +10,8 @@ export const useAlertStore = defineStore({
     actions: {
 		openAlert(message, icon) {
 			this.isOpen = true;
-			this.message = message;
-
-			if(!icon) {
-				this.icon = null;
-			}else {
-				this.icon = icon;
-			}
-
+			this.message = message ? message : '경고창입니다';
+			this.icon = icon ? icon : null;
 		},
         closeAlert() {
             this.isOpen = false;

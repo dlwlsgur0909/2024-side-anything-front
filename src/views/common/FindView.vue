@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 import { ref } from 'vue';
-import globalStore from '../stores/globalStore.js';
-import CommonButton from '../components/common/CommonButton.vue';
+import globalStore from '../../stores/globalStore.js';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 // 아이디 찾기 mode = ID
 // 비밀번호 찾기 mode = PASSWORD
@@ -119,10 +119,10 @@ const buttonConfig = {
 
     <div class="find-container">
       <div class="email-section">
-        <input type="text" class="email-input-box" placeholder="이메일" v-model="email">
+        <input type="text" class="email-input-box" placeholder="이메일" v-model="email" @keyup.enter="find()">
       </div>
       <div class="id-section" v-if="mode === 'PASSWORD'">
-        <input type="text" class="id-input-box" placeholder="아이디" v-model="username">
+        <input type="text" class="id-input-box" placeholder="아이디" v-model="username" @keyup.enter="find()">
       </div>
       <CommonButton
         @click="find()"

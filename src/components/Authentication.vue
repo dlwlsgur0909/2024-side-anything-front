@@ -132,7 +132,7 @@ function verify() {
 <template>
   <div class="verify-container">
     <div class="authentication-section">
-      <input class="authentication-input-box" type="text" placeholder="인증번호" v-model="authentication">
+      <input class="authentication-input-box" type="text" placeholder="인증번호" v-model="authentication" @keyup.enter="verify()">
       {{ timer }}
     </div>
     <div class="button-section">

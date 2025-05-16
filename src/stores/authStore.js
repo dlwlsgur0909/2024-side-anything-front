@@ -76,6 +76,7 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					this.logout();
 					globalStore.alert.openAlert(e.response.data.errorMessage);
+					globalStore.router.push('/login');
 				})
 
 			return result;
