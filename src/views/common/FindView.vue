@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 import { ref } from 'vue';
-import globalStore from '../stores/globalStore.js';
-import CommonButton from '../components/common/CommonButton.vue';
+import globalStore from '../../stores/globalStore.js';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 // 아이디 찾기 mode = ID
 // 비밀번호 찾기 mode = PASSWORD

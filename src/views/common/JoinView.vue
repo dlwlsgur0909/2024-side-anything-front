@@ -2,9 +2,9 @@
 
 import { ref } from 'vue';
 import axios from 'axios';
-import globalStore from '../stores/globalStore.js';
-import Authentication from '../components/Authentication.vue';
-import CommonButton from '../components/common/CommonButton.vue';
+import globalStore from '../../stores/globalStore.js';
+import Authentication from '../../components/Authentication.vue';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 const mode = ref('JOIN');
 

@@ -7,52 +7,52 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: () => import('../views/HomeView.vue')
     },
     {
       path: '/login',
-      name: 'login',
-      component: () => import ('../views/LoginView.vue')
+      name: 'Login',
+      component: () => import ('../views/common/LoginView.vue')
     },
     {
       path: '/join',
-      name: 'join',
-      component: () => import ('../views/JoinView.vue')
+      name: 'Join',
+      component: () => import ('../views/common/JoinView.vue')
     },
     {
       path: '/find',
-      name: 'find',
-      component: () => import('../views/FindView.vue')
+      name: 'Find',
+      component: () => import('../views/common/FindView.vue')
     },
     {
       path: '/member/:username',
-      name: 'member',
+      name: 'Member',
       component: () => import('../views/MemberView.vue'),
       props: true
     },
     {
       path: '/admin',
-      name: 'admin',
+      name: 'Admin',
       component: () => import('../views/AdminView.vue'),
     },
     {
       path: '/login-success',
-      name: 'loginSuccess', 
+      name: 'LoginSuccess', 
     },
     {
       path: '/login-fail',
-      name: 'loginFail',
+      name: 'LoginFail',
     },
     {
       path: '/:pathMatch(.*)',
-      name: 'notFound',
-      component: () => import('../views/NotFound.vue'),
+      name: 'NotFound',
+      component: () => import('../views/common/NotFound.vue'),
     }
   ]
 })
 
-const allowedNames = ['login', 'join', 'find'];
+const allowedNames = ['Login', 'Join', 'Find'];
 
 router.beforeEach(async (to, from) => {
 
@@ -60,32 +60,32 @@ router.beforeEach(async (to, from) => {
   const toName = to.name;
 
   // 소셜 로그인 실패 처리
-  if(toName === 'loginFail') {
+  if(toName === 'LoginFail') {
     if(to.query?.error === '403') {
       globalStore.alert.openAlert('이미 가입된 이메일입니다.');
     }else {
       globalStore.alert.openAlert('소셜 로그인에 실패했습니다.');
     }
 
-    return {name: 'login'}
+    return {name: 'Login'}
   }
 
   // 소셜 로그인 성공 처리
-  if(toName === 'loginSuccess') {
+  if(toName === 'LoginSuccess') {
     if(await auth.socialLogin()) {
-      return {name: 'home'};
+      return {name: 'Home'};
     }else {
-      return {name: 'login'};
+      return {name: 'Login'};
     }
   }
 
   if(!allowedNames.includes(toName) && !auth.isLogin) {
 
-    if(toName !== 'home') {
+    if(toName !== 'Home') {
       globalStore.alert.openAlert('로그인 후 이용해주세요'); 
     }
 
-    return {name: 'login'};
+    return {name: 'Login'};
   }
 
 })

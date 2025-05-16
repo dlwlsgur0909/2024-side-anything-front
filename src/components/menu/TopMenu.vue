@@ -22,7 +22,7 @@ function onClickMyInfo() {
 	selectedMenu.value = 'MYINFO';
 
   globalStore.router.push({
-    name: 'member',
+    name: 'Member',
     params: {
       username: auth.member.username
     },

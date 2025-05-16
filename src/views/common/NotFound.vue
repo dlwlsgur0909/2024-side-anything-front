@@ -1,6 +1,6 @@
 <script setup>
 
-import globalStore from '../stores/globalStore';
+import globalStore from '../../stores/globalStore';
 
 </script>
 

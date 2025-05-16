@@ -31,7 +31,6 @@ const customAxios = () => {
             return response;
         },
         async (error) => {
-            console.log(error);
             if(error?.status === 401) {
                 if(await auth.reissue()) {
                     
