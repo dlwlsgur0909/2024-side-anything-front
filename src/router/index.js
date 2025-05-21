@@ -51,6 +51,11 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/portfolioSave',
+      name: 'PortfolioSave',
+      component: () => import('../views/portfolio/PorfolioSave.vue')
+    },
+    {
       path: '/:pathMatch(.*)',
       name: 'NotFound',
       component: () => import('../views/common/NotFound.vue'),
