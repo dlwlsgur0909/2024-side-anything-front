@@ -29,6 +29,19 @@ function onClickMyInfo() {
   });
 }
 
+function onClickMyPortfolio() {
+
+  selectedMenu.value = 'MYPORTFOLIO';
+
+  globalStore.router.push({
+    name: 'PortfolioList',
+    params: {
+      username: auth.member.username
+    }
+  });
+
+}
+
 
 
 </script>
@@ -38,7 +51,7 @@ function onClickMyInfo() {
   <div class="top-menu-container">
 
     <div class="top-menu-logo-section">
-        <img class="top-menu-logo" src="../../assets/top-menu-logo.svg" alt="logo">
+        <img class="top-menu-logo" src="../../assets/logo/top-menu-logo.svg" alt="logo">
     </div>
 
     <div class="top-menu-item-section">
@@ -59,7 +72,13 @@ function onClickMyInfo() {
 				내 정보
 			</div>
 
-        <div class="top-menu-item">MY 포트폴리오</div>
+        <div 
+          class="top-menu-item"
+          :class="selectedMenu === 'MYPORTFOLIO' ? 'top-menu-item-selected' : ''"
+          @click="onClickMyPortfolio()"
+        >
+          MY 포트폴리오
+        </div>
         <div class="top-menu-item">자유게시판</div>
     </div>
 
