@@ -111,10 +111,10 @@ const buttonConfig = {
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main">
     
     <div class="logo-section">
-      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+      <img class="main-logo" src="../../assets/logo/side-anything.svg" alt="logo">
     </div>
 
     <div class="find-container">
@@ -162,15 +162,6 @@ const buttonConfig = {
 
 <style scoped>
 
-.main-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 50px;
-  width: 80%;
-  height: 98vh;
-}
-
 .logo-section {
   padding-top: 110px;
 }
@@ -178,7 +169,6 @@ const buttonConfig = {
 .main-logo {
   width: 100%;
 }
-
 
 .find-container {
   display: flex;

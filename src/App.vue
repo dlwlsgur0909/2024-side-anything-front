@@ -54,13 +54,10 @@ if(!!localStorage.getItem("ACCESS")) {
 .wrapper {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   margin-left: auto;
   margin-right: auto;
-  height: 98vh;
+  height: calc(100vh - 80px);
   width: 500px;
-  border: 1px solid rgb(0, 0, 0);
-  border-radius: 5px;
 }
 
 .main-container {
