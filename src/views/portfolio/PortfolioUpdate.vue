@@ -1,23 +1,47 @@
 <script setup>
 
 import { ref, inject } from 'vue'; 
-import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '@/components/common/CommonButton.vue';
-import axios from 'axios';
+
+const props = defineProps({
+  portfolioId: {
+    type: String,
+    required: true
+  }
+})
 
 const customAxios = inject('customAxios');
-const auth = useAuthStore();
 
+const portfolioId = ref('');
 const portfolioName = ref('');
 const portfolioContent = ref('');
 const portfolioUrl = ref('');
 const isPublic = ref(true);
 
+// 포트폴리오 상세 API
+function getPortfolio() {
+
+customAxios
+  .get(`/portfolios/${props.portfolioId}`)
+  .then(res => {
+    portfolioId.value = res.data.portfolioId;
+    portfolioName.value = res.data.portfolioName;
+    portfolioContent.value = res.data.portfolioContent;
+    portfolioUrl.value = res.data.portfolioUrl;
+    isPublic.value = res.data.isPublic;
+  })
+  .catch(error => {
+  })
+
+}
+
+getPortfolio();
+
 // 버튼 설정
 const buttonConfig = {
-  save: {
-    label: '등록하기',
+  update: {
+    label: '수정하기',
     fontColor: 'white',
     backgroundColor: 'black'
   }
@@ -33,8 +57,8 @@ function validateContentLimit() {
 
 }
 
-// 포트폴리오 저장 API
-function savePortfolio() {
+// 포트폴리오 수정 API
+function updatePortfolio() {
   if(!validatePortfolioSaveRequest()) {
     return;
   }
@@ -47,12 +71,16 @@ function savePortfolio() {
   }
 
   customAxios
-    .post('/portfolios', request)
+    .patch(`/portfolios/${portfolioId.value}`, request)
     .then(res => {
-      console.log(res);
+      globalStore.router.push({
+        name: 'PortfolioDetail',
+        params: {
+          portfolioId: portfolioId.value
+        }
+      })
     })
     .catch(error => {
-      console.log(error);
     })
 
 }
@@ -77,23 +105,23 @@ function validatePortfolioSaveRequest() {
 
 <template>
   <div class="main">
-    <div class="portfolio-save-container">
+    <div class="portfolio-update-container">
       <div class="portfolio-name">
-        <label class="subject" for="portfolio-save-name">
+        <label class="subject" for="portfolio-update-name">
           포트폴리오 제목
         </label>
         <input 
           type="text" 
           class="name-input"
-          id="portfolio-save-name"
+          id="portfolio-update-name"
           v-model="portfolioName"
         >
       </div>
       <div class="portfolio-content">
-        <label class="subject" for="portfolio-save-content">포트폴리오 내용</label>
+        <label class="subject" for="portfolio-update-content">포트폴리오 내용</label>
         <textarea 
           class="content-textarea"
-          id="portfolio-save-content"
+          id="portfolio-update-content"
           v-model="portfolioContent"
           @input="validateContentLimit()"  
         />
@@ -103,11 +131,11 @@ function validatePortfolioSaveRequest() {
 
       </div>
       <div class="portfolio-url">
-        <label class="subject" for="portfolio-save-url">포트폴리오 URL</label>
+        <label class="subject" for="portfolio-update-url">포트폴리오 URL</label>
         <input 
           type="text"
           class="url-input"
-          id="portfolio-save-url"
+          id="portfolio-update-url"
           v-model="portfolioUrl"
           placeholder="https://www.example.com"
         >
@@ -137,12 +165,12 @@ function validatePortfolioSaveRequest() {
       </div>
     </div>
 
-    <div class="portfolio-save-button-container">
+    <div class="portfolio-update-button-container">
       <CommonButton
-        @click="savePortfolio()"
-        :label="buttonConfig.save.label"
-        :fontColor="buttonConfig.save.fontColor"
-        :background-color="buttonConfig.save.backgroundColor"
+        @click="updatePortfolio()"
+        :label="buttonConfig.update.label"
+        :fontColor="buttonConfig.update.fontColor"
+        :background-color="buttonConfig.update.backgroundColor"
       />
     </div>
   </div>
@@ -150,7 +178,7 @@ function validatePortfolioSaveRequest() {
 
 <style scoped>
 
-.portfolio-save-container {
+.portfolio-update-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -214,7 +242,7 @@ function validatePortfolioSaveRequest() {
   gap: 15px;
 }
 
-.portfolio-save-button-container {
+.portfolio-update-button-container {
   display: flex;
   flex-direction: column;
 }
