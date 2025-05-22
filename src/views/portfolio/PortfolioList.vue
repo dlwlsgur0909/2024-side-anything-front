@@ -3,7 +3,8 @@
 import { ref, inject } from 'vue'; 
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
-import CommonButton from '@/components/common/CommonButton.vue';
+import CommonButton from '../../components/common/CommonButton.vue';
+import Pagination from '../../components/common/Pagination.vue';
 
 const customAxios = inject('customAxios');
 const auth = useAuthStore();
@@ -14,19 +15,25 @@ const props = defineProps({
   }
 });
 
+const currentPage = ref(1);
+const totalElements = ref(0);
+const totalPages = ref(0);
+
 const portfolioList = ref([]);
 
 // 내 포트폴리오 목록 조회 API
 function getPortfolioList() {
 
   customAxios
-    .get('/portfolios')
+    .get(`/portfolios?page=${currentPage.value}`)
     .then(res => {
-      portfolioList.value = res.data;
+      portfolioList.value = res.data.portfolioList;
+      totalElements.value = res.data.totalElements;
+      totalPages.value = res.data.totalPages;
     })
     .catch(error => {
-      console.log(error);
     })
+
 }
 
 getPortfolioList();
@@ -55,12 +62,24 @@ function goToPortfolioDetail(portfolioId) {
   });
 }
 
+// 페이지 변경
+function changePage(page) {
+  currentPage.value = page;
+  getPortfolioList();
+}
+
 </script>
 
 <template>
   <div class="main">
 
     <div class="portfolio-list-container">
+      <div class="portfolio-list-header">
+          <span class="header-portfolio-id">번호</span>
+          <span class="header-portfolio-name">포트폴리오명</span>
+          <span class="header-member-name">작성자</span>
+      </div>
+
       <div class="portfolio-list-item" 
         v-for="(portfolio) in portfolioList" :key="portfolio.portfolioId"
         @click="goToPortfolioDetail(portfolio.portfolioId)"
@@ -76,6 +95,12 @@ function goToPortfolioDetail(portfolioId) {
         </div>
       </div>
     </div>
+
+    <Pagination
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      @changePage="(page) => changePage(page)"
+    />
 
     <div class="portfolio-list-button-container">
       <CommonButton
@@ -93,6 +118,27 @@ function goToPortfolioDetail(portfolioId) {
 .portfolio-list-container {
   display: flex;
   flex-direction: column;
+}
+
+.portfolio-list-header {
+  display: flex;
+  padding: 10px 5px;
+  border-bottom: 1px dashed black;
+}
+
+.header-portfolio-id {
+  width: 15%;
+  text-align: left;
+}
+
+.header-portfolio-name {
+  width: 70%;
+  text-align: center;
+}
+
+.header-member-name {
+  width: 15%;
+  text-align: center;
 }
 
 .portfolio-list-item {
@@ -123,7 +169,7 @@ function goToPortfolioDetail(portfolioId) {
 
 .item-member-name {
   display: flex;
-  justify-content: flex-end;
+  text-align: center;
   width: 15%;
 }
 
