@@ -14,8 +14,11 @@ const customAxios = () => {
         (config) => {
             const path = config.url;
             config.url = BASE_URL + path;
-
-            globalStore.spinner.startSpinner();
+            
+            if(config.method !== 'get') {
+                globalStore.spinner.startSpinner();
+            }
+            
             const accessToken = localStorage.getItem('ACCESS');
             config.headers['Authorization'] = `Bearer ${accessToken}`;
             return config;

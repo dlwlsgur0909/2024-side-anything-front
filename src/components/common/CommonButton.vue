@@ -16,14 +16,14 @@ const props = defineProps({
     required: false,
     default: 'white',
   },
-  icon: {
+  logo: {
     type: String,
     required: false,
   }
 })
 
 function getImageUrl() {
-  return new URL(`/src/assets/${props.icon}`, import.meta.url).href;
+  return new URL(`/src/assets/logo/${props.logo}`, import.meta.url).href;
 }
 
 </script>
@@ -33,13 +33,13 @@ function getImageUrl() {
     class="common-button"
     :style="`color: ${props.fontColor}; background: ${props.backgroundColor}`"
   >
-    <div class="common-button-logo"  v-if="!!props.icon?.trim()">
+    <div class="common-button-logo"  v-if="!!props.logo?.trim()">
       <img 
         class="logo-image" :src="getImageUrl()"
       >
     </div>
     <div class="common-button-label">
-      <span class="label-with-logo" v-if="!!props.icon?.trim()">
+      <span class="label-with-logo" v-if="!!props.logo?.trim()">
         {{ props.label }}
       </span>
       <span class="label-without-logo" v-else>

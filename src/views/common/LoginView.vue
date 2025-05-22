@@ -42,10 +42,9 @@ function login() {
       globalStore.spinner.stopSpinner();
     },
     async (error) => {
-      if(error.response.data.errorCode === '403') {
+      if(error.response.data.errorCode === 403) {
         globalStore.alert.openAlert(error.response.data.errorMessage);
         await sendEmail();
-        isVerified.value = false;
       }else {
         globalStore.alert.openAlert(error.response.data.errorMessage);
       }
@@ -81,10 +80,10 @@ async function sendEmail() {
     .post("/auth/send", request)
     .then((res) => {
       globalStore.alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
+      isVerified.value = false;
     })
     .catch(e => {
       globalStore.alert.openAlert(e.response.data.errorMessage);
-      isVerified.value = true;
     })
 }
 
@@ -119,13 +118,13 @@ const buttonConfig = {
     label: 'Naver로 로그인',
     fontColor: 'black',
     backgroundColor: '#fff',
-    icon: 'naver-logo.png',
+    logo: 'naver-logo.png',
   },
   googleLogin: {
     label: 'Google로 로그인',
     fontColor: 'black',
     backgroundColor: 'white',
-    icon: 'google-logo.png',
+    logo: 'google-logo.png',
   },
 
 }
@@ -134,10 +133,10 @@ const buttonConfig = {
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main">
 
     <div class="logo-section">
-      <img class="main-logo" src="../assets/side-anything.svg" alt="logo">
+      <img class="main-logo" src="../../assets/logo/side-anything.svg" alt="logo">
     </div>
 
     <div class="login-container" v-if="isVerified">
@@ -171,14 +170,14 @@ const buttonConfig = {
           :label="buttonConfig.naverLogin.label" 
           :fontColor="buttonConfig.naverLogin.fontColor" 
           :backgroundColor="buttonConfig.naverLogin.backgroundColor"
-          :icon="buttonConfig.naverLogin.icon"
+          :logo="buttonConfig.naverLogin.logo"
         />
         <CommonButton 
           @click="googleLogin()"
           :label="buttonConfig.googleLogin.label" 
           :fontColor="buttonConfig.googleLogin.fontColor" 
           :backgroundColor="buttonConfig.googleLogin.backgroundColor" 
-          :icon="buttonConfig.googleLogin.icon"
+          :logo="buttonConfig.googleLogin.logo"
         />
       </div>
     </div>
@@ -192,15 +191,6 @@ const buttonConfig = {
 </template>
 
 <style scoped>
-
-.main-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 50px;
-  width: 80%;
-  height: 98vh;
-}
 
 .logo-section {
   padding-top: 110px;

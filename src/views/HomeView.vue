@@ -22,7 +22,7 @@ function admin() {
 </script>
 
 <template>
-  <div class="home">
+  <div class="main">
     <h1>This is Home page</h1>
     <button @click="myInfo()">내 정보</button>
     <button @click="auth.logout()">로그아웃</button>

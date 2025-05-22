@@ -13,6 +13,14 @@ html, body {
   font-family: sans-serif;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
+  width: 80%;
+}
+
 /* #app {
   max-width: 1280px;
   margin: 0 auto;

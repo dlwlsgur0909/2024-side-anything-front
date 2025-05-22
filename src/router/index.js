@@ -45,6 +45,29 @@ const router = createRouter({
       name: 'LoginFail',
     },
     {
+      path: '/portfolioList/:username',
+      name: 'PortfolioList',
+      component: () => import('../views/portfolio/PortfolioList.vue'),
+      props: true
+    },
+    {
+      path: '/portfolioSave',
+      name: 'PortfolioSave',
+      component: () => import('../views/portfolio/PortfolioSave.vue')
+    },
+    {
+      path: '/portfolioDetail/:portfolioId',
+      name: 'PortfolioDetail',
+      component: () => import('../views/portfolio/PortfolioDetail.vue'),
+      props: true
+    },
+    {
+      path: '/portfolioUpdate/:portfolioId',
+      name: 'PortfolioUpdate',
+      component: () => import('../views/portfolio/PortfolioUpdate.vue'),
+      props: true
+    },
+    {
       path: '/:pathMatch(.*)',
       name: 'NotFound',
       component: () => import('../views/common/NotFound.vue'),
