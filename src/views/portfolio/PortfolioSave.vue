@@ -46,9 +46,6 @@ function savePortfolio() {
   customAxios
     .post('/portfolios', request)
     .then(res => {
-
-      console.log(res.data);
-
       globalStore.router.push({
         name: 'PortfolioDetail',
         params: {

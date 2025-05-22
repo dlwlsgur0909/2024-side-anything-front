@@ -52,8 +52,8 @@ function getPortfolio() {
 getPortfolio();
 
 
-// 포트폴리오 수정 버튼
-function portfolioUpdate() {
+// 포트폴리오 수정 페이지 이동
+function goToPortfolioUpdate() {
   globalStore.router.push({
     name: 'PortfolioUpdate',
     params: {
@@ -107,7 +107,7 @@ function portfolioUpdate() {
 
     <div class="portfolio-detail-button-container" v-if="auth.member?.id === memberId">
       <CommonButton
-        @click="portfolioUpdate()"
+        @click="goToPortfolioUpdate()"
         :label="buttonConfig.update.label"
         :fontColor="buttonConfig.update.fontColor"
         :background-color="buttonConfig.update.backgroundColor"
