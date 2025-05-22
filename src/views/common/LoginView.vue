@@ -42,10 +42,9 @@ function login() {
       globalStore.spinner.stopSpinner();
     },
     async (error) => {
-      if(error.response.data.errorCode === '403') {
+      if(error.response.data.errorCode === 403) {
         globalStore.alert.openAlert(error.response.data.errorMessage);
         await sendEmail();
-        isVerified.value = false;
       }else {
         globalStore.alert.openAlert(error.response.data.errorMessage);
       }
@@ -81,10 +80,10 @@ async function sendEmail() {
     .post("/auth/send", request)
     .then((res) => {
       globalStore.alert.openAlert('인증메일이 발송되었습니다', 'email-icon.png');
+      isVerified.value = false;
     })
     .catch(e => {
       globalStore.alert.openAlert(e.response.data.errorMessage);
-      isVerified.value = true;
     })
 }
 
