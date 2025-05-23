@@ -14,17 +14,17 @@ const totalPages = ref(0);
 // 검색어 
 const keyword = ref('');
 
-// 포트폴리오 목록 
-const portfolioList = ref([]);
+// 내 포트폴리오 목록 
+const myPortfolioList = ref([]);
 
 // 내 포트폴리오 목록 조회 API
-function getPortfolioList() {
+function getMyPortfolioList() {
 
   // request parameter에 인코딩이 필요한 특수문자가 들어가면 에러가 발생하므로 encodeURIComponent 사용
   customAxios
-    .get(`/portfolios?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
+    .get(`/portfolios/me?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      portfolioList.value = res.data.portfolioList;
+      myPortfolioList.value = res.data.myPortfolioList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -33,16 +33,16 @@ function getPortfolioList() {
 }
 
 // 검색 이벤트
-async function handleSearch() {
+function handleSearch() {
 
   keyword.value = keyword.value.trim();
   currentPage.value = 1;
-  getPortfolioList();
+  getMyPortfolioList();
 
 }
 
 // 최초 포트폴리오 목록 조회
-getPortfolioList();
+getMyPortfolioList();
 
 // 포트폴리오 저장 페이지 이동
 function goToPortfolioSave() {
@@ -62,7 +62,7 @@ function goToPortfolioDetail(portfolioId) {
 // 페이지 변경
 function changePage(page) {
   currentPage.value = page;
-  getPortfolioList();
+  getMyPortfolioList();
 }
 
 // 버튼 설정
@@ -86,7 +86,7 @@ const buttonConfig = {
 
     <div class="portfolio-search-container">
       <input type="text" 
-        class="portfolio-search-box" placeholder="포트폴리오명 / 작성자"
+        class="portfolio-search-box" placeholder="포트폴리오명"
         v-model="keyword" @keyup.enter="handleSearch()"
       />
       <CommonButton
@@ -99,15 +99,15 @@ const buttonConfig = {
     </div>
 
 
-    <div class="portfolio-list-container" v-if="portfolioList.length > 0">
+    <div class="portfolio-list-container" v-if="myPortfolioList.length > 0">
       <div class="portfolio-list-header">
           <span class="header-portfolio-id">번호</span>
           <span class="header-portfolio-name">포트폴리오명</span>
-          <span class="header-member-name">작성자</span>
+          <span class="header-is-public">공개범위</span>
       </div>
 
       <div class="portfolio-list-item" 
-        v-for="(portfolio) in portfolioList" :key="portfolio.portfolioId"
+        v-for="(portfolio) in myPortfolioList" :key="portfolio.portfolioId"
         @click="goToPortfolioDetail(portfolio.portfolioId)"
       >
         <div class="item-portfolio-id">
@@ -116,8 +116,8 @@ const buttonConfig = {
         <div class="item-portfolio-name">
           {{ portfolio.portfolioName }}
         </div>
-        <div class="item-member-name">
-          {{ portfolio.memberName }}
+        <div class="item-is-public">
+          {{ portfolio.isPublic === true ? 'Public' : 'Private' }}
         </div>
       </div>
     </div>
@@ -181,7 +181,7 @@ const buttonConfig = {
   text-align: center;
 }
 
-.header-member-name {
+.header-is-public {
   width: 15%;
   text-align: center;
 }
@@ -213,10 +213,9 @@ const buttonConfig = {
   width: 70%;
 }
 
-.item-member-name {
+.item-is-public {
   display: flex;
   justify-content: center;
-  text-align: center;
   width: 15%;
 }
 
