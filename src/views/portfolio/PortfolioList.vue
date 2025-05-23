@@ -15,17 +15,25 @@ const props = defineProps({
   }
 });
 
+// 페이지네이션 관련 변수
 const currentPage = ref(1);
-const totalElements = ref(0);
+const totalElements = ref(0); // totalElements는 현재 사용하지 않음 
 const totalPages = ref(0);
 
+// 검색어 
+const keyword = ref('');
+
+// 포트폴리오 목록 
 const portfolioList = ref([]);
 
 // 내 포트폴리오 목록 조회 API
 function getPortfolioList() {
 
+  keyword.value = keyword.value.trim();
+
+  // request parameter에 인코딩이 필요한 특수문자가 들어가면 에러가 발생하므로 encodeURIComponent 사용
   customAxios
-    .get(`/portfolios?page=${currentPage.value}`)
+    .get(`/portfolios?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
       portfolioList.value = res.data.portfolioList;
       totalElements.value = res.data.totalElements;
@@ -36,16 +44,8 @@ function getPortfolioList() {
 
 }
 
+// 최초 포트폴리오 목록 조회
 getPortfolioList();
-
-// 버튼 설정
-const buttonConfig = {
-  save: {
-    label: '등록하기',
-    fontColor: 'white',
-    backgroundColor: 'black'
-  }
-}
 
 // 포트폴리오 저장 페이지 이동
 function goToPortfolioSave() {
@@ -68,12 +68,41 @@ function changePage(page) {
   getPortfolioList();
 }
 
+// 버튼 설정
+const buttonConfig = {
+  save: {
+    label: '등록하기',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  },
+  search: {
+    label: '검색',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  }
+}
+
 </script>
 
 <template>
   <div class="main">
 
-    <div class="portfolio-list-container">
+    <div class="portfolio-search-container">
+      <input type="text" 
+        class="portfolio-search-box" placeholder="포트폴리오명 / 작성자"
+        v-model="keyword" @keyup.enter="getPortfolioList()"
+      />
+      <CommonButton
+        class="portfolio-search-button"
+        :label="buttonConfig.search.label"
+        :fontColor="buttonConfig.search.fontColor"
+        :background-color="buttonConfig.search.backgroundColor"
+         @click="getPortfolioList()"
+      />
+    </div>
+
+
+    <div class="portfolio-list-container" v-if="portfolioList.length > 0">
       <div class="portfolio-list-header">
           <span class="header-portfolio-id">번호</span>
           <span class="header-portfolio-name">포트폴리오명</span>
@@ -96,6 +125,10 @@ function changePage(page) {
       </div>
     </div>
 
+    <div class="no-content" v-else>
+      <span class="no-content-message">등록된 포트폴리오가 없습니다 😢</span>
+    </div>
+
     <Pagination
       :currentPage="currentPage"
       :totalPages="totalPages"
@@ -114,6 +147,21 @@ function changePage(page) {
 </template>
 
 <style scoped>
+
+.portfolio-search-container {
+  display: flex;
+  gap: 20px;
+}
+
+.portfolio-search-box {
+  height: 40px;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.portfolio-search-button {
+  width: 100px;
+}
 
 .portfolio-list-container {
   display: flex;
@@ -176,6 +224,16 @@ function changePage(page) {
 .portfolio-list-button-container {
   display: flex;
   flex-direction: column;
+}
+
+.no-content {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.no-content-message {
+  font-weight: 500;
 }
 
 </style>
