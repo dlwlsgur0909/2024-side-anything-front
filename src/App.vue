@@ -56,8 +56,7 @@ if(!!localStorage.getItem("ACCESS")) {
   flex-wrap: wrap;
   margin-left: auto;
   margin-right: auto;
-  height: calc(100vh - 80px);
-  width: 500px;
+  max-width: 1100px;
 }
 
 .main-container {

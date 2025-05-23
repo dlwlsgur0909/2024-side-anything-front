@@ -206,7 +206,7 @@ const buttonConfig = {
   gap: 20px;
   padding: 20px;
   background: #e6e5e5;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .id-section,
@@ -219,7 +219,7 @@ const buttonConfig = {
 .password-input-box {
   height: 40px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .button-section {
