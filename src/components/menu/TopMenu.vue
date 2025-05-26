@@ -8,12 +8,10 @@ const selectedMenu = ref('HOME');
 
 const auth = useAuthStore();
 
-
 /* 상단 메뉴 클릭 이벤트 */ 
 
 function onClickHome() {
 	selectedMenu.value = 'HOME';
-
 	globalStore.router.push('/');
 }
 
@@ -29,16 +27,9 @@ function onClickMyInfo() {
   });
 }
 
-function onClickMyPortfolio() {
-
-  selectedMenu.value = 'MYPORTFOLIO';
-
-  globalStore.router.push({
-    name: 'PortfolioList',
-    params: {
-      username: auth.member.username
-    }
-  });
+function onPortfolioList() {
+  selectedMenu.value = 'PORTFOLIOLIST';
+  globalStore.router.push('/portfolioList');
 
 }
 
@@ -72,14 +63,16 @@ function onClickMyPortfolio() {
 				내 정보
 			</div>
 
-        <div 
-          class="top-menu-item"
-          :class="selectedMenu === 'MYPORTFOLIO' ? 'top-menu-item-selected' : ''"
-          @click="onClickMyPortfolio()"
-        >
-          MY 포트폴리오
-        </div>
-        <div class="top-menu-item">자유게시판</div>
+      <div 
+        class="top-menu-item"
+        :class="selectedMenu === 'PORTFOLIOLIST' ? 'top-menu-item-selected' : ''"
+        @click="onPortfolioList()"
+      >
+        포트폴리오
+      </div>
+
+      <div class="top-menu-item">자유게시판</div>
+
     </div>
 
   </div>

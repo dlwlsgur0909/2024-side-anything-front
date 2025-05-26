@@ -45,10 +45,14 @@ const router = createRouter({
       name: 'LoginFail',
     },
     {
-      path: '/portfolioList/:username',
+      path: '/myPortfolioList',
+      name: 'MyPortfolioList',
+      component: () => import('../views/portfolio/MyPortfolioList.vue'),
+    },
+    {
+      path: '/portfolioList',
       name: 'PortfolioList',
       component: () => import('../views/portfolio/PortfolioList.vue'),
-      props: true
     },
     {
       path: '/portfolioSave',

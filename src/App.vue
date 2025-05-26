@@ -2,9 +2,12 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from './stores/authStore.js';
 import { useAlertStore } from './stores/alertStore.js';
+import { useConfirmStore } from './stores/confirmStore.js';
 import { useSpinnerStore } from './stores/spinnerStore.js';
 import globalStore from './stores/globalStore.js';
+
 import CommonAlert from './components/common/CommonAlert.vue';
+import CommonConfirm from './components/common/CommonConfirm.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';
 
 import TopMenu from './components/menu/TopMenu.vue';
@@ -12,10 +15,12 @@ import TopMenu from './components/menu/TopMenu.vue';
 const auth = useAuthStore();
 const router = useRouter();
 const alert = useAlertStore();
+const confirm = useConfirmStore();
 const spinner = useSpinnerStore();
 
 globalStore.router = router;
 globalStore.alert = alert;
+globalStore.confirm = confirm;
 globalStore.spinner = spinner;
 
 if(!!localStorage.getItem("ACCESS")) {
@@ -43,6 +48,13 @@ if(!!localStorage.getItem("ACCESS")) {
     @closeAlert="alert.closeAlert()"
   />
 
+  <CommonConfirm
+    v-if="confirm.isOpen"
+    :message="confirm.message"
+    @onClickConfirm="confirm.onClickConfirm()"
+    @closeConfirm="confirm.closeConfirm()"
+  />
+
   <CommonSpinner
     v-if="spinner.isLoading"
   />
@@ -56,8 +68,7 @@ if(!!localStorage.getItem("ACCESS")) {
   flex-wrap: wrap;
   margin-left: auto;
   margin-right: auto;
-  height: calc(100vh - 80px);
-  width: 500px;
+  max-width: 1100px;
 }
 
 .main-container {

@@ -4,45 +4,32 @@ const props = defineProps({
   message: {
     type: String,
     required: true,
-    default: '알림',
+    default: '확인',
   },
-  icon: {
-    type: String,
-    required: false,
-  },
+
 })
 
-function getImageUrl() {
+const emit = defineEmits(['closeConfirm', 'onClickConfirm']);
 
-  if(!!props.icon) {
-    return new URL(`/src/assets/icon/${props.icon}`, import.meta.url).href;
-  }
-
-  return new URL(`/src/assets/icon/warning-icon.png`, import.meta.url).href;
+function closeConfirm() {
+  emit('closeConfirm');
 }
 
-const emit = defineEmits(['closeAlert']);
-
-function closeAlert() {
-  emit('closeAlert');
+function onClickConfirm() {
+  emit('onClickConfirm');
 }
-
 
 </script>
 
 <template>
   <div class="screen-block">
-    <div class="common-alert-container">
-      <div class="content-section">
-        <div class="icon-section">
-          <img class="alert-icon" :src="getImageUrl()" alt="">
-        </div>
-        <div class="message-section">
-          {{ props.message }}
-        </div>
+    <div class="common-confirm-container">
+      <div class="message-section">
+        {{ props.message }}
       </div>
       <div class="button-section">
-        <button class="confirm-button" @click="closeAlert()">확인</button>
+        <button class="confirm-button" @click="onClickConfirm()">확인</button>
+        <button class="cancel-button" @click="closeConfirm()">취소</button>
       </div>
     </div>
   </div>
@@ -63,7 +50,7 @@ function closeAlert() {
   user-select: none;
 }
 
-.common-alert-container {
+.common-confirm-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -76,36 +63,24 @@ function closeAlert() {
   
 }
 
-.content-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.icon-section,
 .message-section {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.message-section {
   text-align: center;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-.alert-icon {
-  width: 100px;
-  height: 100px;
+  font-weight: 700;
+  padding: 20px 0;
 }
 
 .button-section {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
 }
 
 .confirm-button {
+  flex: 1;
   height: 30px;
   border: 0;
   border-radius: 5px;
@@ -115,7 +90,19 @@ function closeAlert() {
   color: #fff;
 }
 
-.confirm-button:hover {
+.cancel-button {
+  flex: 1;
+  height: 30px;
+  border: 0;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: red;
+  color: #fff;
+}
+
+.confirm-button:hover,
+.cancel-button:hover {
   cursor: pointer;
   border: 1px solid black;
   box-shadow: 1px 1px 3px black;

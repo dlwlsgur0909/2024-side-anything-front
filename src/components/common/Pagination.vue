@@ -13,6 +13,7 @@ const props = defineProps({
   }
 })
 
+// emit 이벤트 정의
 const emit = defineEmits(['changePage']);
 
 // 노출될 페이지 수 
@@ -36,7 +37,7 @@ const pageList = computed(() => {
 // 페이지 변경
 function changePage(page) {
 
-  if(page === props.currentPage) {
+  if(page === props.currentPage || props.totalPages === 0) {
     return;
   }
 
@@ -47,7 +48,7 @@ function changePage(page) {
 function prevPage() {
   const startPage = Math.floor((props.currentPage - 1) / DISPLAY_PAGE_NUMBER) * DISPLAY_PAGE_NUMBER + 1;
 
-  if(startPage === 1) {
+  if(startPage <= 1) {
     return;
   }
 

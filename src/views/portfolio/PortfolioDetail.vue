@@ -3,7 +3,7 @@
 import { ref, inject } from 'vue'; 
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
-import CommonButton from '@/components/common/CommonButton.vue';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 const props = defineProps({
   portfolioId: {
@@ -28,6 +28,11 @@ const buttonConfig = {
     label: '수정하기',
     fontColor: 'white',
     backgroundColor: 'black'
+  },
+  delete: {
+    label: '삭제하기',
+    fontColor: 'white',
+    backgroundColor: 'red'
   }
 }
 
@@ -45,6 +50,7 @@ function getPortfolio() {
       memberName.value = res.data.memberName;
     })
     .catch(error => {
+      globalStore.router.push('/portfolioList');
     })
 
 }
@@ -62,15 +68,35 @@ function goToPortfolioUpdate() {
   });
 }
 
+// 포트폴리오 삭제
+function deletePortfolio() {
+
+  globalStore.confirm.openConfirm(`삭제하시겠습니까?`, () => {
+    customAxios
+      .delete(`/portfolios/${portfolioId.value}`)
+      .then(res => {
+        globalStore.router.push('/portfolioList');
+      })
+      .catch((error) => {
+        
+      })
+  });
+
+
+}
+
 </script>
 
 <template>
   <div class="main">
+
     <div class="portfolio-detail-container">
+
       <div class="portfolio-member-name">
         <span class="subject">작성자</span>
         <span>{{ memberName }}</span>
       </div>
+
       <div class="portfolio-name">
         <label class="subject" for="portfolio-detail-name">
           포트폴리오 제목
@@ -83,6 +109,7 @@ function goToPortfolioUpdate() {
           disabled
         >
       </div>
+
       <div class="portfolio-content">
         <label class="subject" for="portfolio-detail-content">포트폴리오 내용</label>
         <textarea 
@@ -91,8 +118,8 @@ function goToPortfolioUpdate() {
           :value="portfolioContent"
           disabled
         />
-
       </div>
+
       <div class="portfolio-url">
         <label class="subject" for="portfolio-detail-url">포트폴리오 URL</label>
         <input 
@@ -107,12 +134,21 @@ function goToPortfolioUpdate() {
 
     <div class="portfolio-detail-button-container" v-if="auth.member?.id === memberId">
       <CommonButton
+        class="update-button"
         @click="goToPortfolioUpdate()"
         :label="buttonConfig.update.label"
         :fontColor="buttonConfig.update.fontColor"
         :background-color="buttonConfig.update.backgroundColor"
       />
+      <CommonButton
+        class="delete-button"
+        @click="deletePortfolio()"
+        :label="buttonConfig.delete.label"
+        :fontColor="buttonConfig.delete.fontColor"
+        :background-color="buttonConfig.delete.backgroundColor"
+      />
     </div>
+
   </div>
 </template>
 
@@ -190,7 +226,12 @@ function goToPortfolioUpdate() {
 
 .portfolio-detail-button-container {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
+}
+
+.update-button,
+.delete-button {
+  flex: 1;
 }
 
 </style>
