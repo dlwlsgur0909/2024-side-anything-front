@@ -26,11 +26,19 @@ function onDragLeave() {
 
 function onDrop(e) {
   isDragOver.value = false;
+  
   if(e.dataTransfer.files.length > 1) {
     globalStore.alert.openAlert('첨부파일은 1개만 등록 가능합니다');
     return;
   }
-  uploadFile.value = e.dataTransfer.files[0];
+  
+  const droppedFile = e.dataTransfer.files[0]
+  if(droppedFile.type !== 'application/pdf') {
+    globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  uploadFile.value = droppedFile;
 }
 
 function openFileInput() {
@@ -38,7 +46,16 @@ function openFileInput() {
 }
 
 function changeFile(e) {
-  uploadFile.value = e.target.files[0];
+
+  const selectedFile = e.target.files[0];
+  fileInput.value.value = '';
+  
+  if(selectedFile.type !== 'application/pdf') {
+    globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  uploadFile.value = selectedFile;
 }
 
 // 버튼 설정
@@ -165,7 +182,6 @@ function validatePortfolioSaveRequest() {
             class="file-input"
             ref="fileInput"
             type="file"
-            hidden
             @change="e => changeFile(e)"
           >
         </div>
