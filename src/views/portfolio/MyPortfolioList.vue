@@ -33,7 +33,7 @@ function getMyPortfolioList() {
 }
 
 // 검색 이벤트
-function handleSearch() {
+function onClickSearch() {
 
   keyword.value = keyword.value.trim();
   currentPage.value = 1;
@@ -87,14 +87,14 @@ const buttonConfig = {
     <div class="portfolio-search-container">
       <input type="text" 
         class="portfolio-search-box" placeholder="포트폴리오명"
-        v-model="keyword" @keyup.enter="handleSearch()"
+        v-model="keyword" @keyup.enter="onClickSearch()"
       />
       <CommonButton
         class="portfolio-search-button"
         :label="buttonConfig.search.label"
         :fontColor="buttonConfig.search.fontColor"
         :background-color="buttonConfig.search.backgroundColor"
-         @click="handleSearch()"
+         @click="onClickSearch()"
       />
     </div>
 
