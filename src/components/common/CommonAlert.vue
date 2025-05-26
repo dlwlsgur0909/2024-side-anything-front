@@ -31,41 +31,47 @@ function closeAlert() {
 </script>
 
 <template>
-
   <div class="screen-block">
-  </div>
-
-  <div class="common-alert-container">
-    <div class="content-section">
-      <div class="icon-section">
-        <img class="alert-icon" :src="getImageUrl()" alt="">
+    <div class="common-alert-container">
+      <div class="content-section">
+        <div class="icon-section">
+          <img class="alert-icon" :src="getImageUrl()" alt="">
+        </div>
+        <div class="message-section">
+          {{ props.message }} 1 23123123123123 12313123123123123213123123123123
+        </div>
       </div>
-      <div class="message-section">
-        {{ props.message }}
+      <div class="button-section">
+        <button class="confirm-button" @click="closeAlert()">확인</button>
       </div>
-    </div>
-    <div class="button-section">
-      <button class="confirm-button" @click="closeAlert()">확인</button>
     </div>
   </div>
 </template>
 
 <style scoped>
 
+.screen-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0000003f;
+}
+
 .common-alert-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-sizing: border-box;
-  position: absolute;
-  top: 30vh;
-  left: calc(50% - 170px);
-  width: 340px;
+  gap: 20px;
   padding: 20px;
+  max-width: 300px;
   background: white;
   border-radius: 10px;
-  gap: 20px;
-
+  
 }
 
 .content-section {
@@ -79,13 +85,12 @@ function closeAlert() {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .message-section {
   text-align: center;
-  word-wrap: break-word;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .alert-icon {
@@ -113,16 +118,5 @@ function closeAlert() {
   border: 1px solid black;
   box-shadow: 1px 1px 3px black;
 }
-
-.screen-block {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.2;
-}
-
 
 </style>
