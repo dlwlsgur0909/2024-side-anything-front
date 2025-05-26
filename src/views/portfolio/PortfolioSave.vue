@@ -11,6 +11,36 @@ const portfolioContent = ref('');
 const portfolioUrl = ref('');
 const isPublic = ref(true);
 
+// 파일 Drag&Drop
+const fileInput = ref(null);
+const uploadFile = ref(null);
+const isDragOver = ref(false);
+
+function onDragOver() {
+  isDragOver.value = true;
+}
+
+function onDragLeave() {
+  isDragOver.value = false;
+}
+
+function onDrop(e) {
+  isDragOver.value = false;
+  if(e.dataTransfer.files.length > 1) {
+    globalStore.alert.openAlert('첨부파일은 1개만 등록 가능합니다');
+    return;
+  }
+  uploadFile.value = e.dataTransfer.files[0];
+}
+
+function openFileInput() {
+  fileInput.value.click();
+}
+
+function changeFile(e) {
+  uploadFile.value = e.target.files[0];
+}
+
 // 버튼 설정
 const buttonConfig = {
   save: {
@@ -32,9 +62,12 @@ function validateContentLimit() {
 
 // 포트폴리오 저장 API
 function savePortfolio() {
+
   if(!validatePortfolioSaveRequest()) {
     return;
   }
+
+  const formData = new FormData();
 
   const request = {
     portfolioName: portfolioName.value,
@@ -43,8 +76,11 @@ function savePortfolio() {
     isPublic: isPublic.value
   }
 
+  formData.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}));
+  formData.append('file', uploadFile.value);
+
   customAxios
-    .post('/portfolios', request)
+    .post('/portfolios', formData)
     .then(res => {
       globalStore.router.push({
         name: 'PortfolioDetail',
@@ -113,6 +149,28 @@ function validatePortfolioSaveRequest() {
           placeholder="https://www.example.com"
         >
       </div>
+
+      <div class="portfolio-file">
+        <label class="subject">첨부파일</label>
+        <div 
+          :class="isDragOver ? 'on-drag file-drop-zone' : 'file-drop-zone' "
+          @dragover.prevent="onDragOver()"
+          @dragleave.prevent="onDragLeave()"
+          @drop.prevent="(e) => onDrop(e)"
+          @click="openFileInput()"
+        >
+          <p v-if="!uploadFile">클릭하거나 파일을 드랍하여 업로드</p>
+          <p v-else class="upload-file-name">{{ uploadFile.name }}</p>
+          <input 
+            class="file-input"
+            ref="fileInput"
+            type="file"
+            hidden
+            @change="e => changeFile(e)"
+          >
+        </div>
+      </div>
+
       <div class="portfolio-visibility">
         <span class="subject">공개범위</span>
         <div class="visibility-radio-button-container">
@@ -200,7 +258,36 @@ function validatePortfolioSaveRequest() {
 
 .url-input {
   height: 25px;
+  font-size: 14px;
+}
+
+.portfolio-file {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-drop-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  border: 2px dashed gray;
+  border-radius: 5px;
   font-size: 16px;
+  font-weight: 700;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+.on-drag {
+  background: rgba(128, 128, 128, 0.281);
+}
+
+.upload-file-name {
+  font-size: 14px;
+  color: #000;
 }
 
 .portfolio-visibility {
