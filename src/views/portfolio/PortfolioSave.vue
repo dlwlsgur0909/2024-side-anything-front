@@ -168,7 +168,11 @@ function validatePortfolioSaveRequest() {
       </div>
 
       <div class="portfolio-file">
-        <label class="subject">첨부파일</label>
+        <div class="subject-wanring">
+          <label class="subject">첨부파일</label>
+          <span class="warning">PDF 파일만 가능</span>
+        </div>
+
         <div 
           :class="isDragOver ? 'on-drag file-drop-zone' : 'file-drop-zone' "
           @dragover.prevent="onDragOver()"
@@ -234,6 +238,11 @@ function validatePortfolioSaveRequest() {
 .subject {
   font-weight: bold;
   font-size: 18px;
+}
+
+.subject-wanring {
+  display: flex;
+  flex-direction: column;
 }
 
 .portfolio-name {
