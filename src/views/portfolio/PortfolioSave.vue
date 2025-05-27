@@ -49,7 +49,7 @@ function changeFile(e) {
 
   const selectedFile = e.target.files[0];
   fileInput.value.value = '';
-  
+
   if(selectedFile.type !== 'application/pdf') {
     globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
     return;
@@ -179,7 +179,7 @@ function validatePortfolioSaveRequest() {
           <p v-if="!uploadFile">클릭하거나 파일을 드랍하여 업로드</p>
           <p v-else class="upload-file-name">{{ uploadFile.name }}</p>
           <input 
-            class="file-input"
+            hidden
             ref="fileInput"
             type="file"
             @change="e => changeFile(e)"

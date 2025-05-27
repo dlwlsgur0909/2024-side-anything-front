@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, inject } from 'vue'; 
+import { ref, inject, onMounted, onUnmounted } from 'vue'; 
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
@@ -19,8 +19,11 @@ const portfolioId = ref('');
 const portfolioName = ref('');
 const portfolioContent = ref('');
 const portfolioUrl = ref('');
+const hasPortfolioFile = ref(false);
 const memberId = ref('');
 const memberName = ref('');
+
+const portfolioFile = ref(null);
 
 // 버튼 설정
 const buttonConfig = {
@@ -37,15 +40,16 @@ const buttonConfig = {
 }
 
 // 포트폴리오 상세 API
-function getPortfolio() {
+async function getPortfolio() {
 
-  customAxios
+  await customAxios
     .get(`/portfolios/${props.portfolioId}`)
     .then(res => {
       portfolioId.value = res.data.portfolioId;
       portfolioName.value = res.data.portfolioName;
       portfolioContent.value = res.data.portfolioContent;
       portfolioUrl.value = res.data.portfolioUrl;
+      hasPortfolioFile.value = res.data.hasPortfolioFile;
       memberId.value = res.data.memberId;
       memberName.value = res.data.memberName;
     })
@@ -55,7 +59,38 @@ function getPortfolio() {
 
 }
 
-getPortfolio();
+// 포트폴리오 첨부파일 로드 API
+function getPortfolioFile() {
+
+  customAxios
+    .get(`/portfolios/${props.portfolioId}/file`, {
+      responseType: 'blob'
+    })
+    .then(res => {
+      const blob = new Blob([res.data], {type: 'application/pdf'})
+      portfolioFile.value = URL.createObjectURL(blob);
+    })
+    .catch(error => {
+      globalStore.router.push('/portfolioList');
+    })
+}
+
+// 최초 데이터 로드
+onMounted(async () => {
+  await getPortfolio();
+
+  if(hasPortfolioFile.value) {
+    getPortfolioFile()
+  }
+
+})
+
+// unmount시 Blob URL 메모리 해제
+onUnmounted(() => {
+  if(portfolioFile.value) {
+    URL.revokeObjectURL(portfolioFile.value);
+  }
+})
 
 
 // 포트폴리오 수정 페이지 이동
@@ -81,7 +116,6 @@ function deletePortfolio() {
         
       })
   });
-
 
 }
 
@@ -129,6 +163,14 @@ function deletePortfolio() {
           :value="portfolioUrl || '없음'"
           disabled
         >
+      </div>
+
+      <div class="portfolio-file" v-if="hasPortfolioFile">
+        <label class="subject" for="portfolio-detail-url">첨부파일</label>
+        <iframe
+          class="pdf-file"
+          :src="portfolioFile"    
+        />
       </div>
     </div>
 
@@ -210,6 +252,16 @@ function deletePortfolio() {
 .url-input {
   height: 25px;
   font-size: 16px;
+}
+
+.portfolio-file {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pdf-file {
+  min-height: 300px;
 }
 
 .portfolio-visibility {
