@@ -50,8 +50,17 @@ const customAxios = () => {
                     return Promise.reject();
                 }
             }else {
+
+                // responseType이 blob인 경우 에러 메세저 JSON으로 변환
+                if(error.response.data instanceof Blob) {
+                    const text = await error.response.data.text();
+                    const errorMessage = JSON.parse(text).errorMessage;
+                    globalStore.alert.openAlert(errorMessage);
+                }else {
+                    globalStore.alert.openAlert(error.response.data.errorMessage);
+                }
+
                 globalStore.spinner.stopSpinner();
-                globalStore.alert.openAlert(error.response.data.errorMessage);
                 return Promise.reject();
             }
         }
