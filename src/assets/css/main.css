@@ -25,7 +25,6 @@ html, body {
 input[type=text],
 input[type=password] {
   padding-left: 10px;
-  caret-color: transparent;
 }
 
 input::placeholder {
