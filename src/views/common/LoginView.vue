@@ -192,8 +192,8 @@ const buttonConfig = {
 
 <style scoped>
 
-.logo-section {
-  /* padding-top: 110px; */
+.main {
+  width: 40%;
 }
 
 .main-logo {

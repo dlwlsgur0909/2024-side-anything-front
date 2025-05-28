@@ -64,6 +64,8 @@ if(!!localStorage.getItem("ACCESS")) {
 <style scoped>
 
 .wrapper {
+  position: relative;
+  top: 80px;
   display: flex;
   flex-wrap: wrap;
   margin-left: auto;
@@ -72,8 +74,6 @@ if(!!localStorage.getItem("ACCESS")) {
 }
 
 .main-container {
-  position: relative;
-  top: 80px;
   display: flex;
   justify-content: center;
   width: 100%;
