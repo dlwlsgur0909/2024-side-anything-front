@@ -72,6 +72,8 @@ if(!!localStorage.getItem("ACCESS")) {
 }
 
 .main-container {
+  position: relative;
+  top: 80px;
   display: flex;
   justify-content: center;
   width: 100%;
