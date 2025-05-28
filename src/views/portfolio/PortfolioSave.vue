@@ -170,7 +170,7 @@ function validatePortfolioSaveRequest() {
       <div class="portfolio-file">
         <div class="subject-wanring">
           <label class="subject">첨부파일</label>
-          <span class="warning">PDF 파일만 가능</span>
+          <span class="warning">PDF 파일만 업로드 할 수 있습니다</span>
         </div>
 
         <div 
@@ -244,7 +244,7 @@ function validatePortfolioSaveRequest() {
   display: flex;
   flex-direction: column;
 }
-
+  
 .portfolio-name {
   display: flex;
   flex-direction: column;

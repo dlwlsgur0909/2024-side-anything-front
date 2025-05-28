@@ -271,8 +271,10 @@ function validatePortfolioUpdateRequest() {
         >
       </div>
       <div class="portfolio-file">
-        <label class="subject">첨부파일</label>
-        
+        <div class="subject-wanring">
+          <label class="subject">첨부파일</label>
+          <span class="warning" v-if="!portfolioFile">PDF 파일만 업로드 할 수 있습니다</span>
+        </div>
         <div class="uploaded-file" v-if="portfolioFile">
           <span class="filename">{{ portfolioFilename }}</span>
           <div class="upload-file-button-container">
@@ -381,6 +383,11 @@ function validatePortfolioUpdateRequest() {
 .subject {
   font-weight: bold;
   font-size: 18px;
+}
+
+.subject-wanring {
+  display: flex;
+  flex-direction: column;
 }
 
 .portfolio-name {
