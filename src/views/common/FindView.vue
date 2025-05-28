@@ -163,7 +163,7 @@ const buttonConfig = {
 <style scoped>
 
 .logo-section {
-  padding-top: 110px;
+  /* padding-top: 110px; */
 }
 
 .main-logo {
