@@ -19,7 +19,7 @@ const portfolioId = ref('');
 const portfolioName = ref('');
 const portfolioContent = ref('');
 const portfolioUrl = ref('');
-const hasPortfolioFile = ref(false);
+const portfolioFileId = ref(null);
 const memberId = ref('');
 const memberName = ref('');
 
@@ -49,7 +49,7 @@ async function getPortfolio() {
       portfolioName.value = res.data.portfolioName;
       portfolioContent.value = res.data.portfolioContent;
       portfolioUrl.value = res.data.portfolioUrl;
-      hasPortfolioFile.value = res.data.hasPortfolioFile;
+      portfolioFileId.value = res.data.portfolioFileId;
       memberId.value = res.data.memberId;
       memberName.value = res.data.memberName;
     })
@@ -59,11 +59,11 @@ async function getPortfolio() {
 
 }
 
-// 포트폴리오 첨부파일 로드 API
+// 포트폴리오 첨부파일 조회 API
 function getPortfolioFile() {
 
   customAxios
-    .get(`/portfolios/${props.portfolioId}/file`, {
+    .get(`/portfolios/${props.portfolioId}/files/${portfolioFileId.value}`, {
       responseType: 'blob'
     })
     .then(res => {
@@ -79,8 +79,8 @@ function getPortfolioFile() {
 onMounted(async () => {
   await getPortfolio();
 
-  if(hasPortfolioFile.value) {
-    getPortfolioFile()
+  if(portfolioFileId.value) {
+    getPortfolioFile();
   }
 
 })
@@ -165,7 +165,7 @@ function deletePortfolio() {
         >
       </div>
 
-      <div class="portfolio-file" v-if="hasPortfolioFile">
+      <div class="portfolio-file" v-if="portfolioFile">
         <label class="subject" for="portfolio-detail-url">첨부파일</label>
         <iframe
           class="pdf-file"
@@ -262,18 +262,6 @@ function deletePortfolio() {
 
 .pdf-file {
   min-height: 300px;
-}
-
-.portfolio-visibility {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.visibility-radio-button-container {
-  display: flex;
-  align-items: center;
-  gap: 15px;
 }
 
 .portfolio-detail-button-container {
