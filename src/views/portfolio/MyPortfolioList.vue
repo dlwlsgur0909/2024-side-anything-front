@@ -189,8 +189,9 @@ const buttonConfig = {
 .portfolio-list-item {
   display: flex;
   align-items: center;
-  height: 60px;
+  min-height: 60px;
   padding: 5px;
+  word-break: break-all;
   border-bottom: 1px solid #000;
 }
 
@@ -211,6 +212,7 @@ const buttonConfig = {
   display: flex;
   justify-content: center;
   width: 70%;
+  text-align: center;
 }
 
 .item-is-public {

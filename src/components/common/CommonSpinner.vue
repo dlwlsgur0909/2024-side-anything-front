@@ -5,7 +5,6 @@
 <template>
   <div class="screen-block">
   </div>
-
   <div class="common-spinner">
   </div>
 
@@ -13,12 +12,13 @@
     <span>Loading...</span>
   </div>
 
+
 </template>
 
 <style scoped>
 
 .common-spinner {
-  position: absolute;
+  position: fixed;
   top: calc(50vh - 50px);
   left: calc(50vw - 50px);
   width: 100px;
@@ -34,7 +34,7 @@
 }
 
 .common-spinner-text {
-  position: absolute;
+  position: fixed;
   top: calc(50vh - 45px);
   left: calc(50vw - 45px);
   display: flex;
@@ -56,7 +56,7 @@
 }
 
 .screen-block {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

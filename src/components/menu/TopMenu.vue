@@ -82,12 +82,14 @@ function onPortfolioList() {
 <style scoped>
 
 .top-menu-container {
-    display: flex;
-    gap: 30px;
-    height: 80px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background: #524FE1;
+  position: fixed;
+  display: flex;
+  gap: 30px;
+  width: 100vw;
+  height: 80px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #524FE1;
 }
 
 .top-menu-logo-section {

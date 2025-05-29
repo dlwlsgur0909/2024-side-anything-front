@@ -20,21 +20,78 @@ const buttonConfig = {
   }
 }
 
-// 포트폴리오 내용 글자 수 검증
-function validateContentLimit() {
+// 파일 Drag&Drop
+const fileInput = ref(null);
+const uploadFile = ref(null);
+const isDragOver = ref(false);
 
-  if(portfolioContent.value?.length > 500) {
-    globalStore.alert.openAlert('최대 500자까지 입력 가능합니다');
-    portfolioContent.value = portfolioContent.value.slice(0, 500);
+// 드래그 시작
+function onDragOver() {
+  isDragOver.value = true;
+}
+
+// 드래그 종료
+function onDragLeave() {
+  isDragOver.value = false;
+}
+
+// 드랍 이벤트
+function onDrop(e) {
+  isDragOver.value = false;
+  
+  if(e.dataTransfer.files.length > 1) {
+    globalStore.alert.openAlert('첨부파일은 1개만 등록 가능합니다');
+    return;
+  }
+  
+  const droppedFile = e.dataTransfer.files[0]
+  if(droppedFile.type !== 'application/pdf') {
+    globalStore.alert.openAlert("PDF 파일만 업로드할 수 있습니다");
+    return;
   }
 
+  const maxSize = 5 * 1024 * 1024;
+  if(droppedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
+    return;
+  }
+
+  uploadFile.value = droppedFile;
+}
+
+// 파일 첨부 창 열기
+function openFileInput() {
+  fileInput.value.click();
+}
+
+// 파일 변경
+function changeFile(e) {
+
+  const selectedFile = e.target.files[0];
+  fileInput.value.value = '';
+
+  if(selectedFile.type !== 'application/pdf') {
+    globalStore.alert.openAlert("PDF 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+  if(selectedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
+    return;
+  }
+
+  uploadFile.value = selectedFile;
 }
 
 // 포트폴리오 저장 API
 function savePortfolio() {
+
   if(!validatePortfolioSaveRequest()) {
     return;
   }
+
+  const formData = new FormData();
 
   const request = {
     portfolioName: portfolioName.value,
@@ -43,8 +100,11 @@ function savePortfolio() {
     isPublic: isPublic.value
   }
 
+  formData.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}));
+  formData.append('file', uploadFile.value);
+
   customAxios
-    .post('/portfolios', request)
+    .post('/portfolios', formData)
     .then(res => {
       globalStore.router.push({
         name: 'PortfolioDetail',
@@ -72,6 +132,16 @@ function validatePortfolioSaveRequest() {
   }
 
   return true;
+}
+
+// 포트폴리오 내용 글자 수 검증
+function validateContentLimit() {
+
+  if(portfolioContent.value?.length > 500) {
+    globalStore.alert.openAlert('최대 500자까지 입력 가능합니다');
+    portfolioContent.value = portfolioContent.value.slice(0, 500);
+  }
+
 }
 
 </script>
@@ -113,6 +183,31 @@ function validatePortfolioSaveRequest() {
           placeholder="https://www.example.com"
         >
       </div>
+
+      <div class="portfolio-file">
+        <div class="subject-wanring">
+          <label class="subject">첨부파일</label>
+          <span class="warning">5MB 이하의 PDF 파일만 업로드 할 수 있습니다</span>
+        </div>
+
+        <div 
+          :class="isDragOver ? 'on-drag file-drop-zone' : 'file-drop-zone' "
+          @dragover.prevent="onDragOver()"
+          @dragleave.prevent="onDragLeave()"
+          @drop.prevent="(e) => onDrop(e)"
+          @click="openFileInput()"
+        >
+          <p v-if="!uploadFile">클릭하거나 파일을 드랍하여 업로드</p>
+          <p v-else class="upload-file-name">{{ uploadFile.name }}</p>
+          <input 
+            hidden
+            ref="fileInput"
+            type="file"
+            @change="e => changeFile(e)"
+          >
+        </div>
+      </div>
+
       <div class="portfolio-visibility">
         <span class="subject">공개범위</span>
         <div class="visibility-radio-button-container">
@@ -162,6 +257,11 @@ function validatePortfolioSaveRequest() {
   font-size: 18px;
 }
 
+.subject-wanring {
+  display: flex;
+  flex-direction: column;
+}
+  
 .portfolio-name {
   display: flex;
   flex-direction: column;
@@ -200,7 +300,36 @@ function validatePortfolioSaveRequest() {
 
 .url-input {
   height: 25px;
+  font-size: 14px;
+}
+
+.portfolio-file {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-drop-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  border: 2px dashed gray;
+  border-radius: 5px;
   font-size: 16px;
+  font-weight: 700;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+.on-drag {
+  background: rgba(128, 128, 128, 0.281);
+}
+
+.upload-file-name {
+  font-size: 14px;
+  color: #000;
 }
 
 .portfolio-visibility {
