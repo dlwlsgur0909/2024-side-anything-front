@@ -71,6 +71,7 @@ if(!!localStorage.getItem("ACCESS")) {
   margin-left: auto;
   margin-right: auto;
   max-width: 1100px;
+  padding: 20px 0 50px 0;
 }
 
 .main-container {

@@ -90,6 +90,7 @@ function onPortfolioList() {
   padding-top: 10px;
   padding-bottom: 10px;
   background: #524FE1;
+  z-index: 99999;
 }
 
 .top-menu-logo-section {
