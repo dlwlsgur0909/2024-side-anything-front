@@ -151,6 +151,12 @@ function onDrop(e) {
     return;
   }
 
+  const maxSize = 5 * 1024 * 1024;
+  if(droppedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
+    return;
+  }
+
   uploadFile.value = droppedFile;
 }
 
@@ -166,7 +172,13 @@ function changeFile(e) {
   fileInput.value.value = '';
 
   if(selectedFile.type !== 'application/pdf') {
-    globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
+    globalStore.alert.openAlert("PDF 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+  if(selectedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
     return;
   }
 
@@ -273,7 +285,7 @@ function validatePortfolioUpdateRequest() {
       <div class="portfolio-file">
         <div class="subject-wanring">
           <label class="subject">첨부파일</label>
-          <span class="warning" v-if="!portfolioFile">PDF 파일만 업로드 할 수 있습니다</span>
+          <span class="warning" v-if="!portfolioFile">5MB 이하의 PDF 파일만 업로드 할 수 있습니다</span>
         </div>
         <div class="uploaded-file" v-if="portfolioFile">
           <span class="filename">{{ portfolioFilename }}</span>

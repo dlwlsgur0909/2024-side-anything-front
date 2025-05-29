@@ -11,19 +11,31 @@ const portfolioContent = ref('');
 const portfolioUrl = ref('');
 const isPublic = ref(true);
 
+// 버튼 설정
+const buttonConfig = {
+  save: {
+    label: '등록하기',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  }
+}
+
 // 파일 Drag&Drop
 const fileInput = ref(null);
 const uploadFile = ref(null);
 const isDragOver = ref(false);
 
+// 드래그 시작
 function onDragOver() {
   isDragOver.value = true;
 }
 
+// 드래그 종료
 function onDragLeave() {
   isDragOver.value = false;
 }
 
+// 드랍 이벤트
 function onDrop(e) {
   isDragOver.value = false;
   
@@ -34,47 +46,42 @@ function onDrop(e) {
   
   const droppedFile = e.dataTransfer.files[0]
   if(droppedFile.type !== 'application/pdf') {
-    globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
+    globalStore.alert.openAlert("PDF 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+  if(droppedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
     return;
   }
 
   uploadFile.value = droppedFile;
 }
 
+// 파일 첨부 창 열기
 function openFileInput() {
   fileInput.value.click();
 }
 
+// 파일 변경
 function changeFile(e) {
 
   const selectedFile = e.target.files[0];
   fileInput.value.value = '';
 
   if(selectedFile.type !== 'application/pdf') {
-    globalStore.alert.openAlert("PDF 형식의 파일만 업로드할 수 있습니다");
+    globalStore.alert.openAlert("PDF 파일만 업로드할 수 있습니다");
+    return;
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+  if(selectedFile.size > maxSize) {
+    globalStore.alert.openAlert("최대 5MB까지 업로드할 수 있습니다");
     return;
   }
 
   uploadFile.value = selectedFile;
-}
-
-// 버튼 설정
-const buttonConfig = {
-  save: {
-    label: '등록하기',
-    fontColor: 'white',
-    backgroundColor: 'black'
-  }
-}
-
-// 포트폴리오 내용 글자 수 검증
-function validateContentLimit() {
-
-  if(portfolioContent.value?.length > 500) {
-    globalStore.alert.openAlert('최대 500자까지 입력 가능합니다');
-    portfolioContent.value = portfolioContent.value.slice(0, 500);
-  }
-
 }
 
 // 포트폴리오 저장 API
@@ -127,6 +134,16 @@ function validatePortfolioSaveRequest() {
   return true;
 }
 
+// 포트폴리오 내용 글자 수 검증
+function validateContentLimit() {
+
+  if(portfolioContent.value?.length > 500) {
+    globalStore.alert.openAlert('최대 500자까지 입력 가능합니다');
+    portfolioContent.value = portfolioContent.value.slice(0, 500);
+  }
+
+}
+
 </script>
 
 <template>
@@ -170,7 +187,7 @@ function validatePortfolioSaveRequest() {
       <div class="portfolio-file">
         <div class="subject-wanring">
           <label class="subject">첨부파일</label>
-          <span class="warning">PDF 파일만 업로드 할 수 있습니다</span>
+          <span class="warning">5MB 이하의 PDF 파일만 업로드 할 수 있습니다</span>
         </div>
 
         <div 
