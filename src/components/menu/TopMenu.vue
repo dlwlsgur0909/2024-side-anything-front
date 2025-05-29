@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ['HOME', 'MYINFO', 'PORTFOLIOLIST', 'BOARD'];
+const menuList = ['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'];
 const selectedMenu = ref('HOME');
 
 const auth = useAuthStore();
@@ -27,7 +27,6 @@ function onClickHome() {
 }
 
 function onClickMyInfo() {
-
 	selectedMenu.value = 'MYINFO';
   sessionStorage.setItem('menu', 'MYINFO');
   globalStore.router.push({
@@ -38,9 +37,9 @@ function onClickMyInfo() {
   });
 }
 
-function onPortfolioList() {
-  selectedMenu.value = 'PORTFOLIOLIST';
-  sessionStorage.setItem('menu', 'PORTFOLIOLIST');
+function onClickPortfolio() {
+  selectedMenu.value = 'PORTFOLIO';
+  sessionStorage.setItem('menu', 'PORTFOLIO');
   globalStore.router.push('/portfolioList');
 
 }
@@ -77,8 +76,8 @@ function onPortfolioList() {
 
       <div 
         class="top-menu-item"
-        :class="selectedMenu === 'PORTFOLIOLIST' ? 'top-menu-item-selected' : ''"
-        @click="onPortfolioList()"
+        :class="selectedMenu === 'PORTFOLIO' ? 'top-menu-item-selected' : ''"
+        @click="onClickPortfolio()"
       >
         포트폴리오
       </div>
