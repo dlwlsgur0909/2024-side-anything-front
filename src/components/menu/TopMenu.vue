@@ -1,24 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ref(['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'])
+const menuList = ['HOME', 'MYINFO', 'PORTFOLIOLIST', 'BOARD'];
 const selectedMenu = ref('HOME');
 
 const auth = useAuthStore();
 
-/* 상단 메뉴 클릭 이벤트 */ 
+onMounted(() => {
+  const findMenu = menuList.find(menu => menu === sessionStorage.getItem('menu'));
+  if(!findMenu) {
+    sessionStorage.setItem('menu', 'HOME');
+    selectedMenu.value = 'HOME';
+    globalStore.router.push('/');
+  }else {
+    selectedMenu.value = findMenu;
+  }
+})
 
+/* 상단 메뉴 클릭 이벤트 */ 
 function onClickHome() {
 	selectedMenu.value = 'HOME';
+  sessionStorage.setItem('menu', 'HOME');
 	globalStore.router.push('/');
 }
 
 function onClickMyInfo() {
 
 	selectedMenu.value = 'MYINFO';
-
+  sessionStorage.setItem('menu', 'MYINFO');
   globalStore.router.push({
     name: 'Member',
     params: {
@@ -29,6 +40,7 @@ function onClickMyInfo() {
 
 function onPortfolioList() {
   selectedMenu.value = 'PORTFOLIOLIST';
+  sessionStorage.setItem('menu', 'PORTFOLIOLIST');
   globalStore.router.push('/portfolioList');
 
 }
