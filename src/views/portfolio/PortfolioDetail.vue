@@ -119,13 +119,46 @@ function deletePortfolio() {
 
 }
 
+// 뒤로가기
+function goToPortfolioList() {
+  globalStore.router.push('/portfolioList');
+}
+
 </script>
 
 <template>
   <div class="main">
+    
+    <div class="portfolio-detail-button-container">
+      <svg 
+        class="prev-button"
+        @click="goToPortfolioList()"
+        xmlns="http://www.w3.org/2000/svg" height="24" fill="none" 
+        stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <line x1="10" y1="12" x2="2222" y2="12" />
+        <polyline points="12 5 5 12 12 19" />
+      </svg>
+
+      <div class="update-delete-button-container" v-if="auth.member?.id === memberId">
+        <CommonButton
+          class="update-button"
+          @click="goToPortfolioUpdate()"
+          :label="buttonConfig.update.label"
+          :fontColor="buttonConfig.update.fontColor"
+          :background-color="buttonConfig.update.backgroundColor"
+        />
+        <CommonButton
+          class="delete-button"
+          @click="deletePortfolio()"
+          :label="buttonConfig.delete.label"
+          :fontColor="buttonConfig.delete.fontColor"
+          :background-color="buttonConfig.delete.backgroundColor"
+        />
+      </div>
+    </div>
 
     <div class="portfolio-detail-container">
-
       <div class="portfolio-member-name">
         <span class="subject">작성자</span>
         <span>{{ memberName }}</span>
@@ -172,23 +205,6 @@ function deletePortfolio() {
           :src="portfolioFile"    
         />
       </div>
-    </div>
-
-    <div class="portfolio-detail-button-container" v-if="auth.member?.id === memberId">
-      <CommonButton
-        class="update-button"
-        @click="goToPortfolioUpdate()"
-        :label="buttonConfig.update.label"
-        :fontColor="buttonConfig.update.fontColor"
-        :background-color="buttonConfig.update.backgroundColor"
-      />
-      <CommonButton
-        class="delete-button"
-        @click="deletePortfolio()"
-        :label="buttonConfig.delete.label"
-        :fontColor="buttonConfig.delete.fontColor"
-        :background-color="buttonConfig.delete.backgroundColor"
-      />
     </div>
 
   </div>
@@ -266,7 +282,23 @@ function deletePortfolio() {
 
 .portfolio-detail-button-container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prev-button {
+  width: 30px;
+}
+
+.prev-button:hover {
+  color: #524FE1;
+}
+
+.update-delete-button-container {
+  display: flex;
   gap: 10px;
+  width: 60%;
+  min-width: 100px;
 }
 
 .update-button,

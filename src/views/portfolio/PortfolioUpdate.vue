@@ -84,7 +84,7 @@ onUnmounted(() => {
 // 버튼 설정
 const buttonConfig = {
   update: {
-    label: '수정하기',
+    label: '저장하기',
     fontColor: 'white',
     backgroundColor: 'black'
   }
@@ -243,10 +243,41 @@ function validatePortfolioUpdateRequest() {
   return true;
 }
 
+// 뒤로가기
+function goToPortfolioDetail() {
+  globalStore.router.push({
+    name: 'PortfolioDetail',
+    params: {
+      portfolioId: portfolioId.value
+    }
+  });
+}
+
 </script>
 
 <template>
   <div class="main">
+
+    <div class="portfolio-update-button-container">
+      <svg 
+        class="prev-button"
+        @click="goToPortfolioDetail()"
+        xmlns="http://www.w3.org/2000/svg" height="24" fill="none" 
+        stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <line x1="10" y1="12" x2="2222" y2="12" />
+        <polyline points="12 5 5 12 12 19" />
+      </svg>
+
+      <CommonButton
+        class="update-button"
+        @click="updatePortfolio()"
+        :label="buttonConfig.update.label"
+        :fontColor="buttonConfig.update.fontColor"
+        :background-color="buttonConfig.update.backgroundColor"
+      />
+    </div>
+
     <div class="portfolio-update-container">
       <div class="portfolio-name">
         <label class="subject" for="portfolio-update-name">
@@ -373,14 +404,6 @@ function validatePortfolioUpdateRequest() {
       </div>
     </div>
 
-    <div class="portfolio-update-button-container">
-      <CommonButton
-        @click="updatePortfolio()"
-        :label="buttonConfig.update.label"
-        :fontColor="buttonConfig.update.fontColor"
-        :background-color="buttonConfig.update.backgroundColor"
-      />
-    </div>
   </div>
 </template>
 
@@ -506,7 +529,21 @@ function validatePortfolioUpdateRequest() {
 
 .portfolio-update-button-container {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.prev-button {
+  width: 30px;
+}
+
+.prev-button:hover {
+  color: #524FE1;
+}
+
+.update-button {
+  width: 30%;
+}
+
 
 </style>
