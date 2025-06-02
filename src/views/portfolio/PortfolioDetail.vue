@@ -121,7 +121,13 @@ function deletePortfolio() {
 
 // 뒤로가기
 function goToPortfolioList() {
-  globalStore.router.push('/portfolioList');
+  const prevMenu = sessionStorage.getItem('menu');
+
+  if(prevMenu === 'PORTFOLIO') {
+    globalStore.router.push('/portfolioList');
+  }else {
+    globalStore.router.push('/myPortfolioList');
+  }
 }
 
 </script>
