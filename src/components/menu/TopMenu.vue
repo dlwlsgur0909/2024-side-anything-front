@@ -105,43 +105,43 @@ function onClickPortfolio() {
 }
 
 .top-menu-logo-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    padding: 10px;
-    margin-left: 20px;
-    border: 3px solid #fff;
-    border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  margin-left: 20px;
+  border: 3px solid #fff;
+  border-radius: 100px;
 }
 
 .top-menu-logo {
-    height: 50%;
+  height: 50%;
 }
 
 .top-menu-item-section {
-    flex-grow: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
 }
 
 .top-menu-item {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
 }
 
 .top-menu-item:hover,
 .top-menu-item-selected {
-    color: rgb(170, 255, 227);
+  color: rgb(170, 255, 227);
 }
 
 
