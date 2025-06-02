@@ -144,10 +144,42 @@ function validateContentLimit() {
 
 }
 
+// 뒤로가기
+function goToPortfolioList() {
+  const prevMenu = sessionStorage.getItem('menu');
+
+  if(prevMenu === 'PORTFOLIO') {
+    globalStore.router.push('/portfolioList');
+  }else {
+    globalStore.router.push('/myPortfolioList');
+  }
+}
+
 </script>
 
 <template>
   <div class="main">
+
+    <div class="portfolio-save-button-container">
+      <svg 
+        class="prev-button"
+        @click="goToPortfolioList()"
+        xmlns="http://www.w3.org/2000/svg" height="24" fill="none" 
+        stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <line x1="10" y1="12" x2="2222" y2="12" />
+        <polyline points="12 5 5 12 12 19" />
+      </svg>
+
+      <CommonButton
+        class="save-button"
+        @click="savePortfolio()"
+        :label="buttonConfig.save.label"
+        :fontColor="buttonConfig.save.fontColor"
+        :background-color="buttonConfig.save.backgroundColor"
+      />
+    </div>
+
     <div class="portfolio-save-container">
       <div class="portfolio-name">
         <label class="subject" for="portfolio-save-name">
@@ -233,14 +265,6 @@ function validateContentLimit() {
       </div>
     </div>
 
-    <div class="portfolio-save-button-container">
-      <CommonButton
-        @click="savePortfolio()"
-        :label="buttonConfig.save.label"
-        :fontColor="buttonConfig.save.fontColor"
-        :background-color="buttonConfig.save.backgroundColor"
-      />
-    </div>
   </div>
 </template>
 
@@ -346,7 +370,21 @@ function validateContentLimit() {
 
 .portfolio-save-button-container {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prev-button {
+  width: 30px;
+  cursor: pointer;
+}
+
+.prev-button:hover {
+  color: #524FE1;
+}
+
+.save-button {
+  width: 30%;
 }
 
 </style>

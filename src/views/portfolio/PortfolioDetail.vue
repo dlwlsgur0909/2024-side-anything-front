@@ -294,6 +294,7 @@ function goToPortfolioList() {
 
 .prev-button {
   width: 30px;
+  cursor: pointer;
 }
 
 .prev-button:hover {
