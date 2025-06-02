@@ -48,6 +48,7 @@ function onClickConfirm() {
   height: 100vh;
   background: #0000003f;
   user-select: none;
+  z-index: 99999;
 }
 
 .common-confirm-container {

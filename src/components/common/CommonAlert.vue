@@ -61,6 +61,7 @@ function closeAlert() {
   height: 100vh;
   background: #0000003f;
   user-select: none;
+  z-index: 99999;
 }
 
 .common-alert-container {
@@ -73,7 +74,6 @@ function closeAlert() {
   max-width: 300px;
   background: white;
   border-radius: 10px;
-  
 }
 
 .content-section {

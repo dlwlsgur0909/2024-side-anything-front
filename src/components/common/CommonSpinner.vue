@@ -30,7 +30,6 @@
   border-radius: 100px;
 
   animation: spinner-rotate 1s linear infinite;
-
 }
 
 .common-spinner-text {
@@ -63,6 +62,7 @@
   height: 100%;
   background: #000;
   opacity: 0.2;
+  z-index: 999999;
 }
 
 </style>

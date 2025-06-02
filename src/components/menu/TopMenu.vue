@@ -6,6 +6,9 @@ import globalStore from '../../stores/globalStore.js';
 const menuList = ['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'];
 const selectedMenu = ref('HOME');
 
+const displaySideMenu = ref(false);
+const isSideMenuOpen = ref(false);
+
 const auth = useAuthStore();
 
 onMounted(() => {
@@ -17,6 +20,9 @@ onMounted(() => {
   }else {
     selectedMenu.value = findMenu;
   }
+
+  displaySideMenu.value = window.innerWidth > 600 ? false : true;
+
 })
 
 /* 상단 메뉴 클릭 이벤트 */ 
@@ -44,49 +50,113 @@ function onClickPortfolio() {
 
 }
 
+function toggleSideMenu() {
+  isSideMenuOpen.value = !isSideMenuOpen.value;
+}
+
+window.addEventListener('resize', () => {
+  displaySideMenu.value = window.innerWidth > 600 ? false : true;
+})
 
 
 </script>
 
 <template>
 
-  <div class="top-menu-container">
-
-    <div class="top-menu-logo-section">
-        <img class="top-menu-logo" src="../../assets/logo/top-menu-logo.svg" alt="logo">
-    </div>
-
-    <div class="top-menu-item-section">
-        
-			<div
-				class="top-menu-item" 
-				:class="selectedMenu === 'HOME' ? 'top-menu-item-selected' : ''"
-				@click="onClickHome()"
-			>
-				HOME	
-			</div>
-        
-			<div 
-				class="top-menu-item"
-				:class="selectedMenu === 'MYINFO' ? 'top-menu-item-selected' : ''"
-				@click="onClickMyInfo()"
-			>
-				내 정보
-			</div>
-
-      <div 
-        class="top-menu-item"
-        :class="selectedMenu === 'PORTFOLIO' ? 'top-menu-item-selected' : ''"
-        @click="onClickPortfolio()"
-      >
-        포트폴리오
+  <div class="menu-container">
+    <div class="top-menu-container" v-if="!displaySideMenu">
+  
+      <div class="top-menu-logo-section" >
+          <img class="top-menu-logo" src="../../assets/logo/top-menu-logo.svg" alt="logo">
       </div>
-
-      <div class="top-menu-item">자유게시판</div>
-
+  
+      <div class="top-menu-item-section">
+        <div
+          class="top-menu-item" 
+          :class="selectedMenu === 'HOME' ? 'top-menu-item-selected' : ''"
+          @click="onClickHome()"
+        >
+          HOME	
+        </div>
+          
+        <div 
+          class="top-menu-item"
+          :class="selectedMenu === 'MYINFO' ? 'top-menu-item-selected' : ''"
+          @click="onClickMyInfo()"
+        >
+          내 정보
+        </div>
+  
+        <div 
+          class="top-menu-item"
+          :class="selectedMenu === 'PORTFOLIO' ? 'top-menu-item-selected' : ''"
+          @click="onClickPortfolio()"
+        >
+          포트폴리오
+        </div>
+  
+        <div class="top-menu-item">자유게시판</div>
+      </div>
+  
     </div>
+
+    <template v-else>
+      <transition name="slide-fade">
+        <div class="side-menu-icon-container-closed" v-if="!isSideMenuOpen">
+          <img 
+            class="side-menu-icon-closed" @click="toggleSideMenu()"
+            src="../../assets/icon/side-menu-icon-closed.svg" alt="side-menu-icon"
+          >
+        </div>
+      </transition>
+
+      <transition name="slide-fade">
+        <div class="side-menu-icon-container-opened" v-if="isSideMenuOpen">
+          <img 
+            class="side-menu-icon-opened" @click="toggleSideMenu()"
+            src="../../assets/icon/side-menu-icon-opened.svg" alt="side-menu-icon"
+          >
+        </div>
+      </transition> 
+
+      <transition name="slide-left">
+        <div class="side-menu-container" v-if="isSideMenuOpen">
+          <div class="side-menu-item-section" >
+            <div
+              class="side-menu-item" 
+              :class="selectedMenu === 'HOME' ? 'side-menu-item-selected' : ''"
+              @click="onClickHome()"
+            >
+              HOME	
+            </div>
+              
+            <div 
+              class="side-menu-item"
+              :class="selectedMenu === 'MYINFO' ? 'side-menu-item-selected' : ''"
+              @click="onClickMyInfo()"
+            >
+              내 정보
+            </div>
+      
+            <div 
+              class="side-menu-item"
+              :class="selectedMenu === 'PORTFOLIO' ? 'side-menu-item-selected' : ''"
+              @click="onClickPortfolio()"
+            >
+              포트폴리오
+            </div>
+      
+            <div class="side-menu-item">자유게시판</div>
+          </div>
+        </div>
+      </transition>
+    </template>
+
+    
+
 
   </div>
+
 
 </template>
 
@@ -96,12 +166,12 @@ function onClickPortfolio() {
   position: fixed;
   display: flex;
   gap: 30px;
-  width: 100vw;
+  width: 100%;
   height: 80px;
   padding-top: 10px;
   padding-bottom: 10px;
   background: #524FE1;
-  z-index: 99999;
+  z-index: 88888;
 }
 
 .top-menu-logo-section {
@@ -144,5 +214,96 @@ function onClickPortfolio() {
   color: rgb(170, 255, 227);
 }
 
+.side-menu-icon-container-opened {
+  position: fixed;
+  width: 200px;
+  height: 50px;
+  background: #524FE1;
+  z-index: 88888;
+}
+
+.side-menu-icon-opened {
+  width: 50px;
+  height: 100%;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.side-menu-icon-container-closed {
+  position: fixed;
+  width: 200px;
+  height: 50px;
+  background: #fff;
+  z-index: 88888;
+}
+
+.side-menu-icon-closed {
+  width: 50px;
+  height: 100%;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.side-menu-container {
+  position: fixed;
+  top: 50px;
+  width: 200px;
+  height: calc(100% - 50px);
+  padding-top: 50px;
+  background: #524FE1;
+  transform: translateX(0);
+  z-index: 88888;
+}
+
+.side-menu-item-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.side-menu-item {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 0 10px 10px;
+  border-bottom: 1px solid #fff;
+}
+
+.side-menu-item:hover,
+.side-menu-item-selected {
+  color: rgb(170, 255, 227);
+  border-bottom: 1px solid rgb(170, 255, 227);
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-left-enter-to,
+.slide-left-leave-from {
+  transform: translateX(0);
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  transform: translateX(0);
+}
 
 </style>
