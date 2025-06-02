@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, inject } from 'vue'; 
+import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
 import Pagination from '../../components/common/Pagination.vue';
@@ -42,7 +42,21 @@ function onClickSearch() {
 }
 
 // 최초 포트폴리오 목록 조회
-getPortfolioList();
+onMounted(() => {
+
+  // 저장된 검색어, 현재 페이지 정보
+  const savedKeyword = sessionStorage.getItem('keyword');
+  const savedCurrentPage = Number(sessionStorage.getItem('currentPage'));
+
+  sessionStorage.removeItem('keyword');
+  sessionStorage.removeItem('currentPage');
+
+  keyword.value = savedKeyword ? savedKeyword : '';
+  currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
+
+  getPortfolioList();
+})
+
 
 // 포트폴리오 저장 페이지 이동
 function goToPortfolioSave() {
@@ -51,6 +65,11 @@ function goToPortfolioSave() {
 
 // 포트폴리오 상세 페이지 이동
 function goToPortfolioDetail(portfolioId) {
+
+  // 검색어, 현재 페이지 정보 저장
+  sessionStorage.setItem('keyword', keyword.value);
+  sessionStorage.setItem('currentPage', currentPage.value);
+
   globalStore.router.push({
     name: 'PortfolioDetail',
     params: {
