@@ -202,7 +202,43 @@ const buttonConfig = {
 .find-id-button,
 .find-password-button,
 .cancel-button {
-  flex-basis: 45%;
+  flex: 1;
+}
+
+@media(max-width: 1000px) {
+  .main {
+    width: 45%;
+  }
+}
+
+@media(max-width: 900px) {
+  .main {
+    width: 50%;
+  }
+}
+
+@media(max-width: 750px) {
+  .main {
+    width: 60%;
+  }
+}
+
+@media(max-width: 600px) {
+  .main {
+    width: 65%;
+  }
+}
+
+@media(max-width: 500px) {
+  .main {
+    width: 80%;
+  }
+}
+
+@media(max-width: 350px) {
+  .main {
+    width: 100%;
+  }
 }
 
 
