@@ -8,12 +8,17 @@ import CommonButton from '../../components/common/CommonButton.vue';
 
 const mode = ref('JOIN');
 
-// 아이디, 비밀번호, 이름, 이메일
+// 아이디, 비밀번호, 이름, 생년월일, 성별, 닉네임, 이메일
 const username = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 const name = ref('');
+const dob = ref('');
+const gender = ref('');
+const nickname = ref('');
 const email = ref('');
+
+const today = new Date().toISOString().split('T')[0];
 
 const isUsernameUnique = ref(false);
 const isEmailUnique = ref(false);
@@ -31,6 +36,9 @@ async function join() {
     username: username.value,
     password: password.value,
     name: name.value,
+    dob: dob.value,
+    gender: gender.value,
+    nickname: nickname.value,
     email: email.value
   }
 
@@ -48,17 +56,11 @@ async function join() {
 }
 
 // 회원가입 유효성 검사
-async function validateJoin() {
+function validateJoin() {
 
   if(!username.value?.trim()) {
     globalStore.alert.openAlert("아이디를 입력하세요");
     return false;
-  }else {
-    await duplicateUsernameCheck();
-    if(!isUsernameUnique.value) {
-      globalStore.alert.openAlert('이미 사용중인 아이디입니다');
-      return false;
-    }
   }
 
   if(!password.value?.trim()) {
@@ -75,16 +77,24 @@ async function validateJoin() {
     globalStore.alert.openAlert('이름을 입력하세요');
     return false;
   }
+
+  if(!dob.value?.trim()) {
+    globalStore.alert.openAlert('생년월일을 선택해주세요');
+    return false;
+  }
+
+  if(!gender.value?.trim()) {
+    globalStore.alert.openAlert('성별을 선택해주세요');
+  }
+  
+  if(!nickname.value?.trim()) {
+    globalStore.alert.openAlert('닉네임을 입력해주세요');
+    return false;
+  }
   
   if(!email.value?.trim()) {
     globalStore.alert.openAlert('이메일을 입력하세요');
     return false;
-  }else {
-    await duplicateEmailCheck()
-    if(!isEmailUnique.value) {
-      globalStore.alert.openAlert('이미 사용중인 이메일입니다')
-      return false;
-    }
   }
   
   if(password.value !== passwordConfirm.value) {
@@ -95,29 +105,6 @@ async function validateJoin() {
   return true;
 
 }
-
-// 아이디 중복 검사
-async function duplicateUsernameCheck() {
-
-  const request = {
-    usernameOrEmail: username.value
-  };
-
-  const response = await axios.post('/auth/duplicate/username', request)
-  isUsernameUnique.value = response.data;
-}
-
-// 이메일 중복 검사
-async function duplicateEmailCheck() {
-
-  const request = {
-    usernameOrEmail: email.value
-  };
-
-  const response = await axios.post('/auth/duplicate/email', request)
-  isEmailUnique.value = response.data;
-}
-
 
 // 취소 -> 로그인 페이지
 function cancel() {
@@ -161,6 +148,29 @@ const buttonConfig = {
       </div>
       <div class="name-section">
         <input class="name-input-box" type="text" placeholder="이름" v-model="name" @keyup.enter="join()">
+      </div>
+      <label class="subject" for="dob">생년월일</label>
+      <div class="dob-gender-section">
+        <div class="dob-section">
+          <input class="dob-input-box" id="dob" type="date" v-model="dob" :max="today">
+        </div>
+        <div class="gender-section">
+          <label class="subject">
+            남성
+            <input type="radio" id="public"
+              :value="'MALE'" v-model="gender"
+            >
+          </label>
+          <label class="subject">
+            여성
+            <input type="radio" id="private" 
+              :value="'FEMALE'" v-model="gender"
+            >
+          </label>
+        </div>
+      </div>
+      <div class="nickname-section">
+        <input class="nickname-input-box" type="text" placeholder="닉네임" v-model="nickname" @keyup.enter="join()">
       </div>
       <div class="email-section">
         <input class="email-input-box" type="text" placeholder="이메일" v-model="email" @keyup.enter="join()">
@@ -212,9 +222,28 @@ const buttonConfig = {
 .password-section,
 .password-confirm-section,
 .name-section,
-.email-section {
+.email-section,
+.nickname-section {
   display: flex;
   flex-direction: column;
+}
+
+.dob-gender-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.dob-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.gender-section {
+  display: flex;
+  gap: 10px;
 }
 
 .authentication-section {
@@ -226,6 +255,8 @@ const buttonConfig = {
 .password-input-box,
 .password-confirm-input-box,
 .name-input-box,
+.dob-input-box,
+.nickname-input-box,
 .email-input-box,
 .authentication-input-box {
   height: 40px;
@@ -242,6 +273,11 @@ const buttonConfig = {
 .join-button, 
 .cancel-button {
   flex: 1;
+}
+
+
+.subject {
+  font-size: 14px;
 }
 
 @media(max-width: 1000px) {

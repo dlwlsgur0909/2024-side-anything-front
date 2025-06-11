@@ -73,7 +73,7 @@ function validateLogin() {
 async function sendEmail() {
 
   const request = {
-    usernameOrEmail: username.value,
+    username: username.value,
   };
 
   await axios
