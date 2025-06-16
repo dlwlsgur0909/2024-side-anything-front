@@ -23,17 +23,11 @@ globalStore.alert = alert;
 globalStore.confirm = confirm;
 globalStore.spinner = spinner;
 
-if(!!localStorage.getItem("ACCESS")) {
-  auth.reissue();
-}else {
-  auth.setMember(null);
-}
-
 </script>
 
 <template>
   <TopMenu 
-    v-if="auth.isLogin"
+    v-if="auth.isLogin && auth.member.isProfileCompleted"
   />
   <div class="wrapper">
     <div class="main-container">

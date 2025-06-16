@@ -50,7 +50,7 @@ const buttonConfig = {
 <template>
   <div class="main">
     <div class="home-greeting-container">
-      <h1>안녕하세요 {{ auth.member.name }}님 😊</h1>
+      <h1>안녕하세요 {{ auth.member?.name }}님 😊</h1>
     </div>
     <div class="my-menu">
       <CommonButton
