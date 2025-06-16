@@ -37,6 +37,11 @@ const router = createRouter({
       component: () => import('../views/AdminView.vue'),
     },
     {
+      path: '/social-join',
+      name: 'SocialJoin',
+      component: () => import('../views/common/SocialJoinView.vue')
+    },
+    {
       path: '/login-success',
       name: 'LoginSuccess', 
     },
@@ -100,20 +105,48 @@ router.beforeEach(async (to, from) => {
   // 소셜 로그인 성공 처리
   if(toName === 'LoginSuccess') {
     if(await auth.socialLogin()) {
-      return {name: 'Home'};
+      return auth.member.isProfileCompleted ? {name: 'Home'} : {name: 'SocialJoin'};
     }else {
       return {name: 'Login'};
     }
   }
 
-  if(!allowedNames.includes(toName) && !auth.isLogin) {
+  if(auth.isLogin) { // 로그인 상태
 
-    if(toName !== 'Home') {
-      globalStore.alert.openAlert('로그인 후 이용해주세요'); 
+    if(auth.member.isProfileCompleted) {
+      if(allowedNames.includes(toName) || toName === 'SocialJoin') {
+          return {name: 'Home'};
+      }
+    }else {
+      if(toName !== 'SocialJoin') {
+        globalStore.alert.openAlert('소셜 회원은 추가정보가 필요합니다');
+        return {name: 'SocialJoin'};
+      }
     }
 
-    return {name: 'Login'};
+
+  }else { // 로그아웃 상태
+    if(!allowedNames.includes(toName)) {
+      if(toName !== 'Home') {
+        globalStore.alert.openAlert('로그인 후 이용해주세요'); 
+      }
+
+      return {name: 'Login'};
+    }
   }
+
+
+  // if(!allowedNames.includes(toName) && !auth.isLogin) {
+
+  //   console.log(toName);
+  //   console.log(toName === 'Home');
+
+  //   if(toName !== 'Home') {
+  //     globalStore.alert.openAlert('로그인 후 이용해주세요'); 
+  //   }
+
+  //   return {name: 'Login'};
+  // }
 
 })
 

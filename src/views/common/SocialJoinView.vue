@@ -1,79 +1,42 @@
 <script setup>
 
 import { ref } from 'vue';
-import axios from 'axios';
 import globalStore from '../../stores/globalStore.js';
-import Authentication from '../../components/Authentication.vue';
 import CommonButton from '../../components/common/CommonButton.vue';
+import { useAuthStore } from '@/stores/authStore.js';
 
-const mode = ref('JOIN');
+const auth = useAuthStore();
 
-// 아이디, 비밀번호, 이름, 생년월일, 성별, 닉네임, 이메일
-const username = ref('');
-const password = ref('');
-const passwordConfirm = ref('');
-const name = ref('');
+// 생년월일, 성별, 닉네임
 const dob = ref('');
 const gender = ref('');
 const nickname = ref('');
-const email = ref('');
 
 const today = new Date().toISOString().split('T')[0];
 
-// 회원가입
-async function join() {
+// 소셜 회원가입
+async function socialJoin() {
 
-  if(!validateJoin()) {
+  if(!validateSocialJoin()) {
     return;
   }
 
   globalStore.spinner.startSpinner();
-
+  
   const request = {
-    username: username.value,
-    password: password.value,
-    name: name.value,
+    id: auth.member.id,
     dob: dob.value,
     gender: gender.value,
     nickname: nickname.value,
-    email: email.value
   }
-
-  await axios
-    .post("/auth/join", request)
-    .then(res => {
-      globalStore.alert.openAlert(`${email.value}로 인증번호를 발송했습니다.`, 'email-icon.png');
-      mode.value = 'VERIFY';
-    })
-    .catch((e) => {
-      globalStore.alert.openAlert(e.response.data.errorMessage);
-    }) 
   
+  await auth.socialJoin(request);
+
   globalStore.spinner.stopSpinner();
 }
 
-// 회원가입 유효성 검사
-function validateJoin() {
-
-  if(!username.value?.trim()) {
-    globalStore.alert.openAlert("아이디를 입력하세요");
-    return false;
-  }
-
-  if(!password.value?.trim()) {
-    globalStore.alert.openAlert('비밀번호를 입력하세요');
-    return false;
-  }
-
-  if(!passwordConfirm.value?.trim()) {
-    globalStore.alert.openAlert('비밀번호 확인을 입력하세요');
-    return false;
-  }
-
-  if(!name.value?.trim()) {
-    globalStore.alert.openAlert('이름을 입력하세요');
-    return false;
-  }
+// 소셜 회원가입 유효성 검사
+function validateSocialJoin() {
 
   if(!dob.value?.trim()) {
     globalStore.alert.openAlert('생년월일을 선택해주세요');
@@ -82,29 +45,20 @@ function validateJoin() {
 
   if(!gender.value?.trim()) {
     globalStore.alert.openAlert('성별을 선택해주세요');
+    return false
   }
   
   if(!nickname.value?.trim()) {
     globalStore.alert.openAlert('닉네임을 입력해주세요');
     return false;
   }
-  
-  if(!email.value?.trim()) {
-    globalStore.alert.openAlert('이메일을 입력하세요');
-    return false;
-  }
-  
-  if(password.value !== passwordConfirm.value) {
-    globalStore.alert.openAlert('비밀번호가 일치하지 않습니다');
-    return false;
-  }
 
   return true;
-
 }
 
 // 취소 -> 로그인 페이지
 function cancel() {
+  auth.logout();
   globalStore.router.push('/login');
 }
 
@@ -112,7 +66,7 @@ function cancel() {
 const buttonConfig = {
 
   join: {
-    label: '회원가입',
+    label: '가입완료',
     fontColor: '#fff',
     backgroundColor: "#524FE1",
   },
@@ -133,19 +87,7 @@ const buttonConfig = {
       <img class="main-logo" src="../../assets/logo/side-anything.svg" alt="logo">
     </div>
 
-    <div class="join-container" v-if="mode === 'JOIN'">
-      <div class="id-section">
-        <input class="id-input-box" type="text" placeholder="아이디" v-model="username" @keyup.enter="join()">
-      </div>
-      <div class="password-section">
-        <input class="password-input-box" type="password" placeholder="비밀번호" v-model="password" @keyup.enter="join()">
-      </div>
-      <div class="password-confirm-section">
-        <input class="password-confirm-input-box" type="password" placeholder="비밀번호 확인" v-model="passwordConfirm" @keyup.enter="join()">
-      </div>
-      <div class="name-section">
-        <input class="name-input-box" type="text" placeholder="이름" v-model="name" @keyup.enter="join()">
-      </div>
+    <div class="join-container">
       <label class="subject" for="dob">생년월일</label>
       <div class="dob-gender-section">
         <div class="dob-section">
@@ -169,13 +111,10 @@ const buttonConfig = {
       <div class="nickname-section">
         <input class="nickname-input-box" type="text" placeholder="닉네임" v-model="nickname" @keyup.enter="join()">
       </div>
-      <div class="email-section">
-        <input class="email-input-box" type="text" placeholder="이메일" v-model="email" @keyup.enter="join()">
-      </div>
       <div class="button-section">
         <CommonButton
           class="join-button"
-          @click="join()" 
+          @click="socialJoin()" 
           :label="buttonConfig.join.label" 
           :fontColor="buttonConfig.join.fontColor"
           :backgroundColor="buttonConfig.join.backgroundColor"
@@ -190,7 +129,6 @@ const buttonConfig = {
       </div>
     </div>
 
-    <Authentication v-if="mode === 'VERIFY'" :username="username" />
   </div>
 
 </template>

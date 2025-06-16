@@ -23,7 +23,8 @@ html, body {
 }
 
 input[type=text],
-input[type=password] {
+input[type=password],
+input[type=date] {
   padding-left: 10px;
 }
 

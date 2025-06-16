@@ -28,7 +28,8 @@
   border-right: 5px solid #524FE1;
   border-bottom: 5px solid #ffffff00;
   border-radius: 100px;
-
+  z-index: 999999;
+  
   animation: spinner-rotate 1s linear infinite;
 }
 
@@ -41,6 +42,7 @@
   align-items: center;
   width: 100px;
   height: 100px;
+  z-index: 999999;
 }
 
 @keyframes spinner-rotate {

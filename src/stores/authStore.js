@@ -33,7 +33,6 @@ export const useAuthStore = defineStore({
         },
 		// 로그아웃
         logout() {
-
 			axios
 				.post('/auth/logout')
 				.then(res => {
@@ -46,6 +45,7 @@ export const useAuthStore = defineStore({
         },
 		// 토큰 재발급 / 새로고침
         async reissue() {
+
 			let result = false;
 			
 			await axios
@@ -76,10 +76,21 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					this.logout();
 					globalStore.alert.openAlert(e.response.data.errorMessage);
-					globalStore.router.push('/login');
 				})
 
 			return result;
+		},
+		// 소셜 회원가입
+		async socialJoin(data) {
+			await axios
+				.patch('/auth/social-join', data)
+				.then(res => {
+					this.setMember(res.data);
+					globalStore.router.push('/');
+				})
+				.catch(e => {
+					globalStore.alert.openAlert(e.response.data.errorMessage);
+				})
 		}
     }
 
