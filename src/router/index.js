@@ -91,9 +91,6 @@ router.beforeEach(async (to, from) => {
   const auth = useAuthStore();
   const toName = to.name;
 
-  console.log(toName);
-  console.log(auth.member);
-
   // 소셜 로그인 실패 처리
   if(toName === 'LoginFail') {
     if(to.query?.error === '403') {
