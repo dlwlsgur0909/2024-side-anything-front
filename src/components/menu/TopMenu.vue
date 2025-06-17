@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'];
+const menuList = ['HOME', 'MYINFO', 'COMPANION', 'BOARD'];
 const selectedMenu = ref('HOME');
 
 const displaySideMenu = ref(false);
@@ -43,10 +43,10 @@ function onClickMyInfo() {
   });
 }
 
-function onClickPortfolio() {
-  selectedMenu.value = 'PORTFOLIO';
-  sessionStorage.setItem('menu', 'PORTFOLIO');
-  globalStore.router.push('/portfolioList');
+function onClickCompanion() {
+  selectedMenu.value = 'COMPANION';
+  sessionStorage.setItem('menu', 'COMPANION');
+  globalStore.router.push('/companion');
 
 }
 
@@ -89,10 +89,10 @@ window.addEventListener('resize', () => {
   
         <div 
           class="top-menu-item"
-          :class="selectedMenu === 'PORTFOLIO' ? 'top-menu-item-selected' : ''"
-          @click="onClickPortfolio()"
+          :class="selectedMenu === 'COMPANION' ? 'top-menu-item-selected' : ''"
+          @click="onClickCompanion()"
         >
-          포트폴리오
+          동행
         </div>
   
         <div class="top-menu-item">자유게시판</div>
