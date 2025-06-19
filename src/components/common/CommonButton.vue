@@ -19,6 +19,11 @@ const props = defineProps({
   logo: {
     type: String,
     required: false,
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -30,8 +35,9 @@ function getImageUrl() {
 
 <template>
   <button
-    class="common-button"
+    :class="props.disabled ? 'common-disabled-button' : 'common-button'"
     :style="`color: ${props.fontColor}; background: ${props.backgroundColor}`"
+    :disabled="props.disabled"
   >
     <div class="common-button-logo"  v-if="!!props.logo?.trim()">
       <img 
@@ -50,6 +56,21 @@ function getImageUrl() {
 </template>
 
 <style scoped>
+
+.common-disabled-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: 5px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .common-button {
   display: flex;
