@@ -59,12 +59,12 @@ const router = createRouter({
       name: 'CompanionPostSave',
       component: () => import('../views/companion/CompanionPostSave.vue')
     },
-    // {
-    //   path: '/portfolioDetail/:portfolioId',
-    //   name: 'PortfolioDetail',
-    //   component: () => import('../views/portfolio/PortfolioDetail.vue'),
-    //   props: true
-    // },
+    {
+      path: '/companionPostDetail/:companionPostId',
+      name: 'CompanionPostDetail',
+      component: () => import('../views/companion/CompanionPostDetail.vue'),
+      props: true
+    },
     // {
     //   path: '/portfolioUpdate/:portfolioId',
     //   name: 'PortfolioUpdate',

@@ -24,9 +24,12 @@ html, body {
 
 input[type=text],
 input[type=password],
-input[type=date],
-textarea {
+input[type=date] {
   padding-left: 10px;
+}
+
+textarea {
+  padding: 10px;
 }
 
 input::placeholder,

@@ -26,7 +26,6 @@ function getCompanionPostList() {
     .then(res => {
       companionPostList.value = res.data.companionPostList;
       totalPages.value = res.data.totalPages;
-      console.log(res.data);
     })
     .catch(error => {
     })
