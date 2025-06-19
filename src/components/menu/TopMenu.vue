@@ -46,7 +46,7 @@ function onClickMyInfo() {
 function onClickCompanion() {
   selectedMenu.value = 'COMPANION';
   sessionStorage.setItem('menu', 'COMPANION');
-  globalStore.router.push('/companion');
+  globalStore.router.push('/companionPostList');
 
 }
 

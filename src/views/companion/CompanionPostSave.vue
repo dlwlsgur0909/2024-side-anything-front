@@ -54,7 +54,7 @@ function savePortfolio() {
 
 }
 
-// 포트폴리오 요청 검증
+// 동행 모집 저장 요청 검증
 function validateCompanionPostSaveRequest() {
 
   if(!title.value?.trim()) {
@@ -90,7 +90,7 @@ function validateCompanionPostSaveRequest() {
   return true;
 }
 
-// 포트폴리오 내용 글자 수 검증
+// 모집 내용 글자 수 검증
 function validateContentLimit() {
 
   if(content.value?.length > 500) {
