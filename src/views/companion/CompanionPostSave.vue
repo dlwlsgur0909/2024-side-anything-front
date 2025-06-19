@@ -102,13 +102,7 @@ function validateContentLimit() {
 
 // 뒤로가기
 function goToPortfolioList() {
-  const prevMenu = sessionStorage.getItem('menu');
-
-  if(prevMenu === 'PORTFOLIO') {
-    globalStore.router.push('/portfolioList');
-  }else {
-    globalStore.router.push('/myPortfolioList');
-  }
+  globalStore.router.push('/companionPostList');
 }
 
 </script>
