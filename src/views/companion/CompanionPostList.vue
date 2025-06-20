@@ -196,7 +196,6 @@ const buttonConfig = {
   display: flex;
   flex-direction: column;
   min-height: 60px;
-  word-break: break-all;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
@@ -211,6 +210,7 @@ const buttonConfig = {
 .item-info {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .item-id {
@@ -222,13 +222,16 @@ const buttonConfig = {
 .item-title {
   flex: 6;
   display: flex;
-  justify-content: center;
+  justify-content: center;  
 }
 
 .item-location {
   flex: 1.5;
   display: flex;
   justify-content: center;
+  word-break: keep-all;
+  white-space: normal; 
+  text-align: center;     
 }
 
 .item-status {
