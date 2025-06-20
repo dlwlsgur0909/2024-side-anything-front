@@ -34,7 +34,7 @@ const message = ref('');
 // 버튼 설정
 const buttonConfig = {
   update: {
-    label: '수정하기',
+    label: '마감하기',
     fontColor: 'white',
     backgroundColor: 'black',
   },
@@ -76,8 +76,11 @@ function getCompanionPostDetail() {
       memberId.value = res.data.memberId;
       isApplied.value = res.data.isApplied;
 
-      if(res.data.isApplied) {
-        buttonConfig.application.label = '신청완료'
+      if(res.data.isClosed) {
+        buttonConfig.application.label = '모집마감';
+        buttonConfig.application.backgroundColor = 'black';
+      }else if(res.data.isApplied) {
+        buttonConfig.application.label = '신청완료';
       }
 
     })
@@ -92,30 +95,35 @@ onMounted(async () => {
   getCompanionPostDetail();
 })
 
-// 동행 모집 수정 페이지 이동 
-function goToCompanionPostUpdate() {
-  alert('수정 로직 확정 후 구현 예정');
-  // globalStore.router.push({
-    //   name: 'CompanionPostUpdate',
-    //   params: {
-      //     companionPostId: props.companionPostId
-      //   }
-      // });
-    }
+// 동행 모집 마감 API
+function closeCompanionPost() {
+
+  globalStore.confirm.openConfirm("동행 모집을 마감하시겠습니까?", () => {
+    customAxios
+      .patch(`/companions/${props.companionPostId}`)
+      .then(res => {
+        getCompanionPostDetail();
+      })
+      .catch(error => {
+
+      })
+  })
+
+}
     
 // 동행 모집 삭제
 function deleteCompanionPost() {
-  alert('삭제 로직 확정 후 구현 예정');
-  // globalStore.confirm.openConfirm(`삭제하시겠습니까?`, () => {
-  //   customAxios
-  //     .delete(`/portfolios/${portfolioId.value}`)
-  //     .then(res => {
-  //       globalStore.router.push('/portfolioList');
-  //     })
-  //     .catch((error) => {
-        
-  //     })
-  // });
+
+  globalStore.confirm.openConfirm('동행 모집을 삭제하시겠습니까?', () => {
+    customAxios
+      .delete(`/companions/${props.companionPostId}`)
+      .then(res => {
+        globalStore.router.push('/companionPostList');
+      })
+      .catch(error => {
+
+      })
+  })
 
 }
 
@@ -154,6 +162,7 @@ function saveCompanionApplication() {
       alert('신청 내역 페이지로 이동?');
     })
     .catch(error => {
+      globalStore.router.push('/companionPostList');
     })
 
 }
@@ -177,7 +186,7 @@ function saveCompanionApplication() {
       <div class="update-delete-button-container" v-if="auth.member?.id === memberId">
         <CommonButton
           class="update-button"
-          @click="goToCompanionPostUpdate()"
+          @click="closeCompanionPost()"
           :label="buttonConfig.update.label"
           :fontColor="buttonConfig.update.fontColor"
           :background-color="buttonConfig.update.backgroundColor"
@@ -189,7 +198,6 @@ function saveCompanionApplication() {
           :label="buttonConfig.delete.label"
           :fontColor="buttonConfig.delete.fontColor"
           :background-color="buttonConfig.delete.backgroundColor"
-          :disabled="isClosed"
         />
       </div>
       <CommonButton v-else
