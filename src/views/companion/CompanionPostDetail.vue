@@ -261,33 +261,35 @@ function saveCompanionApplication() {
     </div>
     
     <div class="screen-block" v-if="displayApplication">
-      <div class="application-form-container">
+    </div>
+    <transition name="slide-fade">
+      <div class="application-form-container" v-if="displayApplication">
         <textarea
-          class="application-textarea"
-          placeholder="간단한 자기소개나 동행 의사를 적어주세요 (최대 100자)"
-          maxlength="100"
-          v-model="message"
+        class="application-textarea"
+        placeholder="간단한 자기소개나 동행 의사를 적어주세요 (최대 100자)"
+        maxlength="100"
+        v-model="message"
         />
         <div class="apply-cancel-button-container">
           <CommonButton
-            class="apply-button"
-            @click="saveCompanionApplication()"
-            :label="buttonConfig.apply.label"
-            :fontColor="buttonConfig.apply.fontColor"
-            :background-color="buttonConfig.apply.backgroundColor"
-            :disabled="isClosed"
+          class="apply-button"
+          @click="saveCompanionApplication()"
+          :label="buttonConfig.apply.label"
+          :fontColor="buttonConfig.apply.fontColor"
+          :background-color="buttonConfig.apply.backgroundColor"
+          :disabled="isClosed"
           />
           <CommonButton
-            class="cancel-button"
-            @click="closeApplication()"
-            :label="buttonConfig.cancel.label"
-            :fontColor="buttonConfig.cancel.fontColor"
-            :background-color="buttonConfig.cancel.backgroundColor"
-            :disabled="isClosed"
+          class="cancel-button"
+          @click="closeApplication()"
+          :label="buttonConfig.cancel.label"
+          :fontColor="buttonConfig.cancel.fontColor"
+          :background-color="buttonConfig.cancel.backgroundColor"
+          :disabled="isClosed"
           />
         </div>
       </div>
-    </div>
+    </transition>
 
   </div>
 </template>
@@ -395,9 +397,6 @@ function saveCompanionApplication() {
 }
 
 .screen-block {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -409,6 +408,9 @@ function saveCompanionApplication() {
 }
 
 .application-form-container {
+  position: fixed;
+  top: calc(50vh - 150px);
+  left: calc(50vw - 150px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -418,6 +420,7 @@ function saveCompanionApplication() {
   max-width: 300px;
   background: white;
   border-radius: 10px;
+  z-index: 90000;
 }
 
 .application-textarea {
@@ -436,6 +439,24 @@ function saveCompanionApplication() {
   flex: 1;
   height: 30px;
 }
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 
 @media(max-width: 500px) {
 
