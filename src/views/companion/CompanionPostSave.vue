@@ -42,12 +42,7 @@ function savePortfolio() {
   customAxios
     .post('/companions', request)
     .then(res => {
-      // globalStore.router.push({
-      //   name: 'PortfolioDetail',
-      //   params: {
-      //     portfolioId: res.data
-      //   }
-      // })
+      globalStore.router.push('/companionPostList');
     })
     .catch(error => {
     })
