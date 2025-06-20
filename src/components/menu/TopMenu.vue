@@ -140,10 +140,10 @@ window.addEventListener('resize', () => {
       
             <div 
               class="side-menu-item"
-              :class="selectedMenu === 'PORTFOLIO' ? 'side-menu-item-selected' : ''"
-              @click="onClickPortfolio()"
+              :class="selectedMenu === 'COMPANION' ? 'side-menu-item-selected' : ''"
+              @click="onClickCompanion()"
             >
-              포트폴리오
+              동행
             </div>
       
             <div class="side-menu-item">자유게시판</div>
@@ -227,11 +227,12 @@ window.addEventListener('resize', () => {
   height: 100%;
   padding-left: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 .side-menu-icon-container-closed {
   position: fixed;
-  width: 200px;
+  width: 100vw;
   height: 50px;
   background: #fff;
   z-index: 88888;
@@ -242,6 +243,7 @@ window.addEventListener('resize', () => {
   height: 100%;
   padding-left: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 .side-menu-container {
