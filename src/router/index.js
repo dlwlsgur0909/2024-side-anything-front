@@ -50,32 +50,27 @@ const router = createRouter({
       name: 'LoginFail',
     },
     {
-      path: '/myPortfolioList',
-      name: 'MyPortfolioList',
-      component: () => import('../views/portfolio/MyPortfolioList.vue'),
+      path: '/companionPostList',
+      name: 'CompanionPostList',
+      component: () => import('../views/companion/CompanionPostList.vue'),
     },
     {
-      path: '/portfolioList',
-      name: 'PortfolioList',
-      component: () => import('../views/portfolio/PortfolioList.vue'),
+      path: '/companionPostSave',
+      name: 'CompanionPostSave',
+      component: () => import('../views/companion/CompanionPostSave.vue')
     },
     {
-      path: '/portfolioSave',
-      name: 'PortfolioSave',
-      component: () => import('../views/portfolio/PortfolioSave.vue')
-    },
-    {
-      path: '/portfolioDetail/:portfolioId',
-      name: 'PortfolioDetail',
-      component: () => import('../views/portfolio/PortfolioDetail.vue'),
+      path: '/companionPostDetail/:companionPostId',
+      name: 'CompanionPostDetail',
+      component: () => import('../views/companion/CompanionPostDetail.vue'),
       props: true
     },
-    {
-      path: '/portfolioUpdate/:portfolioId',
-      name: 'PortfolioUpdate',
-      component: () => import('../views/portfolio/PortfolioUpdate.vue'),
-      props: true
-    },
+    // {
+    //   path: '/portfolioUpdate/:portfolioId',
+    //   name: 'PortfolioUpdate',
+    //   component: () => import('../views/portfolio/PortfolioUpdate.vue'),
+    //   props: true
+    // },
     {
       path: '/:pathMatch(.*)',
       name: 'NotFound',

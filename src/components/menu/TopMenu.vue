@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ['HOME', 'MYINFO', 'PORTFOLIO', 'BOARD'];
+const menuList = ['HOME', 'MYINFO', 'COMPANION', 'BOARD'];
 const selectedMenu = ref('HOME');
 
 const displaySideMenu = ref(false);
@@ -43,10 +43,10 @@ function onClickMyInfo() {
   });
 }
 
-function onClickPortfolio() {
-  selectedMenu.value = 'PORTFOLIO';
-  sessionStorage.setItem('menu', 'PORTFOLIO');
-  globalStore.router.push('/portfolioList');
+function onClickCompanion() {
+  selectedMenu.value = 'COMPANION';
+  sessionStorage.setItem('menu', 'COMPANION');
+  globalStore.router.push('/companionPostList');
 
 }
 
@@ -89,10 +89,10 @@ window.addEventListener('resize', () => {
   
         <div 
           class="top-menu-item"
-          :class="selectedMenu === 'PORTFOLIO' ? 'top-menu-item-selected' : ''"
-          @click="onClickPortfolio()"
+          :class="selectedMenu === 'COMPANION' ? 'top-menu-item-selected' : ''"
+          @click="onClickCompanion()"
         >
-          포트폴리오
+          동행
         </div>
   
         <div class="top-menu-item">자유게시판</div>
@@ -140,10 +140,10 @@ window.addEventListener('resize', () => {
       
             <div 
               class="side-menu-item"
-              :class="selectedMenu === 'PORTFOLIO' ? 'side-menu-item-selected' : ''"
-              @click="onClickPortfolio()"
+              :class="selectedMenu === 'COMPANION' ? 'side-menu-item-selected' : ''"
+              @click="onClickCompanion()"
             >
-              포트폴리오
+              동행
             </div>
       
             <div class="side-menu-item">자유게시판</div>
@@ -172,6 +172,7 @@ window.addEventListener('resize', () => {
   padding-bottom: 10px;
   background: #524FE1;
   z-index: 88888;
+  user-select: none;
 }
 
 .top-menu-logo-section {
@@ -227,11 +228,12 @@ window.addEventListener('resize', () => {
   height: 100%;
   padding-left: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 .side-menu-icon-container-closed {
   position: fixed;
-  width: 200px;
+  width: 100vw;
   height: 50px;
   background: #fff;
   z-index: 88888;
@@ -242,6 +244,7 @@ window.addEventListener('resize', () => {
   height: 100%;
   padding-left: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 .side-menu-container {
@@ -253,6 +256,7 @@ window.addEventListener('resize', () => {
   background: #524FE1;
   transform: translateX(0);
   z-index: 88888;
+  user-select: none;
 }
 
 .side-menu-item-section {

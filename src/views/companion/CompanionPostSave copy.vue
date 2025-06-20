@@ -1,10 +1,18 @@
-<script setup>
+<!-- <script setup>
 
 import { ref, inject } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '@/components/common/CommonButton.vue';
 
 const customAxios = inject('customAxios');
+
+// 동행 모집 관련 변수
+const title = ref('');
+const Content = ref('');
+const location = ref('');
+const recruitCount = ref(1);
+const startDate = ref('');
+const endDate = ref('');
 
 const portfolioName = ref('');
 const portfolioContent = ref('');
@@ -387,4 +395,4 @@ function goToPortfolioList() {
   width: 30%;
 }
 
-</style>
+</style> -->

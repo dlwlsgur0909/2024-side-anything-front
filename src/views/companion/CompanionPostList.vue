@@ -14,17 +14,17 @@ const totalPages = ref(0);
 // 검색어 
 const keyword = ref('');
 
-// 포트폴리오 목록 
-const portfolioList = ref([]);
+// 동행 모집 목록 
+const companionPostList = ref([]);
 
-// 내 포트폴리오 목록 조회 API
-function getPortfolioList() {
+// 동행 모집 목록 조회 API
+function getCompanionPostList() {
 
   // request parameter에 인코딩이 필요한 특수문자가 들어가면 에러가 발생하므로 encodeURIComponent 사용
   customAxios
-    .get(`/portfolios?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
+    .get(`/companions?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      portfolioList.value = res.data.portfolioList;
+      companionPostList.value = res.data.companionPostList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -37,11 +37,11 @@ function onClickSearch() {
 
   keyword.value = keyword.value.trim();
   currentPage.value = 1;
-  getPortfolioList();
+  getCompanionPostList();
 
 }
 
-// 최초 포트폴리오 목록 조회
+// 최초 동행 모집 목록 조회
 onMounted(() => {
 
   // 저장된 검색어, 현재 페이지 정보
@@ -54,26 +54,26 @@ onMounted(() => {
   keyword.value = savedKeyword ? savedKeyword : '';
   currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
 
-  getPortfolioList();
+  getCompanionPostList();
 })
 
 
-// 포트폴리오 저장 페이지 이동
-function goToPortfolioSave() {
-  globalStore.router.push('/portfolioSave');  
+// 동행 모집 저장 페이지 이동
+function goToCompanionPostSave() {
+  globalStore.router.push('/companionPostSave');  
 }
 
-// 포트폴리오 상세 페이지 이동
-function goToPortfolioDetail(portfolioId) {
+// 동행 모집 상세 페이지 이동
+function goToCompanionPostDetail(companionPostId) {
 
   // 검색어, 현재 페이지 정보 저장
   sessionStorage.setItem('keyword', keyword.value);
   sessionStorage.setItem('currentPage', currentPage.value);
 
   globalStore.router.push({
-    name: 'PortfolioDetail',
+    name: 'CompanionPostDetail',
     params: {
-      portfolioId: portfolioId
+      companionPostId: companionPostId
     }
   });
 }
@@ -81,7 +81,7 @@ function goToPortfolioDetail(portfolioId) {
 // 페이지 변경
 function changePage(page) {
   currentPage.value = page;
-  getPortfolioList();
+  getCompanionPostList();
 }
 
 // 버튼 설정
@@ -103,13 +103,13 @@ const buttonConfig = {
 <template>
   <div class="main">
 
-    <div class="portfolio-search-container">
+    <div class="companion-post-search-container">
       <input type="text" 
-        class="portfolio-search-box" placeholder="포트폴리오명 / 작성자"
+        class="companion-post-search-box" placeholder="제목 / 장소"
         v-model="keyword" @keyup.enter="onClickSearch()"
       />
       <CommonButton
-        class="portfolio-search-button"
+        class="companion-post-search-button"
         :label="buttonConfig.search.label"
         :fontColor="buttonConfig.search.fontColor"
         :background-color="buttonConfig.search.backgroundColor"
@@ -118,31 +118,38 @@ const buttonConfig = {
     </div>
 
 
-    <div class="portfolio-list-container" v-if="portfolioList.length > 0">
-      <div class="portfolio-list-header">
-          <span class="header-portfolio-id">번호</span>
-          <span class="header-portfolio-name">포트폴리오명</span>
-          <span class="header-member-name">작성자</span>
-      </div>
-
-      <div class="portfolio-list-item" 
-        v-for="(portfolio) in portfolioList" :key="portfolio.portfolioId"
-        @click="goToPortfolioDetail(portfolio.portfolioId)"
+    <div class="companion-post-list-container" v-if="companionPostList.length > 0">
+      <div class="list-item-container" 
+        v-for="(companionPost) in companionPostList" :key="companionPost.id"
+        @click="goToCompanionPostDetail(companionPost.id)"
       >
-        <div class="item-portfolio-id">
-          {{ portfolio.portfolioId }}
+        <div class="item-info">
+          <div class="item-id">
+            {{ companionPost.id }}
+          </div>
+          <div class="item-title">
+            {{ companionPost.title }}
+          </div>
+          <div class="item-location">
+            {{ companionPost.location }}
+          </div>
+          <div class="item-status">
+            {{ companionPost.status }}
+          </div>
         </div>
-        <div class="item-portfolio-name">
-          {{ portfolio.portfolioName }}
+
+        <div class="item-duration">
+          기간:
+          {{ companionPost.startDate }}
+          ~
+          {{ companionPost.endDate }}
         </div>
-        <div class="item-member-name">
-          {{ portfolio.memberName }}
-        </div>
+
       </div>
     </div>
 
     <div class="no-content" v-else>
-      <span class="no-content-message">등록된 포트폴리오가 없습니다 😢</span>
+      <span class="no-content-message">등록된 동행이 없습니다 😢</span>
     </div>
 
     <Pagination
@@ -151,97 +158,103 @@ const buttonConfig = {
       @changePage="(page) => changePage(page)"
     />
 
-    <div class="portfolio-list-button-container">
+    <div class="companion-post-list-button-container">
       <CommonButton
-        @click="goToPortfolioSave()"
+        @click="goToCompanionPostSave()"
         :label="buttonConfig.save.label"
         :fontColor="buttonConfig.save.fontColor"
         :background-color="buttonConfig.save.backgroundColor"
       />
     </div>
+
   </div>
 </template>
 
 <style scoped>
 
-.portfolio-search-container {
+.companion-post-search-container {
   display: flex;
   gap: 20px;
 }
 
-.portfolio-search-box {
+.companion-post-search-box {
   height: 40px;
   border-radius: 5px;
   flex: 1;
 }
 
-.portfolio-search-button {
+.companion-post-search-button {
   width: 100px;
 }
 
-.portfolio-list-container {
+.companion-post-list-container {
   display: flex;
   flex-direction: column;
 }
 
-.portfolio-list-header {
+.list-item-container {
   display: flex;
-  padding: 10px 5px;
-  border-bottom: 1px dashed black;
-}
-
-.header-portfolio-id {
-  width: 15%;
-  text-align: left;
-}
-
-.header-portfolio-name {
-  width: 70%;
-  text-align: center;
-}
-
-.header-member-name {
-  width: 15%;
-  text-align: center;
-}
-
-.portfolio-list-item {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   min-height: 60px;
-  padding: 5px;
-  word-break: break-all;
-  border-bottom: 1px solid #000;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.portfolio-list-item:hover {
-  cursor: pointer;
+.list-item-container:hover {
   background: #514fe1;
   color: #fff;
-  border-radius: 5px;
 }
 
-.item-portfolio-id {
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-id {
+  flex: 1;
   display: flex;
   justify-content: flex-start;
-  width: 15%;
 }
 
-.item-portfolio-name {
+.item-title {
+  flex: 6;
+  display: flex;
+  justify-content: center;  
+}
+
+.item-location {
+  flex: 1.5;
   display: flex;
   justify-content: center;
-  width: 70%;
-  text-align: center;
+  word-break: keep-all;
+  white-space: normal; 
+  text-align: center;     
 }
 
-.item-member-name {
+.item-status {
+  flex: 1.5;
   display: flex;
   justify-content: center;
-  width: 15%;
-  text-align: center;
+  padding: 3px 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  background: black;
+  border-radius: 15px;
 }
 
-.portfolio-list-button-container {
+.item-duration {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.companion-post-list-button-container {
   display: flex;
   flex-direction: column;
 }

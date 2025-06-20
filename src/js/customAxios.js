@@ -47,6 +47,8 @@ const customAxios = () => {
                     return await instance(error.config);
                 }else {
                     globalStore.spinner.stopSpinner();
+                    globalStore.router.push('/login');
+                    globalStore.alert.openAlert('로그인이 만료되었습니다');
                     return Promise.reject();
                 }
             }else {
