@@ -45,14 +45,14 @@ function onClickSearch() {
 onMounted(() => {
 
   // 저장된 검색어, 현재 페이지 정보
-  // const savedKeyword = sessionStorage.getItem('keyword');
-  // const savedCurrentPage = Number(sessionStorage.getItem('currentPage'));
+  const savedKeyword = sessionStorage.getItem('keyword');
+  const savedCurrentPage = Number(sessionStorage.getItem('currentPage'));
 
-  // sessionStorage.removeItem('keyword');
-  // sessionStorage.removeItem('currentPage');
+  sessionStorage.removeItem('keyword');
+  sessionStorage.removeItem('currentPage');
 
-  // keyword.value = savedKeyword ? savedKeyword : '';
-  // currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
+  keyword.value = savedKeyword ? savedKeyword : '';
+  currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
 
   getCompanionPostList();
 })
@@ -133,6 +133,9 @@ const buttonConfig = {
           <div class="item-location">
             {{ companionPost.location }}
           </div>
+          <div class="item-status">
+            {{ companionPost.status }}
+          </div>
         </div>
 
         <div class="item-duration">
@@ -207,6 +210,7 @@ const buttonConfig = {
 
 .item-info {
   display: flex;
+  align-items: center;
 }
 
 .item-id {
@@ -216,20 +220,33 @@ const buttonConfig = {
 }
 
 .item-title {
-  flex: 7;
+  flex: 6;
   display: flex;
   justify-content: center;
 }
 
 .item-location {
-  flex: 2;
+  flex: 1.5;
   display: flex;
   justify-content: center;
 }
 
+.item-status {
+  flex: 1.5;
+  display: flex;
+  justify-content: center;
+  padding: 3px 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  background: black;
+  border-radius: 15px;
+}
+
 .item-duration {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  padding-left: 10px;
   font-weight: 500;
   font-size: 14px;
 }
