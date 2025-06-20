@@ -172,6 +172,7 @@ window.addEventListener('resize', () => {
   padding-bottom: 10px;
   background: #524FE1;
   z-index: 88888;
+  user-select: none;
 }
 
 .top-menu-logo-section {
@@ -255,6 +256,7 @@ window.addEventListener('resize', () => {
   background: #524FE1;
   transform: translateX(0);
   z-index: 88888;
+  user-select: none;
 }
 
 .side-menu-item-section {
