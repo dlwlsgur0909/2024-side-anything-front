@@ -409,7 +409,7 @@ function saveCompanionApplication() {
 
 .application-form-container {
   position: fixed;
-  top: calc(50vh - 150px);
+  top: calc(50vh - 115px);
   left: calc(50vw - 150px);
   display: flex;
   flex-direction: column;
