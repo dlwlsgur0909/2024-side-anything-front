@@ -19,7 +19,7 @@ function getMyCompanionApplicationList() {
   customAxios
     .get(`/companions/my-applications?page=${currentPage.value}`)
     .then(res => {
-      myCompanionApplicationList.value = res.data.myCompanionApplicationList;
+      myCompanionApplicationList.value = res.data.companionApplicationList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -35,7 +35,7 @@ onMounted(() => {
 // 페이지 변경
 function changePage(page) {
   currentPage.value = page;
-  getCompanionPostList();
+  getMyCompanionApplicationList();
 }
 
 // 내 동행 신청 취소
@@ -45,11 +45,9 @@ function cancelApplication({applicationId, postTitle}) {
     customAxios
       .patch(`/companions/my-applications/${applicationId}`)
       .then(res => {
-        console.log(res);
         getMyCompanionApplicationList();
       })
       .catch(error => {
-        console.log(error);
       })
   })
 
@@ -63,11 +61,9 @@ function deleteApplication({applicationId, postTitle}) {
     customAxios
       .delete(`/companions/my-applications/${applicationId}`)
       .then(res => {
-        console.log(res);
         getMyCompanionApplicationList();
       })
       .catch(error => {
-        console.log(error);
       })
   })
 

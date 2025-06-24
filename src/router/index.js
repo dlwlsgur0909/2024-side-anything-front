@@ -25,12 +25,12 @@ const router = createRouter({
       name: 'Find',
       component: () => import('../views/common/FindView.vue')
     },
-    {
-      path: '/member/:username',
-      name: 'Member',
-      component: () => import('../views/MemberView.vue'),
-      props: true
-    },
+    // {
+    //   path: '/member/:username',
+    //   name: 'Member',
+    //   component: () => import('../views/MemberView.vue'),
+    //   props: true
+    // },
     {
       path: '/admin',
       name: 'Admin',
@@ -69,6 +69,11 @@ const router = createRouter({
       path: '/myCompanionApplicationList',
       name: 'MyCompanionApplicationList',
       component: () => import('../views/companion/MyCompanionApplicationList.vue')
+    },
+    {
+      path: '/myCompanionPostList',
+      name: 'MyCompanionPostList',
+      component: () => import('../views/companion/MyCompanionPostList.vue')
     },
     // {
     //   path: '/portfolioUpdate/:portfolioId',
