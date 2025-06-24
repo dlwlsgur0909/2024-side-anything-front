@@ -20,10 +20,8 @@ function getMyCompanionPostList() {
     .then(res => {
       myCompanionPostList.value = res.data.companionPostList;
       totalPages.value = res.data.totalPages;
-      console.log(res.data);
     })
     .catch(error => {
-      console.log(error);
     })
 }
 
@@ -31,6 +29,16 @@ function getMyCompanionPostList() {
 onMounted(() => {
   getMyCompanionPostList();
 })
+
+// 내 동행 모집 상세 페이지 이동
+function goToMyCompanionPostDetail(companionPostId) {
+  globalStore.router.push({
+    name: 'MyCompanionPostDetail',
+    params: {
+      companionPostId: companionPostId
+    }
+  });
+}
 
 // 페이지 변경
 function changePage(page) {
@@ -48,6 +56,7 @@ function changePage(page) {
 
       <div class="list-item-container" 
         v-for="(myCompanionPost) in myCompanionPostList" :key="myCompanionPost.id"
+        @click="goToMyCompanionPostDetail(myCompanionPost.id)"
       >
         <div class="item-post-title-status">
           <div class="title-status">
