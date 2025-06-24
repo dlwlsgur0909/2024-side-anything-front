@@ -38,6 +38,7 @@ function changePage(page) {
   getCompanionPostList();
 }
 
+// 내 동행 신청 취소
 function cancelApplication({applicationId, postTitle}) {
 
   globalStore.confirm.openConfirm(`${postTitle} 동행 신청을 취소하시겠습니까?`, () => {
@@ -55,6 +56,7 @@ function cancelApplication({applicationId, postTitle}) {
 
 }
 
+// 내 동행 신청 삭제
 function deleteApplication({applicationId, postTitle}) {
 
   globalStore.confirm.openConfirm(`${postTitle} 동행 신청을 삭제하시겠습니까?`, () => {
@@ -108,8 +110,16 @@ function deleteApplication({applicationId, postTitle}) {
         </div>
         
         <div class="cancel-delete-button-container">
-          <span class="cancel-button" @click="cancelApplication(myCompanionApplication)">
-            취소
+          <span 
+            v-if="myCompanionApplication.isCancelable"
+            class="cancel-button" @click="cancelApplication(myCompanionApplication)" 
+          >
+            취소 
+          </span>
+          <span 
+            v-else class="cancel-button-disabled"
+          >
+            취소 
           </span>
           <span class="delete-button" @click="deleteApplication(myCompanionApplication)">
             삭제
@@ -209,7 +219,6 @@ function deleteApplication({applicationId, postTitle}) {
   flex: 2;
   display: flex;
   justify-content: flex-end;
-  border: 1px solid red;
 }
 
 .application-status-label {
@@ -239,6 +248,7 @@ function deleteApplication({applicationId, postTitle}) {
 }
 
 .cancel-button-disabled {
+  color: gray;
   cursor: not-allowed;
 }
 
