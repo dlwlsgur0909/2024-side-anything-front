@@ -6,19 +6,14 @@ import CommonButton from '@/components/common/CommonButton.vue';
 
 const auth = useAuthStore();
 
-// 내 정보 페이지 이동
-function goToMyInfo() {
-  globalStore.router.push({
-    name: 'Member',
-    params: {
-      username: auth.member.username
-    },
-  });
+// 내 동행 모집 페이지 이동
+function goToMyCompanionPostList() {
+  globalStore.router.push('/myCompanionPostList');
 }
 
-// 내 포트폴리오 페이지 이동
-function goToMyPortfolioList() {
-  globalStore.router.push('/myPortfolioList');
+// 내 동행 신청 페이지 이동
+function goToMyCompanionApplicationList() {
+  globalStore.router.push('/myCompanionApplicationList');
 }
 
 // 로그인 시 권한도 저장해서 admin이 아닌 경우 admin 버튼 숨김 처리 필요
@@ -28,13 +23,13 @@ function admin() {
 
 // 버튼 설정
 const buttonConfig = {
-  myInfo: {
-    label: '내 정보',
+  myCompanionPost: {
+    label: '내 동행 모집',
     fontColor: '#fff',
     backgroundColor: '#000'
   },
-  myPortfolio: {
-    label: '내 포트폴리오',
+  myCompanionApplication: {
+    label: '내 동행 신청',
     fontColor: '#fff',
     backgroundColor: '#000'
   },
@@ -54,18 +49,18 @@ const buttonConfig = {
     </div>
     <div class="my-menu">
       <CommonButton
-        class="my-info-button"
-        @click="goToMyInfo()"
-        :label="buttonConfig.myInfo.label"
-        :fontColor="buttonConfig.myInfo.fontColor"
-        :backgroundColor="buttonConfig.myInfo.backgroundColor"
+        class="my-companion-post-button"
+        @click="goToMyCompanionPostList()"
+        :label="buttonConfig.myCompanionPost.label"
+        :fontColor="buttonConfig.myCompanionPost.fontColor"
+        :backgroundColor="buttonConfig.myCompanionPost.backgroundColor"
       />
       <CommonButton
-        class="my-portfolio-button"
-        @click="goToMyPortfolioList()"
-        :label="buttonConfig.myPortfolio.label"
-        :fontColor="buttonConfig.myPortfolio.fontColor"
-        :backgroundColor="buttonConfig.myPortfolio.backgroundColor"
+        class="my-companion-application-button"
+        @click="goToMyCompanionApplicationList()"
+        :label="buttonConfig.myCompanionApplication.label"
+        :fontColor="buttonConfig.myCompanionApplication.fontColor"
+        :backgroundColor="buttonConfig.myCompanionApplication.backgroundColor"
       />
       <CommonButton
         class="logout-button"
@@ -95,15 +90,14 @@ const buttonConfig = {
   gap: 20px;
 }
 
-.my-info-button,
-.my-portfolio-button,
+.my-companion-post-button,
+.my-companion-application-button,
 .logout-button {
   flex: 1;
-  height: 30px !important;
 }
 
 @media(max-width: 600px) {
-  /* .my-menu {
+  .my-menu {
     flex-direction: column;
     align-items: center;
   }
@@ -112,7 +106,7 @@ const buttonConfig = {
   .my-portfolio-button,
   .logout-button {
     width: 30%;
-  } */
+  }
 }
 
 </style>
