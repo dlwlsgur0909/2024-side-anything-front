@@ -159,7 +159,7 @@ function saveCompanionApplication() {
     .then(res => {
       displayApplication.value = false;
       message.value = '';
-      alert('신청 내역 페이지로 이동?');
+      globalStore.router.push('/myCompanionApplicationList');
     })
     .catch(error => {
       globalStore.router.push('/companionPostList');
@@ -265,27 +265,27 @@ function saveCompanionApplication() {
     <transition name="slide-fade">
       <div class="application-form-container" v-if="displayApplication">
         <textarea
-        class="application-textarea"
-        placeholder="간단한 자기소개나 동행 의사를 적어주세요 (최대 100자)"
-        maxlength="100"
-        v-model="message"
+          class="application-textarea"
+          placeholder="간단한 자기소개나 동행 의사를 적어주세요 (최대 100자)"
+          maxlength="100"
+          v-model="message"
         />
         <div class="apply-cancel-button-container">
           <CommonButton
-          class="apply-button"
-          @click="saveCompanionApplication()"
-          :label="buttonConfig.apply.label"
-          :fontColor="buttonConfig.apply.fontColor"
-          :background-color="buttonConfig.apply.backgroundColor"
-          :disabled="isClosed"
+            class="apply-button"
+            @click="saveCompanionApplication()"
+            :label="buttonConfig.apply.label"
+            :fontColor="buttonConfig.apply.fontColor"
+            :background-color="buttonConfig.apply.backgroundColor"
+            :disabled="isClosed"
           />
           <CommonButton
-          class="cancel-button"
-          @click="closeApplication()"
-          :label="buttonConfig.cancel.label"
-          :fontColor="buttonConfig.cancel.fontColor"
-          :background-color="buttonConfig.cancel.backgroundColor"
-          :disabled="isClosed"
+            class="cancel-button"
+            @click="closeApplication()"
+            :label="buttonConfig.cancel.label"
+            :fontColor="buttonConfig.cancel.fontColor"
+            :background-color="buttonConfig.cancel.backgroundColor"
+            :disabled="isClosed"
           />
         </div>
       </div>

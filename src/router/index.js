@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import('../views/companion/CompanionPostDetail.vue'),
       props: true
     },
+    {
+      path: '/myCompanionApplicationList',
+      name: 'MyCompanionApplicationList',
+      component: () => import('../views/companion/MyCompanionApplicationList.vue')
+    },
     // {
     //   path: '/portfolioUpdate/:portfolioId',
     //   name: 'PortfolioUpdate',

@@ -69,8 +69,7 @@ function onClickConfirm() {
   justify-content: center;
   align-items: center;
   text-align: center;
-  white-space: pre-wrap;
-  word-break: break-word;
+  word-break: keep-all;
   font-weight: 700;
   padding: 20px 0;
 }
