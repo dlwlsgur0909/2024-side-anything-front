@@ -66,7 +66,6 @@ async function getMyCompanionPostDetail() {
       endDate.value = res.data.endDate;
       isClosed.value = res.data.isClosed;
       applicationList.value = res.data.applicationList;
-      console.log(res.data);
     })
     .catch(error => {
       globalStore.router.push('/myCompanionPostList');
