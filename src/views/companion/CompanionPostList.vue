@@ -15,7 +15,7 @@ const totalPages = ref(0);
 const keyword = ref('');
 
 // 동행 모집 목록 
-const companionPostList = ref([]);
+const postList = ref([]);
 
 // 동행 모집 목록 조회 API
 function getCompanionPostList() {
@@ -24,7 +24,7 @@ function getCompanionPostList() {
   customAxios
     .get(`/companions?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      companionPostList.value = res.data.companionPostList;
+      postList.value = res.data.postList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -64,7 +64,7 @@ function goToCompanionPostSave() {
 }
 
 // 동행 모집 상세 페이지 이동
-function goToCompanionPostDetail(companionPostId) {
+function goToCompanionPostDetail(postId) {
 
   // 검색어, 현재 페이지 정보 저장
   sessionStorage.setItem('keyword', keyword.value);
@@ -73,7 +73,7 @@ function goToCompanionPostDetail(companionPostId) {
   globalStore.router.push({
     name: 'CompanionPostDetail',
     params: {
-      companionPostId: companionPostId
+      companionPostId: postId
     }
   });
 }
@@ -118,31 +118,31 @@ const buttonConfig = {
     </div>
 
 
-    <div class="companion-post-list-container" v-if="companionPostList.length > 0">
+    <div class="companion-post-list-container" v-if="postList.length > 0">
       <div class="list-item-container" 
-        v-for="(companionPost) in companionPostList" :key="companionPost.id"
-        @click="goToCompanionPostDetail(companionPost.id)"
+        v-for="(post) in postList" :key="post.id"
+        @click="goToCompanionPostDetail(post.id)"
       >
         <div class="item-info">
           <div class="item-id">
-            {{ companionPost.id }}
+            {{ post.id }}
           </div>
           <div class="item-title">
-            {{ companionPost.title }}
+            {{ post.title }}
           </div>
           <div class="item-location">
-            {{ companionPost.location }}
+            {{ post.location }}
           </div>
           <div class="item-status">
-            {{ companionPost.status }}
+            {{ post.status }}
           </div>
         </div>
 
         <div class="item-duration">
           기간:
-          {{ companionPost.startDate }}
+          {{ post.startDate }}
           ~
-          {{ companionPost.endDate }}
+          {{ post.endDate }}
         </div>
 
       </div>

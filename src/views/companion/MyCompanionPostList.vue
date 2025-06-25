@@ -11,14 +11,14 @@ const currentPage = ref(1);
 const totalPages = ref(0);
 
 // 내 동행 모집 목록
-const myCompanionPostList = ref([]);
+const myPostList = ref([]);
 
 // 내 동행 모집 목록 조회 API
 function getMyCompanionPostList() {
   customAxios
     .get(`/companions/my-posts?page=${currentPage.value}`)
     .then(res => {
-      myCompanionPostList.value = res.data.companionPostList;
+      myPostList.value = res.data.postList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -31,11 +31,11 @@ onMounted(() => {
 })
 
 // 내 동행 모집 상세 페이지 이동
-function goToMyCompanionPostDetail(companionPostId) {
+function goToMyCompanionPostDetail(postId) {
   globalStore.router.push({
     name: 'MyCompanionPostDetail',
     params: {
-      companionPostId: companionPostId
+      companionPostId: postId
     }
   });
 }
@@ -52,25 +52,25 @@ function changePage(page) {
 <template>
   <div class="main">
 
-    <div class="my-companion-post-list-container" v-if="myCompanionPostList.length > 0">
+    <div class="my-companion-post-list-container" v-if="myPostList.length > 0">
 
       <div class="list-item-container" 
-        v-for="(myCompanionPost) in myCompanionPostList" :key="myCompanionPost.id"
-        @click="goToMyCompanionPostDetail(myCompanionPost.id)"
+        v-for="(myPost) in myPostList" :key="myPost.id"
+        @click="goToMyCompanionPostDetail(myPost.id)"
       >
         <div class="item-post-title-status">
           <div class="title-status">
-            {{ myCompanionPost.title }}
+            {{ myPost.title }}
             <span class="post-status-label">
-              ({{ myCompanionPost.status }})
+              ({{ myPost.status }})
             </span>
           </div>
         </div>
         <div class="item-post-location">
-          장소: {{ myCompanionPost.location }}
+          장소: {{ myPost.location }}
         </div>
         <div class="item-post-duration">
-            {{ myCompanionPost.startDate }} ~ {{ myCompanionPost.endDate }}
+            {{ myPost.startDate }} ~ {{ myPost.endDate }}
         </div>
       </div>
 

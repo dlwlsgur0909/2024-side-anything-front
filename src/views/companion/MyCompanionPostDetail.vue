@@ -19,7 +19,6 @@ const customAxios = inject('customAxios');
 const title = ref('');
 const content = ref('');
 const location = ref('');
-const writer = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const isClosed = ref(false);
@@ -67,6 +66,7 @@ async function getMyCompanionPostDetail() {
       endDate.value = res.data.endDate;
       isClosed.value = res.data.isClosed;
       applicationList.value = res.data.applicationList;
+      console.log(res.data);
     })
     .catch(error => {
       globalStore.router.push('/myCompanionPostList');
@@ -135,14 +135,14 @@ function closeApplicationList() {
 }
 
 // 동행 신청 승인
-function approveCompanionApplication(companionApplicationId) {
+function approveCompanionApplication(applicationId) {
 
   const request = {
     isApproval: true
   };
 
   customAxios
-    .patch(`/companions/${props.companionPostId}/applications/${companionApplicationId}`, request)
+    .patch(`/companions/${props.companionPostId}/applications/${applicationId}`, request)
     .then(res => {
       getMyCompanionPostDetail();
     })
@@ -153,14 +153,14 @@ function approveCompanionApplication(companionApplicationId) {
 }
 
 // 동행 신청 거절
-function rejectCompanionApplication(companionApplicationId) {
+function rejectCompanionApplication(applicationId) {
   
   const request = {
     isApproval: false
   };
 
   customAxios
-    .patch(`/companions/${props.companionPostId}/applications/${companionApplicationId}`, request)
+    .patch(`/companions/${props.companionPostId}/applications/${applicationId}`, request)
     .then(async (res) => {
       await getMyCompanionPostDetail();
       displayApplicationList.value = applicationList.value > 0;
@@ -287,7 +287,7 @@ function rejectCompanionApplication(companionApplicationId) {
             :label="buttonConfig.approve.label"
             :fontColor="buttonConfig.approve.fontColor"
             :background-color="buttonConfig.approve.backgroundColor"
-            :disabled="isClosed"
+            :disabled="isClosed || !application.isPending"
           />
           <CommonButton
             class="reject-button"
@@ -295,7 +295,7 @@ function rejectCompanionApplication(companionApplicationId) {
             :label="buttonConfig.reject.label"
             :fontColor="buttonConfig.reject.fontColor"
             :background-color="buttonConfig.reject.backgroundColor"
-            :disabled="isClosed"
+            :disabled="isClosed || !application.isPending"
           />
         </div>
       </div>

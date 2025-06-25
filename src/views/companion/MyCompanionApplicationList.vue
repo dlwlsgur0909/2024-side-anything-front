@@ -11,7 +11,7 @@ const currentPage = ref(1);
 const totalPages = ref(0);
 
 // 내 동행 신청 목록
-const myCompanionApplicationList = ref([]);
+const myApplicationList = ref([]);
 
 // 내 동행 신청 목록 조회 API
 function getMyCompanionApplicationList() {
@@ -19,7 +19,7 @@ function getMyCompanionApplicationList() {
   customAxios
     .get(`/companions/my-applications?page=${currentPage.value}`)
     .then(res => {
-      myCompanionApplicationList.value = res.data.companionApplicationList;
+      myApplicationList.value = res.data.applicationList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -74,7 +74,7 @@ function deleteApplication({applicationId, postTitle}) {
 <template>
   <div class="main">
 
-    <div class="my-companion-application-list-container" v-if="myCompanionApplicationList.length > 0">
+    <div class="my-companion-application-list-container" v-if="myApplicationList.length > 0">
 
       <div class="list-item-header">
         <div class="header-post-title-status">제목</div>
@@ -83,32 +83,32 @@ function deleteApplication({applicationId, postTitle}) {
       </div>
 
       <div class="list-item-container" 
-        v-for="(myCompanionApplication) in myCompanionApplicationList" :key="myCompanionApplication.applicationId"
+        v-for="(myApplication) in myApplicationList" :key="myApplication.applicationId"
       >
 
         <div class="item-info">
           <div class="item-post-title-status">
             <div class="title-status">
-              {{ myCompanionApplication.postTitle }}
+              {{ myApplication.postTitle }}
               <span class="post-status-label">
-                ({{ myCompanionApplication.postStatus }})
+                ({{ myApplication.postStatus }})
               </span>
             </div>
           </div>
           <div class="item-post-location">
-            {{ myCompanionApplication.postLocation }}
+            {{ myApplication.postLocation }}
           </div>
           <div class="item-application-status">
             <span class="application-status-label">
-              {{ myCompanionApplication.applicationStatus }}
+              {{ myApplication.applicationStatus }}
             </span>
           </div>
         </div>
         
         <div class="cancel-delete-button-container">
           <span 
-            v-if="myCompanionApplication.isCancelable"
-            class="cancel-button" @click="cancelApplication(myCompanionApplication)" 
+            v-if="myApplication.isCancelable"
+            class="cancel-button" @click="cancelApplication(myApplication)" 
           >
             취소 
           </span>
@@ -117,7 +117,7 @@ function deleteApplication({applicationId, postTitle}) {
           >
             취소 
           </span>
-          <span class="delete-button" @click="deleteApplication(myCompanionApplication)">
+          <span class="delete-button" @click="deleteApplication(myApplication)">
             삭제
           </span>
         </div>

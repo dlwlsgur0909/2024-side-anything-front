@@ -19,7 +19,7 @@ const customAxios = inject('customAxios');
 const title = ref('');
 const content = ref('');
 const location = ref('');
-const writer = ref('');
+const nickname = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const isClosed = ref(false);
@@ -69,7 +69,7 @@ function getCompanionPostDetail() {
       title.value = res.data.title;
       content.value = res.data.content;
       location.value = res.data.location;
-      writer.value = res.data.writer;
+      nickname.value = res.data.nickname;
       startDate.value = res.data.startDate;
       endDate.value = res.data.endDate;
       isClosed.value = res.data.isClosed;
@@ -155,7 +155,7 @@ function saveCompanionApplication() {
   };
 
   customAxios
-    .post(`/companions/${props.companionPostId}/application`, request)
+    .post(`/companions/${props.companionPostId}/applications`, request)
     .then(res => {
       displayApplication.value = false;
       message.value = '';
@@ -215,7 +215,7 @@ function saveCompanionApplication() {
       <div class="companion-post-writer-duration">
         <div class="companion-post-writer">
           <span class="subject">작성자</span>
-          <span>{{ writer }}</span>
+          <span>{{ nickname }}</span>
         </div>
 
         <div class="companion-post-duration">
