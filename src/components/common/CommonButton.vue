@@ -69,6 +69,7 @@ function getImageUrl() {
   font-size: 16px;
   font-weight: bold;
   opacity: 0.5;
+  user-select: none;
   cursor: not-allowed;
 }
 
@@ -83,10 +84,11 @@ function getImageUrl() {
   height: 40px;
   font-size: 16px;
   font-weight: bold;
+  user-select: none;
+  cursor: pointer;
 }
 
 .common-button:hover {
-  cursor: pointer;
   border: 1px solid black;
   box-shadow: 1px 1px 3px black;
 }

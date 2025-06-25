@@ -72,6 +72,7 @@ function getClassName() {
   text-align: center;
   color: #fff;
   border-radius: 15px;
+  user-select: none;
 }
 
 .status-open {
