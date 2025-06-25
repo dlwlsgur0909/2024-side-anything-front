@@ -1,9 +1,9 @@
 <script setup>
 
 import { ref, inject, onMounted } from 'vue'; 
-import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
+import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
 
 const props = defineProps({
   companionPostId: {
@@ -275,7 +275,9 @@ function rejectCompanionApplication(applicationId) {
           <span>{{ application.nickname }}</span>
           <span>{{ application.dob }}</span>
           <span>{{ application.gender }}</span>
-          <span class="application-status-label">{{ application.status }}</span>
+          <CommonStatusLabel
+            :status="application.status"
+          />
         </div>
 
         <div class="approve-reject-button-container">
@@ -450,14 +452,6 @@ function rejectCompanionApplication(applicationId) {
   gap: 10px;
   font-weight: 600;
   font-size: 16px;
-}
-
-.application-status-label {
-  padding: 5px 10px;
-  color: #fff;
-  background: #000;
-  border-radius: 15px;
-  font-size: 14px;
 }
 
 .approve-reject-button-container {

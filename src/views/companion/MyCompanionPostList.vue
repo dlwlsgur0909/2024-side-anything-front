@@ -3,7 +3,8 @@
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import Pagination from '../../components/common/Pagination.vue';
-import CommonButton from '@/components/common/CommonButton.vue';
+import CommonButton from '../../components/common/CommonButton.vue';
+import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
 
 const customAxios = inject('customAxios');
 
@@ -74,9 +75,9 @@ function goToCompanionPostSave() {
       >
         <div class="item-title-status">
           {{ myPost.title }}
-          <span class="item-status-label">
-            {{ myPost.status }}
-          </span>
+          <CommonStatusLabel
+            :status="myPost.status"
+          />
         </div>
         <div class="item-location">
           장소: {{ myPost.location }}
@@ -136,15 +137,6 @@ function goToCompanionPostSave() {
   justify-content: center;
   align-items: center;
   gap: 5px;
-}
-
-.item-status-label {
-  font-size: 14px;
-  font-weight: 600;
-  padding: 5px 10px;
-  background: #000;
-  color: #fff;
-  border-radius: 15px;
 }
 
 .item-location {

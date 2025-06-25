@@ -3,6 +3,7 @@
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
+import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
 import Pagination from '../../components/common/Pagination.vue';
 
 const customAxios = inject('customAxios');
@@ -26,6 +27,7 @@ function getCompanionPostList() {
     .then(res => {
       postList.value = res.data.postList;
       totalPages.value = res.data.totalPages;
+      console.log(res.data.postList);
     })
     .catch(error => {
     })
@@ -113,9 +115,9 @@ const buttonConfig = {
       >
         <div class="item-title-status">
           {{ post.title }}
-          <span class="item-status-label">
-            {{ post.status }}
-          </span>
+          <CommonStatusLabel
+            :status="post.status"
+          />
         </div>
         <div class="item-location">
           장소: {{ post.location }}
@@ -183,15 +185,6 @@ const buttonConfig = {
   justify-content: center;
   align-items: center;
   gap: 5px;
-}
-
-.item-status-label {
-  font-size: 14px;
-  font-weight: 600;
-  padding: 5px 10px;
-  background: #000;
-  color: #fff;
-  border-radius: 15px;
 }
 
 .item-location {

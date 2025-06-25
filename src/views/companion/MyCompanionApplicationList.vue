@@ -3,6 +3,7 @@
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import Pagination from '../../components/common/Pagination.vue';
+import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
 
 const customAxios = inject('customAxios');
 
@@ -99,9 +100,9 @@ function deleteApplication({applicationId, postTitle}) {
             {{ myApplication.postLocation }}
           </div>
           <div class="item-application-status">
-            <span class="application-status-label">
-              {{ myApplication.applicationStatus }}
-            </span>
+            <CommonStatusLabel
+              :status="myApplication.applicationStatus"
+            />
           </div>
         </div>
         
@@ -215,18 +216,6 @@ function deleteApplication({applicationId, postTitle}) {
   flex: 2;
   display: flex;
   justify-content: flex-end;
-}
-
-.application-status-label {
-  width: 60px;
-  height: 30px;
-  padding: 5px 10px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #fff;
-  background: black;
-  border-radius: 15px;
-  text-align: center;
 }
 
 .cancel-delete-button-container {
