@@ -1,7 +1,6 @@
 <script setup>
 
 import { ref, inject, onMounted, onUnmounted } from 'vue'; 
-import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
 
@@ -12,7 +11,6 @@ const props = defineProps({
   }
 })
 
-const auth = useAuthStore();
 const customAxios = inject('customAxios');
 
 // 동행 모집 상세 관련 변수
@@ -25,33 +23,21 @@ const endDate = ref('');
 const isClosed = ref(false);
 const isApplied = ref(false);
 
-const memberId = ref('');
-
 // 동행 신청 관련 변수
 const displayApplication = ref(false);
 const message = ref('');
 
 // 버튼 설정
 const buttonConfig = {
-  update: {
-    label: '마감하기',
-    fontColor: 'white',
-    backgroundColor: 'black',
-  },
-  delete: {
-    label: '삭제하기',
-    fontColor: 'white',
-    backgroundColor: 'red',
-  },
   application: {
     label: '신청하기',
     fontColor: 'white',
-    backgroundColor:'#524FE1',
+    backgroundColor: 'black'
   },
   apply: {
     label: '신청',
     fontColor: 'white',
-    backgroundColor: 'black'
+    backgroundColor: '#524FE1'
   },
   cancel: {
     label: '취소',
@@ -73,12 +59,10 @@ function getCompanionPostDetail() {
       startDate.value = res.data.startDate;
       endDate.value = res.data.endDate;
       isClosed.value = res.data.isClosed;
-      memberId.value = res.data.memberId;
       isApplied.value = res.data.isApplied;
 
       if(res.data.isClosed) {
         buttonConfig.application.label = '모집마감';
-        buttonConfig.application.backgroundColor = 'black';
       }else if(res.data.isApplied) {
         buttonConfig.application.label = '신청완료';
       }
@@ -94,38 +78,6 @@ function getCompanionPostDetail() {
 onMounted(async () => {
   getCompanionPostDetail();
 })
-
-// 동행 모집 마감 API
-function closeCompanionPost() {
-
-  globalStore.confirm.openConfirm("동행 모집을 마감하시겠습니까?", () => {
-    customAxios
-      .patch(`/companions/${props.companionPostId}`)
-      .then(res => {
-        getCompanionPostDetail();
-      })
-      .catch(error => {
-
-      })
-  })
-
-}
-    
-// 동행 모집 삭제
-function deleteCompanionPost() {
-
-  globalStore.confirm.openConfirm('동행 모집을 삭제하시겠습니까?', () => {
-    customAxios
-      .delete(`/companions/${props.companionPostId}`)
-      .then(res => {
-        globalStore.router.push('/companionPostList');
-      })
-      .catch(error => {
-
-      })
-  })
-
-}
 
 // 뒤로가기
 function goToCompanionPostList() {
@@ -183,31 +135,14 @@ function saveCompanionApplication() {
         <polyline points="12 5 5 12 12 19" />
       </svg>
 
-      <div class="update-delete-button-container" v-if="auth.member?.id === memberId">
-        <CommonButton
-          class="update-button"
-          @click="closeCompanionPost()"
-          :label="buttonConfig.update.label"
-          :fontColor="buttonConfig.update.fontColor"
-          :background-color="buttonConfig.update.backgroundColor"
-          :disabled="isClosed"
-        />
-        <CommonButton
-          class="delete-button"
-          @click="deleteCompanionPost()"
-          :label="buttonConfig.delete.label"
-          :fontColor="buttonConfig.delete.fontColor"
-          :background-color="buttonConfig.delete.backgroundColor"
-        />
-      </div>
-      <CommonButton v-else
-          class="application-button"
-          @click="openApplication()"
-          :label="buttonConfig.application.label"
-          :fontColor="buttonConfig.application.fontColor"
-          :background-color="buttonConfig.application.backgroundColor"
-          :disabled="isClosed || isApplied"
-        />
+      <CommonButton
+        class="application-button"
+        @click="openApplication()"
+        :label="buttonConfig.application.label"
+        :fontColor="buttonConfig.application.fontColor"
+        :background-color="buttonConfig.application.backgroundColor"
+        :disabled="isClosed || isApplied"
+      />
     </div>
 
     <div class="companion-post-detail-container">
@@ -260,7 +195,7 @@ function saveCompanionApplication() {
       </div>
     </div>
     
-    <div class="screen-block" v-if="displayApplication">
+    <div class="screen-block" v-if="displayApplication" @click="closeApplication()">
     </div>
     <transition name="slide-fade">
       <div class="application-form-container" v-if="displayApplication">

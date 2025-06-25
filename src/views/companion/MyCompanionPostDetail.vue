@@ -94,7 +94,7 @@ function closeCompanionPost() {
 
 }
     
-// 동행 모집 삭제
+// 동행 모집 삭제 API
 function deleteCompanionPost() {
 
   globalStore.confirm.openConfirm('동행 모집을 삭제하시겠습니까?', () => {
