@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, inject, onMounted, onUnmounted } from 'vue'; 
+import { ref, inject, onMounted } from 'vue'; 
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
@@ -12,7 +12,6 @@ const props = defineProps({
   }
 })
 
-const auth = useAuthStore();
 const customAxios = inject('customAxios');
 
 // 내 동행 모집 상세 관련 변수

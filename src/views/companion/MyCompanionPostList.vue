@@ -3,12 +3,22 @@
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import Pagination from '../../components/common/Pagination.vue';
+import CommonButton from '@/components/common/CommonButton.vue';
 
 const customAxios = inject('customAxios');
 
 // 페이지네이션 관련 변수
 const currentPage = ref(1);
 const totalPages = ref(0);
+
+// 버튼 설정
+const buttonConfig = {
+  save: {
+    label: '등록하기',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  },
+}
 
 // 내 동행 모집 목록
 const myPostList = ref([]);
@@ -46,6 +56,10 @@ function changePage(page) {
   getMyCompanionPostList();
 }
 
+// 동행 모집 저장 페이지 이동
+function goToCompanionPostSave() {
+  globalStore.router.push('/companionPostSave');  
+}
 
 </script>
 
@@ -84,6 +98,13 @@ function changePage(page) {
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"
+    />
+
+    <CommonButton
+      @click="goToCompanionPostSave()"
+      :label="buttonConfig.save.label"
+      :fontColor="buttonConfig.save.fontColor"
+      :background-color="buttonConfig.save.backgroundColor"
     />
 
   </div>

@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, inject, onMounted, onUnmounted } from 'vue'; 
+import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
 

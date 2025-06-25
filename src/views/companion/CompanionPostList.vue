@@ -34,7 +34,6 @@ function getCompanionPostList() {
 
 // 검색 이벤트
 function onClickSearch() {
-
   keyword.value = keyword.value.trim();
   currentPage.value = 1;
   getCompanionPostList();
@@ -56,12 +55,6 @@ onMounted(() => {
 
   getCompanionPostList();
 })
-
-
-// 동행 모집 저장 페이지 이동
-function goToCompanionPostSave() {
-  globalStore.router.push('/companionPostSave');  
-}
 
 // 동행 모집 상세 페이지 이동
 function goToCompanionPostDetail(postId) {
@@ -86,11 +79,6 @@ function changePage(page) {
 
 // 버튼 설정
 const buttonConfig = {
-  save: {
-    label: '등록하기',
-    fontColor: 'white',
-    backgroundColor: 'black'
-  },
   search: {
     label: '검색',
     fontColor: 'white',
@@ -157,15 +145,6 @@ const buttonConfig = {
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"
     />
-
-    <div class="companion-post-list-button-container">
-      <CommonButton
-        @click="goToCompanionPostSave()"
-        :label="buttonConfig.save.label"
-        :fontColor="buttonConfig.save.fontColor"
-        :background-color="buttonConfig.save.backgroundColor"
-      />
-    </div>
 
   </div>
 </template>
@@ -252,11 +231,6 @@ const buttonConfig = {
   padding-left: 10px;
   font-weight: 500;
   font-size: 14px;
-}
-
-.companion-post-list-button-container {
-  display: flex;
-  flex-direction: column;
 }
 
 .no-content {
