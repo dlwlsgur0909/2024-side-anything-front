@@ -111,28 +111,18 @@ const buttonConfig = {
         v-for="(post) in postList" :key="post.id"
         @click="goToCompanionPostDetail(post.id)"
       >
-        <div class="item-info">
-          <div class="item-id">
-            {{ post.id }}
-          </div>
-          <div class="item-title">
-            {{ post.title }}
-          </div>
-          <div class="item-location">
-            {{ post.location }}
-          </div>
-          <div class="item-status">
+        <div class="item-title-status">
+          {{ post.title }}
+          <span class="item-status-label">
             {{ post.status }}
-          </div>
+          </span>
         </div>
-
+        <div class="item-location">
+          장소: {{ post.location }}
+        </div>
         <div class="item-duration">
-          기간:
-          {{ post.startDate }}
-          ~
-          {{ post.endDate }}
+          {{ post.startDate }} ~ {{ post.endDate }}
         </div>
-
       </div>
     </div>
 
@@ -163,7 +153,8 @@ const buttonConfig = {
 }
 
 .companion-post-search-button {
-  width: 100px;
+  flex: 1;
+  max-width: 100px;
 }
 
 .companion-post-list-container {
@@ -174,10 +165,11 @@ const buttonConfig = {
 .list-item-container {
   display: flex;
   flex-direction: column;
-  min-height: 60px;
+  gap: 5px;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
+  user-select: none;
   cursor: pointer;
 }
 
@@ -186,50 +178,32 @@ const buttonConfig = {
   color: #fff;
 }
 
-.item-info {
+.item-title-status {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
-.item-id {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.item-title {
-  flex: 6;
-  display: flex;
-  justify-content: center;  
+.item-status-label {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 10px;
+  background: #000;
+  color: #fff;
+  border-radius: 15px;
 }
 
 .item-location {
-  flex: 1.5;
   display: flex;
   justify-content: center;
   word-break: keep-all;
-  white-space: normal; 
-  text-align: center;     
-}
-
-.item-status {
-  flex: 1.5;
-  display: flex;
-  justify-content: center;
-  padding: 3px 0;
-  font-weight: 600;
-  font-size: 14px;
-  color: #fff;
-  background: black;
-  border-radius: 15px;
+  text-align: center;    
 }
 
 .item-duration {
   display: flex;
-  justify-content: flex-start;
-  padding-left: 10px;
-  font-weight: 500;
+  justify-content: center;
   font-size: 14px;
 }
 

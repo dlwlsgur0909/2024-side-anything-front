@@ -453,7 +453,7 @@ function rejectCompanionApplication(applicationId) {
 }
 
 .application-status-label {
-  padding: 3px 10px;
+  padding: 5px 10px;
   color: #fff;
   background: #000;
   border-radius: 15px;

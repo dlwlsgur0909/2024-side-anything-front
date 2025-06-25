@@ -72,18 +72,16 @@ function goToCompanionPostSave() {
         v-for="(myPost) in myPostList" :key="myPost.id"
         @click="goToMyCompanionPostDetail(myPost.id)"
       >
-        <div class="item-post-title-status">
-          <div class="title-status">
-            {{ myPost.title }}
-            <span class="post-status-label">
-              ({{ myPost.status }})
-            </span>
-          </div>
+        <div class="item-title-status">
+          {{ myPost.title }}
+          <span class="item-status-label">
+            {{ myPost.status }}
+          </span>
         </div>
-        <div class="item-post-location">
+        <div class="item-location">
           장소: {{ myPost.location }}
         </div>
-        <div class="item-post-duration">
+        <div class="item-duration">
             {{ myPost.startDate }} ~ {{ myPost.endDate }}
         </div>
       </div>
@@ -91,7 +89,7 @@ function goToCompanionPostSave() {
     </div>
 
     <div class="no-content" v-else>
-      <span class="no-content-message">신청한 동행이 없습니다 😢</span>
+      <span class="no-content-message">등록한 동행이 없습니다 😢</span>
     </div>
 
     <Pagination
@@ -133,30 +131,30 @@ function goToCompanionPostSave() {
   background: #524FE1;
 }
 
-.item-post-title-status {
+.item-title-status {
   display: flex;
   justify-content: center;
-}
-
-.title-status {
-  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
-.post-status-label {
+.item-status-label {
   font-size: 14px;
   font-weight: 600;
+  padding: 5px 10px;
+  background: #000;
+  color: #fff;
+  border-radius: 15px;
 }
 
-.item-post-location {
+.item-location {
   display: flex;
   justify-content: center;
   word-break: keep-all;
   text-align: center;     
 }
 
-.item-post-duration {
+.item-duration {
   display: flex;
   justify-content: center;
   font-size: 14px;
