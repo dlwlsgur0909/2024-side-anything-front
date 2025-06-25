@@ -3,6 +3,7 @@
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
 import CommonButton from '../../components/common/CommonButton.vue';
+import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
 import Pagination from '../../components/common/Pagination.vue';
 
 const customAxios = inject('customAxios');
@@ -15,7 +16,7 @@ const totalPages = ref(0);
 const keyword = ref('');
 
 // 동행 모집 목록 
-const companionPostList = ref([]);
+const postList = ref([]);
 
 // 동행 모집 목록 조회 API
 function getCompanionPostList() {
@@ -24,7 +25,7 @@ function getCompanionPostList() {
   customAxios
     .get(`/companions?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      companionPostList.value = res.data.companionPostList;
+      postList.value = res.data.postList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -34,7 +35,6 @@ function getCompanionPostList() {
 
 // 검색 이벤트
 function onClickSearch() {
-
   keyword.value = keyword.value.trim();
   currentPage.value = 1;
   getCompanionPostList();
@@ -57,14 +57,8 @@ onMounted(() => {
   getCompanionPostList();
 })
 
-
-// 동행 모집 저장 페이지 이동
-function goToCompanionPostSave() {
-  globalStore.router.push('/companionPostSave');  
-}
-
 // 동행 모집 상세 페이지 이동
-function goToCompanionPostDetail(companionPostId) {
+function goToCompanionPostDetail(postId) {
 
   // 검색어, 현재 페이지 정보 저장
   sessionStorage.setItem('keyword', keyword.value);
@@ -73,7 +67,7 @@ function goToCompanionPostDetail(companionPostId) {
   globalStore.router.push({
     name: 'CompanionPostDetail',
     params: {
-      companionPostId: companionPostId
+      companionPostId: postId
     }
   });
 }
@@ -86,11 +80,6 @@ function changePage(page) {
 
 // 버튼 설정
 const buttonConfig = {
-  save: {
-    label: '등록하기',
-    fontColor: 'white',
-    backgroundColor: 'black'
-  },
   search: {
     label: '검색',
     fontColor: 'white',
@@ -103,7 +92,7 @@ const buttonConfig = {
 <template>
   <div class="main">
 
-    <div class="companion-post-search-container">
+    <div class="companion-post-search-container" v-if="postList.length > 0">
       <input type="text" 
         class="companion-post-search-box" placeholder="제목 / 장소"
         v-model="keyword" @keyup.enter="onClickSearch()"
@@ -118,33 +107,23 @@ const buttonConfig = {
     </div>
 
 
-    <div class="companion-post-list-container" v-if="companionPostList.length > 0">
+    <div class="companion-post-list-container" v-if="postList.length > 0">
       <div class="list-item-container" 
-        v-for="(companionPost) in companionPostList" :key="companionPost.id"
-        @click="goToCompanionPostDetail(companionPost.id)"
+        v-for="(post) in postList" :key="post.id"
+        @click="goToCompanionPostDetail(post.id)"
       >
-        <div class="item-info">
-          <div class="item-id">
-            {{ companionPost.id }}
-          </div>
-          <div class="item-title">
-            {{ companionPost.title }}
-          </div>
-          <div class="item-location">
-            {{ companionPost.location }}
-          </div>
-          <div class="item-status">
-            {{ companionPost.status }}
-          </div>
+        <div class="item-title-status">
+          {{ post.title }}
+          <CommonStatusLabel
+            :status="post.status"
+          />
         </div>
-
+        <div class="item-location">
+          장소: {{ post.location }}
+        </div>
         <div class="item-duration">
-          기간:
-          {{ companionPost.startDate }}
-          ~
-          {{ companionPost.endDate }}
+          {{ post.startDate }} ~ {{ post.endDate }}
         </div>
-
       </div>
     </div>
 
@@ -153,19 +132,11 @@ const buttonConfig = {
     </div>
 
     <Pagination
+      v-if="postList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"
     />
-
-    <div class="companion-post-list-button-container">
-      <CommonButton
-        @click="goToCompanionPostSave()"
-        :label="buttonConfig.save.label"
-        :fontColor="buttonConfig.save.fontColor"
-        :background-color="buttonConfig.save.backgroundColor"
-      />
-    </div>
 
   </div>
 </template>
@@ -184,7 +155,8 @@ const buttonConfig = {
 }
 
 .companion-post-search-button {
-  width: 100px;
+  flex: 1;
+  max-width: 100px;
 }
 
 .companion-post-list-container {
@@ -195,10 +167,11 @@ const buttonConfig = {
 .list-item-container {
   display: flex;
   flex-direction: column;
-  min-height: 60px;
+  gap: 5px;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
+  user-select: none;
   cursor: pointer;
 }
 
@@ -207,56 +180,24 @@ const buttonConfig = {
   color: #fff;
 }
 
-.item-info {
+.item-title-status {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-}
-
-.item-id {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.item-title {
-  flex: 6;
-  display: flex;
-  justify-content: center;  
+  gap: 5px;
 }
 
 .item-location {
-  flex: 1.5;
   display: flex;
   justify-content: center;
   word-break: keep-all;
-  white-space: normal; 
-  text-align: center;     
-}
-
-.item-status {
-  flex: 1.5;
-  display: flex;
-  justify-content: center;
-  padding: 3px 0;
-  font-weight: 600;
-  font-size: 14px;
-  color: #fff;
-  background: black;
-  border-radius: 15px;
+  text-align: center;    
 }
 
 .item-duration {
   display: flex;
-  justify-content: flex-start;
-  padding-left: 10px;
-  font-weight: 500;
+  justify-content: center;
   font-size: 14px;
-}
-
-.companion-post-list-button-container {
-  display: flex;
-  flex-direction: column;
 }
 
 .no-content {

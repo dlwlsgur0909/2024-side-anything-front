@@ -25,7 +25,7 @@ const buttonConfig = {
 }
 
 // 동행 모집 저장 API
-function savePortfolio() {
+function saveCompanionPost() {
 
   if(!validateCompanionPostSaveRequest()) {
     return;
@@ -42,7 +42,7 @@ function savePortfolio() {
   customAxios
     .post('/companions', request)
     .then(res => {
-      globalStore.router.push('/companionPostList');
+      globalStore.router.push('/myCompanionPostList');
     })
     .catch(error => {
     })
@@ -96,8 +96,8 @@ function validateContentLimit() {
 }
 
 // 뒤로가기
-function goToPortfolioList() {
-  globalStore.router.push('/companionPostList');
+function goToMyCompanionPostList() {
+  globalStore.router.push('/myCompanionPostList');
 }
 
 </script>
@@ -108,7 +108,7 @@ function goToPortfolioList() {
     <div class="companion-post-save-button-container">
       <svg 
         class="prev-button"
-        @click="goToPortfolioList()"
+        @click="goToMyCompanionPostList()"
         xmlns="http://www.w3.org/2000/svg" height="24" fill="none" 
         stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
       >
@@ -118,7 +118,7 @@ function goToPortfolioList() {
 
       <CommonButton
         class="save-button"
-        @click="savePortfolio()"
+        @click="saveCompanionPost()"
         :label="buttonConfig.save.label"
         :fontColor="buttonConfig.save.fontColor"
         :background-color="buttonConfig.save.backgroundColor"
