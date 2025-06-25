@@ -55,9 +55,9 @@ const buttonConfig = {
 }
 
 // 동행 모집 상세 API
-function getMyCompanionPostDetail() {
+async function getMyCompanionPostDetail() {
 
-  customAxios
+  await customAxios
     .get(`/companions/my-posts/${props.companionPostId}`)
     .then(res => {
       title.value = res.data.title;
@@ -135,12 +135,39 @@ function closeApplicationList() {
 }
 
 // 동행 신청 승인
-function approveCompanionApplication() {
+function approveCompanionApplication(companionApplicationId) {
+
+  const request = {
+    isApproval: true
+  };
+
+  customAxios
+    .patch(`/companions/${props.companionPostId}/applications/${companionApplicationId}`, request)
+    .then(res => {
+      getMyCompanionPostDetail();
+    })
+    .catch(error => {
+
+    })
 
 }
 
 // 동행 신청 거절
-function rejectCompanionApplication() {
+function rejectCompanionApplication(companionApplicationId) {
+  
+  const request = {
+    isApproval: false
+  };
+
+  customAxios
+    .patch(`/companions/${props.companionPostId}/applications/${companionApplicationId}`, request)
+    .then(async (res) => {
+      await getMyCompanionPostDetail();
+      displayApplicationList.value = applicationList.value > 0;
+    })
+    .catch(error => {
+
+    })
 
 }
 
@@ -227,49 +254,50 @@ function rejectCompanionApplication() {
     </div>
 
     <div class="screen-block" v-if="displayApplicationList" @click="closeApplicationList()">
-      <div class="application-list-container">
-        <div class="close-application-list-button-container">
-          <svg 
-            class="close-application-list-button"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            @click="closeApplicationList()"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+    </div>
+
+    <div class="application-list-container" v-if="displayApplicationList">
+      <div class="close-application-list-button-container">
+        <svg 
+          class="close-application-list-button"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          @click="closeApplicationList()"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+
+      <div class="list-item" v-for="application in applicationList" :key="application.id">
+        <div class="info-message">
+          {{ application.message }}
         </div>
 
-        <div class="list-item" v-for="application in applicationList" :key="application.id">
-          <div class="info-message">
-            {{ application.message }}
-          </div>
-
-          <div class="item-applicant-status-info">
-            <span>{{ application.nickname }}</span>
-            <span>{{ application.dob }}</span>
-            <span>{{ application.gender }}</span>
-            <span class="application-status-label">{{ application.status }}</span>
-          </div>
-          <div class="approve-reject-button-container">
-            <CommonButton
-              class="approve-button"
-              @click="approveCompanionApplication(application.id)"
-              :label="buttonConfig.approve.label"
-              :fontColor="buttonConfig.approve.fontColor"
-              :background-color="buttonConfig.approve.backgroundColor"
-              :disabled="isClosed"
-            />
-            <CommonButton
-              class="reject-button"
-              @click="rejectCompanionApplication(application.id)"
-              :label="buttonConfig.reject.label"
-              :fontColor="buttonConfig.reject.fontColor"
-              :background-color="buttonConfig.reject.backgroundColor"
-              :disabled="isClosed"
-            />
-          </div>
+        <div class="item-applicant-status-info">
+          <span>{{ application.nickname }}</span>
+          <span>{{ application.dob }}</span>
+          <span>{{ application.gender }}</span>
+          <span class="application-status-label">{{ application.status }}</span>
         </div>
 
+        <div class="approve-reject-button-container">
+          <CommonButton
+            class="approve-button"
+            @click="approveCompanionApplication(application.id)"
+            :label="buttonConfig.approve.label"
+            :fontColor="buttonConfig.approve.fontColor"
+            :background-color="buttonConfig.approve.backgroundColor"
+            :disabled="isClosed"
+          />
+          <CommonButton
+            class="reject-button"
+            @click="rejectCompanionApplication(application.id)"
+            :label="buttonConfig.reject.label"
+            :fontColor="buttonConfig.reject.fontColor"
+            :background-color="buttonConfig.reject.backgroundColor"
+            :disabled="isClosed"
+          />
+        </div>
       </div>
     </div>
 
@@ -385,6 +413,7 @@ function rejectCompanionApplication() {
   padding: 20px;
   background: #fff;
   overflow-y: scroll;
+  z-index: 90000;
 }
 
 .close-application-list-button-container {
