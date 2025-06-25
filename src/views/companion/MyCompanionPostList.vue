@@ -94,6 +94,7 @@ function goToCompanionPostSave() {
     </div>
 
     <Pagination
+      v-if="myPostList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"

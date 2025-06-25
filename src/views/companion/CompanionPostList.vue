@@ -27,7 +27,6 @@ function getCompanionPostList() {
     .then(res => {
       postList.value = res.data.postList;
       totalPages.value = res.data.totalPages;
-      console.log(res.data.postList);
     })
     .catch(error => {
     })
@@ -93,7 +92,7 @@ const buttonConfig = {
 <template>
   <div class="main">
 
-    <div class="companion-post-search-container">
+    <div class="companion-post-search-container" v-if="postList.length > 0">
       <input type="text" 
         class="companion-post-search-box" placeholder="제목 / 장소"
         v-model="keyword" @keyup.enter="onClickSearch()"
@@ -133,6 +132,7 @@ const buttonConfig = {
     </div>
 
     <Pagination
+      v-if="postList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"

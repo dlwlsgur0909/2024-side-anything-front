@@ -131,6 +131,7 @@ function deleteApplication({applicationId, postTitle}) {
     </div>
 
     <Pagination
+      v-if="myApplicationList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"
