@@ -1,19 +1,16 @@
-// import { Client } from "@stomp/stompjs";
-// import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 let stompClient = null;
 
 export const connectStomp = async (roomId, memberId, onMessageReceived) => {
-
-    const { Client } = await import('@stomp/stompjs');
-    const SockJS = (await import('sockjs-client')).default;
 
     stompClient = new Client({
         webSocketFactory: () => new SockJS("http://localhost:8090/ws-chat"),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-        debug: (message) => console.log('[STOMP DEBUG]', msg),
+        debug: (message) => console.log('[STOMP DEBUG]', message),
         onConnect: () => {
             console.log('WebSocket connected');
 
