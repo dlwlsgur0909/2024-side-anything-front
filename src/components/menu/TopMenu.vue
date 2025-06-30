@@ -50,6 +50,18 @@ function onClickCompanion() {
 
 }
 
+// 테스트 용도 추후 수정 필요
+function onClickChat() {
+  selectedMenu.value = 'CHAT';
+  sessionStorage.setItem('menu', 'CHAT');
+  globalStore.router.push({
+    name: 'ChatRoom',
+    params: {
+      chatRoomId: 1
+    }
+  })
+}
+
 function toggleSideMenu() {
   isSideMenuOpen.value = !isSideMenuOpen.value;
 }
@@ -95,7 +107,12 @@ window.addEventListener('resize', () => {
           동행
         </div>
   
-        <div class="top-menu-item">자유게시판</div>
+        <div class="top-menu-item"
+          :class="selectedMenu === 'CHAT' ? 'top-menu-item-selected' : ''"
+          @click="onClickChat()"
+        >
+          채팅
+        </div>
       </div>
   
     </div>
