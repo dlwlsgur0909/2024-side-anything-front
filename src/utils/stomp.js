@@ -1,12 +1,17 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { useAuthStore } from "@/stores/authStore";
 
 let stompClient = null;
+const auth = useAuthStore();
 
 export const connectStomp = async (roomId, memberId, onMessageReceived) => {
 
     stompClient = new Client({
         webSocketFactory: () => new SockJS("http://localhost:8090/ws-chat"),
+        connectHeaders: {
+            Authorization: `Bearer ${auth.member.accessToken}` 
+        },
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
