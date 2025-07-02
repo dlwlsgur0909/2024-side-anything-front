@@ -50,6 +50,9 @@ export const sendMessage = (roomId, memberId, message) => {
     stompClient.publish({
         destination: `/pub/chat/${roomId}`,
         body: JSON.stringify(payload),
+        headers: {
+            Authorization: `Bearer ${auth.member.accessToken}`
+        }
     });
 };
 

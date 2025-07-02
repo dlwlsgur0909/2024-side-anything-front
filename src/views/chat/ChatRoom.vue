@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useAuthStore } from '../../stores/authStore.js';
+import { connectStomp, sendMessage, disconnectStomp } from '../../utils/stomp.js';
 
 const props = defineProps({
     chatRoomId: {
@@ -8,8 +10,32 @@ const props = defineProps({
     }
 });
 
+const roomId = props.chatRoomId;
+const auth = useAuthStore();
 
+const input = ref('');
+const messageList = ref([]);
 
+// 메세지 수신 후 콜백
+const onMessageReceived = (message) => {
+	messageList.value.push(message);
+}
+
+// 마운트 시 WebSocket 연결
+onMounted(() => {
+	connectStomp(roomId, auth.member.id, onMessageReceived);
+});
+
+onBeforeUnmount(() => {
+	disconnectStomp();
+})
+
+const send = () => {
+  if (!input.value.trim()) return;
+
+  sendMessage(roomId, auth.member.id, input.value);
+  input.value = '';
+};
 
 </script>
 
@@ -18,7 +44,7 @@ const props = defineProps({
 			<h1>chatRoom</h1>
 
 			<div class="chat-log">
-					<div v-for="(msg, idx) in messages" :key="idx" class="chat-message">
+					<div v-for="(msg, idx) in messageList" :key="idx" class="chat-message">
 					<strong>{{ msg.memberId }}:</strong> {{ msg.message }}
 					</div>
 			</div>
