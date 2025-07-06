@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ['HOME', 'MYINFO', 'COMPANION', 'BOARD'];
+const menuList = ['HOME', 'MYINFO', 'COMPANION', 'CHAT'];
 const selectedMenu = ref('HOME');
 
 const displaySideMenu = ref(false);
@@ -50,16 +50,10 @@ function onClickCompanion() {
 
 }
 
-// 테스트 용도 추후 수정 필요
 function onClickChat() {
   selectedMenu.value = 'CHAT';
   sessionStorage.setItem('menu', 'CHAT');
-  globalStore.router.push({
-    name: 'ChatRoom',
-    params: {
-      chatRoomId: 1
-    }
-  })
+  globalStore.router.push('/chatRoomList');
 }
 
 function toggleSideMenu() {
