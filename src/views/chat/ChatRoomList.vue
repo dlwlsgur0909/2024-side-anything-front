@@ -12,13 +12,15 @@ const customAxios = inject('customAxios');
 const currentPage = ref(1);
 const totalPages = ref(0);
 
+const keyword = ref('');
+
 // 버튼 설정
 const buttonConfig = {
-  // save: {
-  //   label: '등록하기',
-  //   fontColor: 'white',
-  //   backgroundColor: 'black'
-  // },
+  search: {
+    label: '검색',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  },
 }
 
 // 채팅방 목록
@@ -27,23 +29,40 @@ const chatRoomList = ref([]);
 // 채팅방 목록 조회 API
 function getChatRoomList() {
   customAxios
-    .get('/chats')
+    .get(`/chats?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
+      console.log(res.data);
       chatRoomList.value = res.data.chatRoomList;
+      totalPages.value = res.data.totalPages;
     })
     .catch(error => {
 
     })
 }
 
-
-// 최초 내 동행 모집 목록 조회
+// 최초 채팅방 목록 조회
 onMounted(() => {
+
+  // 저장된 검색어, 현재 페이지 정보
+  const savedKeyword = sessionStorage.getItem('keyword');
+  const savedCurrentPage = Number(sessionStorage.getItem('currentPage'));
+
+  sessionStorage.removeItem('keyword');
+  sessionStorage.removeItem('currentPage');
+
+  keyword.value = savedKeyword ? savedKeyword : '';
+  currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
+
   getChatRoomList();
 })
 
-// 내 동행 모집 상세 페이지 이동
+// 채팅방으로 페이지 이동
 function goToChatRoom(chatRoomId) {
+
+  // 검색어, 현재 페이지 정보 저장
+  sessionStorage.setItem('keyword', keyword.value);
+  sessionStorage.setItem('currentPage', currentPage.value);
+
   globalStore.router.push({
     name: 'ChatRoom',
     params: {
@@ -52,19 +71,39 @@ function goToChatRoom(chatRoomId) {
   });
 }
 
+// 검색 이벤트
+function onClickSearch() {
+  keyword.value = keyword.value.trim();
+  currentPage.value = 1;
+  getChatRoomList();
+}
+
 // 페이지 변경
 function changePage(page) {
   currentPage.value = page;
-  getMyCompanionPostList();
+  getChatRoomList();
 }
-
 
 </script>
 
 <template>
   <div class="main">
-    <div class="my-companion-post-list-container" v-if="chatRoomList.length > 0">
 
+    <div class="chat-room-search-container">
+      <input type="text" 
+        class="chat-room-search-box" placeholder="제목"
+        v-model="keyword" @keyup.enter="onClickSearch()"
+      />
+      <CommonButton
+        class="chat-room-search-button"
+        :label="buttonConfig.search.label"
+        :fontColor="buttonConfig.search.fontColor"
+        :background-color="buttonConfig.search.backgroundColor"
+         @click="onClickSearch()"
+      />
+    </div>
+
+    <div class="chat-list-container" v-if="chatRoomList.length > 0">
       <div class="list-item-container" 
         v-for="(chatRoom) in chatRoomList" :key="chatRoom.chatRoomId"
         @click="goToChatRoom(chatRoom.chatRoomId)"
@@ -80,7 +119,7 @@ function changePage(page) {
     </div>
 
     <div class="no-content" v-else>
-      <span class="no-content-message">등록한 동행이 없습니다 😢</span>
+      <span class="no-content-message">참여중인 채팅이 없습니다 😢</span>
     </div>
 
     <Pagination
@@ -95,7 +134,23 @@ function changePage(page) {
 
 <style scoped>
 
-.my-companion-application-list-container {
+.chat-room-search-container {
+  display: flex;
+  gap: 20px;
+}
+
+.chat-room-search-box {
+  height: 40px;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.chat-room-search-button {
+  flex: 1;
+  max-width: 100px;
+}
+
+.chat-list-container {
   display: flex;
   flex-direction: column;
 }

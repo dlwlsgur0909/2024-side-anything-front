@@ -92,7 +92,7 @@ const buttonConfig = {
 <template>
   <div class="main">
 
-    <div class="companion-post-search-container" v-if="postList.length > 0">
+    <div class="companion-post-search-container">
       <input type="text" 
         class="companion-post-search-box" placeholder="제목 / 장소"
         v-model="keyword" @keyup.enter="onClickSearch()"
