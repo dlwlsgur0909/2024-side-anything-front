@@ -24,14 +24,14 @@ const buttonConfig = {
 }
 
 // 채팅방 목록
-const chatRoomList = ref([]);
+const roomList = ref([]);
 
 // 채팅방 목록 조회 API
 function getChatRoomList() {
   customAxios
     .get(`/chats?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      chatRoomList.value = res.data.chatRoomList;
+      roomList.value = res.data.roomList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
@@ -102,15 +102,15 @@ function changePage(page) {
       />
     </div>
 
-    <div class="chat-list-container" v-if="chatRoomList.length > 0">
+    <div class="chat-list-container" v-if="roomList.length > 0">
       <div class="list-item-container" 
-        v-for="(chatRoom) in chatRoomList" :key="chatRoom.chatRoomId"
-        @click="goToChatRoom(chatRoom.chatRoomId)"
+        v-for="(room) in roomList" :key="room.chatRoomId"
+        @click="goToChatRoom(room.roomId)"
       >
         <div class="item-title-status">
-          {{ chatRoom.companionPostTitle }}
+          {{ room.postTitle }}
           <CommonStatusLabel
-            :status="chatRoom.companionPostStatus"
+            :status="room.postStatus"
           />
         </div>
       </div>
@@ -122,7 +122,7 @@ function changePage(page) {
     </div>
 
     <Pagination
-      v-if="chatRoomList.length > 0"
+      v-if="roomList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"

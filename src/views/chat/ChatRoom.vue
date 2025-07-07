@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import { connectStomp, sendMessage, disconnectStomp } from '../../utils/stomp.js';
+import globalStore from '@/stores/globalStore.js';
 
 const props = defineProps({
     chatRoomId: {
@@ -9,6 +10,8 @@ const props = defineProps({
         required: true
     }
 });
+
+const customAxios = inject('customAxios');
 
 const roomId = props.chatRoomId;
 const auth = useAuthStore();
@@ -21,8 +24,21 @@ const onMessageReceived = (message) => {
 	messageList.value.push(message);
 }
 
+// 이전 채팅 내역 조회
+function getChatMessageList() {
+  customAxios
+    .get(`/chats/${props.chatRoomId}`)
+    .then(res => {
+      messageList.value = res.data.messageList;
+    })
+    .catch(error => {
+      globalStore.router.push('/chatRoomList');
+    })
+}
+
 // 마운트 시 WebSocket 연결
 onMounted(() => {
+  getChatMessageList();
 	connectStomp(roomId, auth.member.id, onMessageReceived);
 });
 
