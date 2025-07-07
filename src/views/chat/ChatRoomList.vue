@@ -31,7 +31,6 @@ function getChatRoomList() {
   customAxios
     .get(`/chats?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      console.log(res.data);
       chatRoomList.value = res.data.chatRoomList;
       totalPages.value = res.data.totalPages;
     })
