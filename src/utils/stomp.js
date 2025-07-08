@@ -8,7 +8,7 @@ const auth = useAuthStore();
 export const connectStomp = async (roomId, memberId, onMessageReceived) => {
 
     stompClient = new Client({
-        webSocketFactory: () => new SockJS("http://localhost:8090/ws-chat"),
+        webSocketFactory: () => new SockJS("http://localhost:8090/ws"),
         connectHeaders: {
             Authorization: `Bearer ${auth.member.accessToken}` 
         },
