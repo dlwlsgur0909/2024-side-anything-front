@@ -16,6 +16,8 @@ export const connectStomp = async (roomId, memberId, onMessageReceived) => {
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
         debug: (message) => console.log('[STOMP DEBUG]', message),
+
+        // 연결 성공 시
         onConnect: () => {
             console.log('WebSocket connected');
 
@@ -24,9 +26,22 @@ export const connectStomp = async (roomId, memberId, onMessageReceived) => {
                 onMessageReceived(payload);
             });
         },
+
+        // 연결 실패 시
         onStompError: (frame) => {
-            console.error('STOMP Error: ', frame.headers['message']);
-            console.error('Detail: ', frame.body);
+
+            const errorMessage = frame.headers['message'] || '서버 오류입니다. 관리자에게 문의해주세요.';
+            const errorDetail = frame.body || '';
+
+            console.error('STOMP Error: ', errorMessage);
+            console.error('Detail: ', errorDetail);
+
+            // 사용자에게 알림
+
+            // 연결 해제
+
+            // 리다이렉트 
+
         },
     });
 
