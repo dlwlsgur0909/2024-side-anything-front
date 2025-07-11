@@ -1,6 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useAuthStore } from "@/stores/authStore";
+import globalStore from "@/stores/globalStore";
 
 let stompClient = null;
 const auth = useAuthStore();
@@ -8,43 +9,46 @@ const auth = useAuthStore();
 export const connectStomp = async (roomId, memberId, onMessageReceived) => {
 
     stompClient = new Client({
-        webSocketFactory: () => new SockJS("http://localhost:8090/ws"),
+        webSocketFactory: () => new SockJS("http://localhost:8090/ws"), // WebSocket 객체 생성
         connectHeaders: {
-            Authorization: `Bearer ${auth.member.accessToken}` 
+            Authorization: `Bearer ${auth.member.accessToken}` // CONNECT 프레임에 토큰 포함
         },
-        reconnectDelay: 5000,
+        reconnectDelay: 0, // 자동 재연결 비활성화 
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-        debug: (message) => console.log('[STOMP DEBUG]', message),
+        // debug: (message) => console.log('[STOMP DEBUG]', message), // 디버깅용
 
-        // 연결 성공 시
+        // 연결 성공 시 자동으로 실행되는 콜백
         onConnect: () => {
-            console.log('WebSocket connected');
-
+            // 입장한 채팅방을 구독
             stompClient.subscribe(`/sub/chat/${roomId}`, (message) => {
                 const payload = JSON.parse(message.body);
-                onMessageReceived(payload);
+                onMessageReceived(payload); // 서버에서 메세지를 수신하면 동작할 콜백 함수
             });
         },
+        // 연결 실패 시 에러 처리
+        onStompError: async (frame) => {
 
-        // 연결 실패 시
-        onStompError: (frame) => {
+            const errorCode = frame.headers['message'];
 
-            const errorMessage = frame.headers['message'] || '서버 오류입니다. 관리자에게 문의해주세요.';
-            const errorDetail = frame.body || '';
+            // 토큰 인증 실패인 경우 reissue 시도
+            if(errorCode === 'UNAUTHORIZED') {
 
-            console.error('STOMP Error: ', errorMessage);
-            console.error('Detail: ', errorDetail);
+                if(await auth.reissue()) {
+                    stompClient.deactivate(); // 기존 연결 해제
+                    await connectStomp(roomId, memberId, onMessageReceived); // 연결 재시도
+                }
 
-            // 사용자에게 알림
-
-            // 연결 해제
-
-            // 리다이렉트 
+            }else {
+                // 인증 오류가 아니라면 채팅방 목록으로 페이지 이동
+                globalStore.alert.openAlert('서버 오류입니다 다시 시도해주세요.');
+                globalStore.router.push('/chatRoomList');
+            }
 
         },
     });
 
+    // STOMP 연결 시도
     stompClient.activate();
 };
 
