@@ -7,7 +7,7 @@ const auth = useAuthStore();
 let stompClient = null;
 let retry = true;
 
-export const connectStomp = async (roomId, memberId, onMessageReceived) => {
+export const connectStomp = async (roomId, onMessageReceived) => {
 
     stompClient = new Client({
         webSocketFactory: () => new SockJS("http://localhost:8090/ws"), // WebSocket 객체 생성
@@ -64,7 +64,7 @@ export const connectStomp = async (roomId, memberId, onMessageReceived) => {
 };
 
 // 메세지 전송
-export const sendMessage = async (roomId, memberId, message) => {
+export const sendMessage = async (roomId, message) => {
 
     // 연결 상태 확인
     if(!stompClient || !stompClient.connected) {
@@ -76,7 +76,7 @@ export const sendMessage = async (roomId, memberId, message) => {
     const payload = {
         messageType: 'TALK', 
         roomId: roomId, 
-        memberId: memberId, 
+        memberId: auth.member.id, 
         message: message
     };
 

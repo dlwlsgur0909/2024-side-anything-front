@@ -39,7 +39,7 @@ function getChatMessageList() {
 // 마운트 시 WebSocket 연결
 onMounted(() => {
   getChatMessageList();
-	connectStomp(roomId, auth.member.id, onMessageReceived);
+	connectStomp(roomId, onMessageReceived);
 });
 
 onBeforeUnmount(() => {
@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
 const send = () => {
   if (!input.value.trim()) return;
 
-  sendMessage(roomId, auth.member.id, input.value);
+  sendMessage(roomId, input.value);
   input.value = '';
 };
 
