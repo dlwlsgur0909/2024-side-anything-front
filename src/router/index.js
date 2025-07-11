@@ -82,7 +82,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/ChatRoomList',
+      path: '/chatRoomList',
       name: 'ChatRoomList',
       component: () => import('../views/chat/ChatRoomList.vue')
     },
