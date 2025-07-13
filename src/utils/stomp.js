@@ -42,10 +42,11 @@ export const connectStomp = async (roomId, onMessageReceived) => {
             
             // 토큰 인증 실패인 경우 reissue 시도
             if(errorCode === 'UNAUTHORIZED' && retry) {
+                retry = false; // 최초 1회만 재시도
                 if(await auth.reissue()) {
-                    retry = false; // 최초 1회만 재시도
+                    retry = true;
                     stompClient.deactivate(); // 기존 연결 해제
-                    await connectStomp(roomId, memberId, onMessageReceived); // 연결 재시도
+                    await connectStomp(roomId, onMessageReceived); // 연결 재시도
                     globalStore.alert.openAlert('잠시 후 다시 시도해주세요'); // 
                 }
 
