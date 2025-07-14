@@ -30,6 +30,8 @@ function getChatMessageList() {
     .get(`/chats/${props.chatRoomId}`)
     .then(res => {
       messageList.value = res.data.messageList;
+      console.log(res.data);
+      console.log(auth.member.id);
     })
     .catch(error => {
       globalStore.router.push('/chatRoomList');
@@ -42,6 +44,7 @@ onMounted(() => {
 	connectStomp(roomId, onMessageReceived);
 });
 
+// 마운트 해제 시 WebSocket 연결 해제
 onBeforeUnmount(() => {
 	disconnectStomp();
 })
@@ -56,13 +59,27 @@ const send = () => {
 </script>
 
 <template>
-    <div class="chat-container">
+    <div class="main">
 			<h1>chatRoom</h1>
 
-			<div class="chat-log">
-					<div v-for="(msg, idx) in messageList" :key="idx" class="chat-message">
-					<strong>{{ msg.memberId }}:</strong> {{ msg.message }}
-					</div>
+			<div class="chat-content-container">
+					<template v-for="(message) in messageList" :key="message.messageId" >
+
+            <div v-if="message.messageType === 'TALK'">
+              <div class="chat-message" v-if="message.memberId !== auth.member.id">
+                <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
+              </div>
+              <div class="my-message" v-else>
+                {{ message.message }}
+              </div>
+            </div>
+
+            <div class="message-center" v-else>
+              {{ message.message }}
+            </div>
+
+
+					</template>
 			</div>
 
 			<input
@@ -76,22 +93,36 @@ const send = () => {
 </template>
 
 <style scoped>
-.chat-container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
-}
 
-.chat-log {
+.chat-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 500px;
   border: 1px solid #ccc;
-  height: 300px;
-  overflow-y: auto;
-  margin-bottom: 10px;
   padding: 10px;
+  margin-bottom: 10px;
+  overflow-y: auto;
 }
 
 .chat-message {
-  margin-bottom: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.nickname {
+  font-weight: 700;
+  padding-right: 5px;
+}
+
+.my-message {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message-center {
+  display: flex;
+  justify-content: center;
 }
 
 .chat-input {

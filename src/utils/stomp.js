@@ -44,10 +44,10 @@ export const connectStomp = async (roomId, onMessageReceived) => {
             if(errorCode === 'UNAUTHORIZED' && retry) {
                 retry = false; // 최초 1회만 재시도
                 if(await auth.reissue()) {
-                    retry = true;
+                    retry = true; // 재발급 성공 시 retry 원복
                     stompClient.deactivate(); // 기존 연결 해제
                     await connectStomp(roomId, onMessageReceived); // 연결 재시도
-                    globalStore.alert.openAlert('잠시 후 다시 시도해주세요'); // 
+                    globalStore.alert.openAlert('잠시 후 다시 시도해주세요');
                 }
 
             }else {
