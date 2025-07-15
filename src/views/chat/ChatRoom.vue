@@ -30,8 +30,6 @@ function getChatMessageList() {
     .get(`/chats/${props.chatRoomId}`)
     .then(res => {
       messageList.value = res.data.messageList;
-      console.log(res.data);
-      console.log(auth.member.id);
     })
     .catch(error => {
       globalStore.router.push('/chatRoomList');
