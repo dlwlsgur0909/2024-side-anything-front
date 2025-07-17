@@ -64,16 +64,18 @@ const send = () => {
 					<template v-for="(message) in messageList" :key="message.messageId" >
 
             <div v-if="message.messageType === 'TALK'">
-              <div class="chat-message" v-if="message.memberId !== auth.member.id">
-                <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
+              <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
+                <span class="chat-message">
+                  <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
+                </span>
               </div>
-              <div class="my-message" v-else>
-                {{ message.message }}
+              <div class="my-message-section" v-else>
+                <span class="my-message">{{ message.message }}</span>
               </div>
             </div>
 
-            <div class="message-center" v-else>
-              {{ message.message }}
+            <div class="message-center-section" v-else>
+              <span class="message-center">{{ message.message }}</span>
             </div>
 
 
@@ -97,15 +99,25 @@ const send = () => {
   flex-direction: column;
   gap: 10px;
   height: 500px;
-  border: 1px solid #ccc;
   padding: 10px;
-  margin-bottom: 10px;
+  background: #514fe1;
+  border-radius: 10px;
   overflow-y: auto;
 }
 
-.chat-message {
+.chat-message-section {
   display: flex;
   justify-content: flex-start;
+}
+
+.chat-message {
+  max-width: 40%;
+  padding: 5px 10px;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 5px;
+  word-break: break-all;
+  overflow-wrap: break-word
 }
 
 .nickname {
@@ -113,14 +125,33 @@ const send = () => {
   padding-right: 5px;
 }
 
-.my-message {
+.my-message-section {
   display: flex;
   justify-content: flex-end;
 }
 
-.message-center {
+.my-message {
+  max-width: 40%;
+  padding: 5px 10px;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 5px;
+  word-break: break-all;
+  overflow-wrap: break-word
+}
+
+.message-center-section {
   display: flex;
   justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.message-center {
+  background: #403ead;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .chat-input {

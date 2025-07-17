@@ -32,7 +32,6 @@ export const connectStomp = async (roomId, onMessageReceived) => {
             // 입장한 채팅방 에러 처리용 채널 구독
             stompClient.subscribe(`/sub/chat/${roomId}/errors`, (frame) => {
                 const response = JSON.parse(frame.body);
-                console.log(response);
                 if(response.memberId === auth.member.id) {
                     globalStore.alert.openAlert(response.errorMessage);
                     globalStore.router.push('/chatRoomList');
