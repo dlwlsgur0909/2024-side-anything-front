@@ -23,10 +23,20 @@ export const connectStomp = async (roomId, onMessageReceived) => {
         onConnect: () => {
 
             // 클라이언트별 에러 큐 구독
-            stompClient.subscribe(`/user/${auth.member.id}/queue/errors`, (frame) => {
+            // stompClient.subscribe(`/user/${auth.member.id}/queue/errors`, (frame) => {
+            //     const response = JSON.parse(frame.body);
+            //     globalStore.alert.openAlert(response.errorMessage);
+            //     globalStore.router.push('/chatRoomList');
+            // });
+
+            // 입장한 채팅방 에러 처리용 채널 구독
+            stompClient.subscribe(`/sub/chat/${roomId}/errors`, (frame) => {
                 const response = JSON.parse(frame.body);
-                globalStore.alert.openAlert(response.errorMessage);
-                globalStore.router.push('/chatRoomList');
+                console.log(response);
+                if(response.memberId === auth.member.id) {
+                    globalStore.alert.openAlert(response.errorMessage);
+                    globalStore.router.push('/chatRoomList');
+                }
             });
 
             // 입장한 채팅방을 구독
