@@ -17,6 +17,7 @@ const roomId = props.chatRoomId;
 const auth = useAuthStore();
 
 const input = ref('');
+const postTitle = ref('');
 const messageList = ref([]);
 
 // 메세지 수신 후 콜백
@@ -29,6 +30,7 @@ function getChatMessageList() {
   customAxios
     .get(`/chats/${props.chatRoomId}`)
     .then(res => {
+      postTitle.value = res.data.postTitle;
       messageList.value = res.data.messageList;
     })
     .catch(error => {
@@ -58,7 +60,7 @@ const send = () => {
 
 <template>
     <div class="main">
-			<h1>chatRoom</h1>
+			<h1>{{ postTitle }}</h1>
 
 			<div class="chat-content-container">
 					<template v-for="(message) in messageList" :key="message.messageId" >
