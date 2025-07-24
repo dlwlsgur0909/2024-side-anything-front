@@ -16,9 +16,11 @@ const customAxios = inject('customAxios');
 const roomId = props.chatRoomId;
 const auth = useAuthStore();
 
-const input = ref('');
+const messageInput = ref('');
 const postTitle = ref('');
 const messageList = ref([]);
+
+const displayMenu = ref(false);
 
 // 메세지 수신 후 콜백
 const onMessageReceived = (message) => {
@@ -50,43 +52,70 @@ onBeforeUnmount(() => {
 })
 
 const send = () => {
-  if (!input.value.trim()) return;
+  if (!messageInput.value.trim()){
+    return;
+  } 
 
-  sendMessage(roomId, input.value);
-  input.value = '';
+  sendMessage(roomId, messageInput.value);
+  messageInput.value = '';
 };
 
 </script>
 
 <template>
     <div class="main">
-			<h1>{{ postTitle }}</h1>
+      <div class="chat-container">
+        <div class="chat-title-menu-button-container">
+          <span class="post-title">{{ postTitle }}</span>
+          <svg 
+            @click="displayMenu = !displayMenu"
+            class="chat-menu-button"
+            width="30" height="30" viewBox="0 0 30 30" 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="currentColor"
+          >
+            <rect x="4" y="7" width="22" height="3" rx="1" />
+            <rect x="4" y="14" width="22" height="3" rx="1" />
+            <rect x="4" y="21" width="22" height="3" rx="1" />
+          </svg>
+        </div>
 
-			<div class="chat-content-container">
-					<template v-for="(message) in messageList" :key="message.messageId" >
-
-            <div v-if="message.messageType === 'TALK'">
-              <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
-                <span class="chat-message">
-                  <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
-                </span>
+        <div class="chat-content-container">
+            <template v-for="(message) in messageList" :key="message.messageId" >
+              <div v-if="message.messageType === 'TALK'">
+                <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
+                  <span class="chat-message">
+                    <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
+                  </span>
+                </div>
+                <div class="my-message-section" v-else>
+                  <span class="my-message">{{ message.message }}</span>
+                </div>
               </div>
-              <div class="my-message-section" v-else>
-                <span class="my-message">{{ message.message }}</span>
+  
+              <div class="message-center-section" v-else>
+                <span class="message-center">{{ message.message }}</span>
               </div>
-            </div>
+            </template>
 
-            <div class="message-center-section" v-else>
-              <span class="message-center">{{ message.message }}</span>
-            </div>
+            <transition name="slide-right">
+              <div class="chat-menu-container" v-if="displayMenu">
+                <div class="chat-participant-list">
+      
+                </div>
+                <div class="chat-menu-button-container">
+      
+                </div>
+              </div>
+            </transition>
+        </div>
 
 
-					</template>
-			</div>
+      </div>
 
 			<input
-					v-model="input"
-					@keyup.enter="send"
+					v-model="messageInput"
+					@keyup.enter="send()"
 					type="text"
 					placeholder="메시지를 입력하세요"
 					class="chat-input"
@@ -96,15 +125,71 @@ const send = () => {
 
 <style scoped>
 
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #514fe1;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.chat-title-menu-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 5px 10px;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chat-menu-button {
+  color: #514fe1;
+  cursor: pointer;
+}
+
+.chat-menu-container {
+  position: absolute;
+  background: #fff;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 500px;
+  padding: 0px;
+  border-top: 1px solid #514fe1;
+  border-bottom-right-radius: 10px;
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-right-enter-to,
+.slide-right-leave-from {
+  transform: translateX(0);
+}
+
 .chat-content-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
   height: 500px;
   padding: 10px;
   background: #514fe1;
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .chat-message-section {
