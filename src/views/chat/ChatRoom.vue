@@ -27,13 +27,17 @@ const displayMenu = ref(false);
 
 // 메세지 수신 후 콜백
 const onMessageReceived = (message) => {
-	messageList.value.push(message);
+  if(message.messageType === 'TALK') {
+    messageList.value.push(message);
+  }else {
+    getChatMessageList();
+  }
 }
 
 // 이전 채팅 내역 조회
 function getChatMessageList() {
   customAxios
-    .get(`/chats/${props.chatRoomId}`)
+    .get(`/chats/${roomId}`)
     .then(res => {
       postTitle.value = res.data.postTitle;
       messageList.value = res.data.messageList;
@@ -69,6 +73,7 @@ function send() {
 };
 
 function clickParticipant(participant) {
+
   if(hostId.value !== auth.member.id) {
     globalStore.alert.openAlert('참가자 관련 기능은 방장만 가능합니다');
     return;
@@ -79,8 +84,15 @@ function clickParticipant(participant) {
     return;
   }
 
-  globalStore.confirm.openConfirm(`${participant.nickname}님을 강퇴하시겠습니까?`, () => {
-    console.log('강퇴!');
+  globalStore.confirm.openConfirm(`${participant.nickname}님을 강퇴하시겠습니까? (참가자의 동행 신청이 철회됩니다)`, () => {
+    customAxios
+      .delete(`/chats/${roomId}/participants/${participant.id}`)
+      .then(res => {
+        getChatMessageList();
+      })
+      .catch(error => {
+
+      })
   });
 }
 
@@ -130,7 +142,7 @@ function clickParticipant(participant) {
                 <div class="chat-participant-list-container">
                   <div class="chat-participant" 
                     v-for="(participant) in participantList" 
-                    :key="participant.memberId"
+                    :key="participant.id"
                     @click="clickParticipant(participant)"
                   >
                     <svg 
