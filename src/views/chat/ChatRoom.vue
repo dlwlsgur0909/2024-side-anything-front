@@ -117,73 +117,72 @@ function clickParticipant(participant) {
           </svg>
         </div>
 
+            <!-- 채팅방 메뉴 -->
+        <transition name="slide-right">
+          <div class="chat-menu-container" v-if="displayMenu">
+            <div class="chat-participant-list-container">
+              <div class="chat-participant" 
+                v-for="(participant) in participantList" 
+                :key="participant.id"
+                @click="clickParticipant(participant)"
+              >
+                <svg 
+                  class="host-icon" version="1.1" id="Layer_1" v-if="participant.isHost"
+                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                  viewBox="0 0 472.615 472.615" xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier"> 
+                    <g> <g> 
+                      <path 
+                        d="M436.475,103.262c-19.961,0-36.141,16.18-36.141,36.141c0,9.776,3.92,18.613,
+                        10.226,25.12l-74.195,71.928l-76.969-122.068 c12.207-7.695,20.378-21.202,
+                        20.378-36.7c0-24.005-19.46-43.467-43.466-43.467c-24.005,0-43.465,19.462-43.465,
+                        43.467 c0,15.468,8.139,28.961,20.31,36.666l-76.938,122.101L62.05,164.528c6.311-6.505,
+                        10.232-15.346,10.232-25.125 c0-19.961-16.181-36.141-36.141-36.141S0,119.442,0,139.403c0,
+                        19.959,16.181,36.139,36.141,36.139 c2.196,0,4.322-0.272,6.411-0.647l34.27,
+                        166.474h318.972l34.27-166.474c2.088,0.378,4.215,0.647,6.412,0.647 c19.96,0,36.14-16.18,
+                        36.14-36.139C472.615,119.442,456.435,103.262,436.475,103.262z"
+                      />
+
+                    </g> </g> 
+                    <g> <g> 
+                      <polygon points="391.714,361.061 80.875,361.061 62.108,438.398 410.481,438.398 " />
+                    </g> </g> 
+                  </g>
+                </svg>
+                <span class="participant-info">
+                  {{ participant.nickname }}
+                  {{ participant.memberId === auth.member.id ? '(나)' : participant.gender === 'MALE' ? '/ 남' : '/ 여' }}
+                </span>
+              </div>
+            </div>
+            <div class="chat-menu-button-container">
+  
+            </div>
+          </div>
+        </transition>
+
         <!-- 채팅방 내용 -->
         <div class="chat-content-container">
-            <template v-for="(message) in messageList" :key="message.messageId" >
-              <div v-if="message.messageType === 'TALK'">
-                <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
-                  <span class="chat-message">
-                    <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
-                  </span>
-                </div>
-                <div class="my-message-section" v-else>
-                  <span class="my-message">{{ message.message }}</span>
-                </div>
+          <template v-for="(message) in messageList" :key="message.messageId" >
+            <div v-if="message.messageType === 'TALK'">
+              <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
+                <span class="chat-message">
+                  <span class="nickname">{{ message.nickname }}:</span> {{ message.message }}
+                </span>
               </div>
+              <div class="my-message-section" v-else>
+                <span class="my-message">{{ message.message }}</span>
+              </div>
+            </div>
   
-              <div class="message-center-section" v-else>
-                <span class="message-center">{{ message.message }}</span>
-              </div>
-            </template>
-
-            <!-- 채팅방 메뉴 -->
-            <transition name="slide-right">
-              <div class="chat-menu-container" v-if="displayMenu">
-                <div class="chat-participant-list-container">
-                  <div class="chat-participant" 
-                    v-for="(participant) in participantList" 
-                    :key="participant.id"
-                    @click="clickParticipant(participant)"
-                  >
-                    <svg 
-                      class="host-icon" version="1.1" id="Layer_1" v-if="participant.isHost"
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                      viewBox="0 0 472.615 472.615" xml:space="preserve"
-                    >
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                      <g id="SVGRepo_iconCarrier"> 
-                        <g> <g> 
-                          <path 
-                            d="M436.475,103.262c-19.961,0-36.141,16.18-36.141,36.141c0,9.776,3.92,18.613,
-                            10.226,25.12l-74.195,71.928l-76.969-122.068 c12.207-7.695,20.378-21.202,
-                            20.378-36.7c0-24.005-19.46-43.467-43.466-43.467c-24.005,0-43.465,19.462-43.465,
-                            43.467 c0,15.468,8.139,28.961,20.31,36.666l-76.938,122.101L62.05,164.528c6.311-6.505,
-                            10.232-15.346,10.232-25.125 c0-19.961-16.181-36.141-36.141-36.141S0,119.442,0,139.403c0,
-                            19.959,16.181,36.139,36.141,36.139 c2.196,0,4.322-0.272,6.411-0.647l34.27,
-                            166.474h318.972l34.27-166.474c2.088,0.378,4.215,0.647,6.412,0.647 c19.96,0,36.14-16.18,
-                            36.14-36.139C472.615,119.442,456.435,103.262,436.475,103.262z"
-                          />
-
-                        </g> </g> 
-                        <g> <g> 
-                          <polygon points="391.714,361.061 80.875,361.061 62.108,438.398 410.481,438.398 " />
-                        </g> </g> 
-                      </g>
-                    </svg>
-                    <span class="participant-info">
-                      {{ participant.nickname }}
-                      {{ participant.memberId === auth.member.id ? '(나)' : participant.gender === 'MALE' ? '/ 남' : '/ 여' }}
-                    </span>
-                  </div>
-                </div>
-                <div class="chat-menu-button-container">
-      
-                </div>
-              </div>
-            </transition>
+            <div class="message-center-section" v-else>
+              <span class="message-center">{{ message.message }}</span>
+            </div>
+          </template>
         </div>
-
 
       </div>
 
@@ -200,10 +199,12 @@ function clickParticipant(participant) {
 <style scoped>
 
 .chat-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid #514fe1;
   border-radius: 10px;
+  overflow-x: hidden;
   user-select: none;
 }
 
@@ -228,11 +229,11 @@ function clickParticipant(participant) {
 .chat-menu-container {
   position: absolute;
   background: #fff;
-  top: 0;
+  top: 50px;
   right: 0;
   width: 200px;
   height: 500px;
-  padding: 0px;
+  padding: 5px;
   border-top: 1px solid #514fe1;
   border-bottom-right-radius: 10px;
 }
@@ -283,7 +284,6 @@ function clickParticipant(participant) {
 }
 
 .chat-content-container {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -293,7 +293,10 @@ function clickParticipant(participant) {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   overflow-y: auto;
-  overflow-x: hidden;
+}
+
+.chat-content-container::-webkit-scrollbar{
+  display:none;
 }
 
 .chat-message-section {
