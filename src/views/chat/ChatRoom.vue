@@ -3,6 +3,7 @@ import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import { connectStomp, sendMessage, disconnectStomp } from '../../utils/stomp.js';
 import globalStore from '@/stores/globalStore.js';
+import CommonButton from '../../components/common/CommonButton.vue';
 
 const props = defineProps({
     chatRoomId: {
@@ -24,6 +25,17 @@ const participantList = ref([]);
 const hostId = ref(0);
 
 const displayMenu = ref(false);
+
+// 버튼 설정
+const buttonConfig = {
+
+  leave: {
+    label: '나가기',
+    fontColor: '#fff',
+    backgroundColor: "#E34444",
+  },
+
+}
 
 // 메세지 수신 후 콜백
 const onMessageReceived = (message) => {
@@ -72,6 +84,7 @@ function send() {
   messageInput.value = '';
 };
 
+// 참가자 강퇴 
 function clickParticipant(participant) {
 
   if(hostId.value !== auth.member.id) {
@@ -94,6 +107,22 @@ function clickParticipant(participant) {
 
       })
   });
+}
+
+// 채팅방 나가기
+function clickLeaveButton() {
+
+  globalStore.confirm.openConfirm(`${postTitle.value} 채팅방을 나가시겠습니까? (동행 신청이 취소됩니다)`, () => {
+  customAxios
+    .delete(`/chats/${roomId}`)
+    .then(res => {
+      globalStore.router.push('/chatRoomList');
+    })
+    .catch(error => {
+
+    })
+  });
+
 }
 
 </script>
@@ -159,7 +188,13 @@ function clickParticipant(participant) {
               </div>
             </div>
             <div class="chat-menu-button-container">
-  
+              <CommonButton
+                class="leave-button"
+                @click="clickLeaveButton()"
+                :label="buttonConfig.leave.label"
+                :fontColor="buttonConfig.leave.fontColor"
+                :backgroundColor="buttonConfig.leave.backgroundColor"
+              />
             </div>
           </div>
         </transition>
@@ -228,12 +263,13 @@ function clickParticipant(participant) {
 
 .chat-menu-container {
   position: absolute;
-  background: #fff;
   top: 50px;
   right: 0;
+  display: flex;
+  flex-direction: column;
   width: 200px;
   height: 500px;
-  padding: 5px;
+  background: #fff;
   border-top: 1px solid #514fe1;
   border-bottom-right-radius: 10px;
 }
@@ -254,9 +290,12 @@ function clickParticipant(participant) {
 }
 
 .chat-participant-list-container {
-  height: 450px;
+  height: 460px;
   overflow-y: auto;
-  border-bottom: 1px solid black;
+}
+
+.chat-participant-list-container::-webkit-scrollbar{
+  display:none;
 }
 
 .chat-participant {
@@ -281,6 +320,16 @@ function clickParticipant(participant) {
 .participant-info {
   font-size: 14px;
   font-weight: 500;
+}
+
+.chat-menu-button-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.leave-button {
+  border-radius: 0;
 }
 
 .chat-content-container {

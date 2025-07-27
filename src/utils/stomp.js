@@ -41,6 +41,12 @@ export const connectStomp = async (roomId, onMessageReceived) => {
             // 입장한 채팅방을 구독
             stompClient.subscribe(`/sub/chat/${roomId}`, (message) => {
                 const payload = JSON.parse(message.body);
+
+                // 채팅방을 나가는 경우 당사자는 콜백 함수 동작 X
+                if(payload.messageType === 'LEAVE' && payload.memberId === auth.member.id) {
+                    return;
+                }
+
                 onMessageReceived(payload); // 서버에서 메세지를 수신하면 동작할 콜백 함수
             });
         },
