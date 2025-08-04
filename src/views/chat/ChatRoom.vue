@@ -125,6 +125,11 @@ function clickLeaveButton() {
 
 }
 
+// 뒤로가기
+function goToChatRoomList() {
+  globalStore.router.push('/chatRoomList');
+}
+
 </script>
 
 <template>
@@ -132,6 +137,15 @@ function clickLeaveButton() {
       <div class="chat-container">
         <!-- 채팅방 상단 -->
         <div class="chat-title-menu-button-container">
+          <svg 
+            class="prev-button"
+            @click="goToChatRoomList()"
+            xmlns="http://www.w3.org/2000/svg" height="24" fill="none" 
+            stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+          >
+            <line x1="10" y1="12" x2="2222" y2="12" />
+            <polyline points="12 5 5 12 12 19" />
+          </svg>
           <span class="post-title">{{ postTitle }}</span>
           <svg 
             @click="displayMenu = !displayMenu"
@@ -249,6 +263,15 @@ function clickLeaveButton() {
   align-items: center;
   height: 50px;
   padding: 5px 10px;
+}
+
+.prev-button {
+  width: 30px;
+  cursor: pointer;
+}
+
+.prev-button:hover {
+  color: #524FE1;
 }
 
 .post-title {
