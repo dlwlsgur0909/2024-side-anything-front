@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import { connectStomp, sendMessage, disconnectStomp } from '../../utils/stomp.js';
 import globalStore from '@/stores/globalStore.js';
@@ -16,6 +16,8 @@ const customAxios = inject('customAxios');
 
 const roomId = props.chatRoomId;
 const auth = useAuthStore();
+
+const messageContainer = ref(null);
 
 const messageInput = ref('');
 const postTitle = ref('');
@@ -37,10 +39,17 @@ const buttonConfig = {
 
 }
 
+// 메세지 최하단으로 스크롤
+async function scrollToBottom() {
+  await nextTick();
+  messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+}
+
 // 메세지 수신 후 콜백
 const onMessageReceived = (message) => {
   if(message.messageType === 'TALK') {
     messageList.value.push(message);
+    scrollToBottom();
   }else {
     getChatMessageList();
   }
@@ -57,6 +66,8 @@ function getChatMessageList() {
       hostId.value = res.data.participantList
         .find(participant => participant.isHost)
         .memberId;
+
+      scrollToBottom();
     })
     .catch(error => {
       globalStore.router.push('/chatRoomList');
@@ -214,7 +225,7 @@ function goToChatRoomList() {
         </transition>
 
         <!-- 채팅방 내용 -->
-        <div class="chat-content-container">
+        <div class="chat-content-container" ref="messageContainer">
           <template v-for="(message) in messageList" :key="message.messageId" >
             <div v-if="message.messageType === 'TALK'">
               <div class="chat-message-section" v-if="message.memberId !== auth.member.id">
