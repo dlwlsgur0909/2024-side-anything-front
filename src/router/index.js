@@ -81,6 +81,17 @@ const router = createRouter({
       component: () => import('../views/companion/MyCompanionPostDetail.vue'),
       props: true
     },
+    {
+      path: '/chatRoomList',
+      name: 'ChatRoomList',
+      component: () => import('../views/chat/ChatRoomList.vue')
+    },
+    {
+      path: '/chatRoom/:chatRoomId',
+      name: 'ChatRoom',
+      component: () => import('../views/chat/ChatRoom.vue'),
+      props: true
+    },
     // {
     //   path: '/portfolioUpdate/:portfolioId',
     //   name: 'PortfolioUpdate',

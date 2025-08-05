@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/authStore.js';
 import globalStore from '../../stores/globalStore.js';
 
-const menuList = ['HOME', 'MYINFO', 'COMPANION', 'BOARD'];
+const menuList = ['HOME', 'MYINFO', 'COMPANION', 'CHAT'];
 const selectedMenu = ref('HOME');
 
 const displaySideMenu = ref(false);
@@ -48,6 +48,12 @@ function onClickCompanion() {
   sessionStorage.setItem('menu', 'COMPANION');
   globalStore.router.push('/companionPostList');
 
+}
+
+function onClickChat() {
+  selectedMenu.value = 'CHAT';
+  sessionStorage.setItem('menu', 'CHAT');
+  globalStore.router.push('/chatRoomList');
 }
 
 function toggleSideMenu() {
@@ -95,7 +101,12 @@ window.addEventListener('resize', () => {
           동행
         </div>
   
-        <div class="top-menu-item">자유게시판</div>
+        <div class="top-menu-item"
+          :class="selectedMenu === 'CHAT' ? 'top-menu-item-selected' : ''"
+          @click="onClickChat()"
+        >
+          채팅
+        </div>
       </div>
   
     </div>

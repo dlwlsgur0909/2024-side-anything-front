@@ -82,6 +82,7 @@ function validateJoin() {
 
   if(!gender.value?.trim()) {
     globalStore.alert.openAlert('성별을 선택해주세요');
+    return false;
   }
   
   if(!nickname.value?.trim()) {

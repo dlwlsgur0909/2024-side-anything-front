@@ -2,9 +2,9 @@
 
 import { ref, inject, onMounted } from 'vue'; 
 import globalStore from '../../stores/globalStore.js';
+import Pagination from '../../components/common/Pagination.vue';
 import CommonButton from '../../components/common/CommonButton.vue';
 import CommonStatusLabel from '../../components/common/CommonStatusLabel.vue';
-import Pagination from '../../components/common/Pagination.vue';
 
 const customAxios = inject('customAxios');
 
@@ -12,36 +12,34 @@ const customAxios = inject('customAxios');
 const currentPage = ref(1);
 const totalPages = ref(0);
 
-// 검색어 
 const keyword = ref('');
 
-// 동행 모집 목록 
-const postList = ref([]);
+// 버튼 설정
+const buttonConfig = {
+  search: {
+    label: '검색',
+    fontColor: 'white',
+    backgroundColor: 'black'
+  },
+}
 
-// 동행 모집 목록 조회 API
-function getCompanionPostList() {
+// 채팅방 목록
+const roomList = ref([]);
 
-  // request parameter에 인코딩이 필요한 특수문자가 들어가면 에러가 발생하므로 encodeURIComponent 사용
+// 채팅방 목록 조회 API
+function getChatRoomList() {
   customAxios
-    .get(`/companions?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
+    .get(`/chats?page=${currentPage.value}&keyword=${encodeURIComponent(keyword.value)}`)
     .then(res => {
-      postList.value = res.data.postList;
+      roomList.value = res.data.roomList;
       totalPages.value = res.data.totalPages;
     })
     .catch(error => {
+
     })
-
 }
 
-// 검색 이벤트
-function onClickSearch() {
-  keyword.value = keyword.value.trim();
-  currentPage.value = 1;
-  getCompanionPostList();
-
-}
-
-// 최초 동행 모집 목록 조회
+// 최초 채팅방 목록 조회
 onMounted(() => {
 
   // 저장된 검색어, 현재 페이지 정보
@@ -54,37 +52,35 @@ onMounted(() => {
   keyword.value = savedKeyword ? savedKeyword : '';
   currentPage.value = savedCurrentPage ? savedCurrentPage : 1;
 
-  getCompanionPostList();
+  getChatRoomList();
 })
 
-// 동행 모집 상세 페이지 이동
-function goToCompanionPostDetail(postId) {
+// 채팅방으로 페이지 이동
+function goToChatRoom(chatRoomId) {
 
   // 검색어, 현재 페이지 정보 저장
   sessionStorage.setItem('keyword', keyword.value);
   sessionStorage.setItem('currentPage', currentPage.value);
 
   globalStore.router.push({
-    name: 'CompanionPostDetail',
+    name: 'ChatRoom',
     params: {
-      companionPostId: postId
+      chatRoomId: chatRoomId
     }
   });
+}
+
+// 검색 이벤트
+function onClickSearch() {
+  keyword.value = keyword.value.trim();
+  currentPage.value = 1;
+  getChatRoomList();
 }
 
 // 페이지 변경
 function changePage(page) {
   currentPage.value = page;
-  getCompanionPostList();
-}
-
-// 버튼 설정
-const buttonConfig = {
-  search: {
-    label: '검색',
-    fontColor: 'white',
-    backgroundColor: 'black'
-  }
+  getChatRoomList();
 }
 
 </script>
@@ -92,13 +88,13 @@ const buttonConfig = {
 <template>
   <div class="main">
 
-    <div class="companion-post-search-container">
+    <div class="chat-room-search-container">
       <input type="text" 
-        class="companion-post-search-box" placeholder="제목 / 장소"
+        class="chat-room-search-box" placeholder="제목"
         v-model="keyword" @keyup.enter="onClickSearch()"
       />
       <CommonButton
-        class="companion-post-search-button"
+        class="chat-room-search-button"
         :label="buttonConfig.search.label"
         :fontColor="buttonConfig.search.fontColor"
         :background-color="buttonConfig.search.backgroundColor"
@@ -106,33 +102,27 @@ const buttonConfig = {
       />
     </div>
 
-
-    <div class="companion-post-list-container" v-if="postList.length > 0">
+    <div class="chat-list-container" v-if="roomList.length > 0">
       <div class="list-item-container" 
-        v-for="(post) in postList" :key="post.id"
-        @click="goToCompanionPostDetail(post.id)"
+        v-for="(room) in roomList" :key="room.chatRoomId"
+        @click="goToChatRoom(room.roomId)"
       >
         <div class="item-title-status">
-          {{ post.title }}
+          {{ room.postTitle }}
           <CommonStatusLabel
-            :status="post.status"
+            :status="room.postStatus"
           />
         </div>
-        <div class="item-location">
-          장소: {{ post.location }}
-        </div>
-        <div class="item-duration">
-          {{ post.startDate }} ~ {{ post.endDate }}
-        </div>
       </div>
+
     </div>
 
     <div class="no-content" v-else>
-      <span class="no-content-message">등록된 동행이 없습니다 😢</span>
+      <span class="no-content-message">참여중인 채팅이 없습니다 😢</span>
     </div>
 
     <Pagination
-      v-if="postList.length > 0"
+      v-if="roomList.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       @changePage="(page) => changePage(page)"
@@ -143,23 +133,23 @@ const buttonConfig = {
 
 <style scoped>
 
-.companion-post-search-container {
+.chat-room-search-container {
   display: flex;
   gap: 20px;
 }
 
-.companion-post-search-box {
+.chat-room-search-box {
   height: 40px;
   border-radius: 5px;
   flex: 1;
 }
 
-.companion-post-search-button {
+.chat-room-search-button {
   flex: 1;
   max-width: 100px;
 }
 
-.companion-post-list-container {
+.chat-list-container {
   display: flex;
   flex-direction: column;
 }
@@ -176,8 +166,8 @@ const buttonConfig = {
 }
 
 .list-item-container:hover {
-  background: #514fe1;
   color: #fff;
+  background: #524FE1;
 }
 
 .item-title-status {
@@ -191,7 +181,7 @@ const buttonConfig = {
   display: flex;
   justify-content: center;
   word-break: keep-all;
-  text-align: center;    
+  text-align: center;     
 }
 
 .item-duration {
