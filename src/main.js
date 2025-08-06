@@ -17,11 +17,14 @@ app.provide('customAxios', customAxios());
 const auth = useAuthStore();
 const alert = useAlertStore();
 
-if(!!localStorage.getItem("ACCESS")) {
+if(!!localStorage.getItem("ACCESS") && auth.checkExpiration()) {
+  
   if(!await auth.reissue()) {
     router.push('/login');
+    localStorage.removeItem('ACCESS');
     alert.openAlert('로그인이 만료되었습니다');
   }
+
 }else {
   auth.setMember(null);
 }
