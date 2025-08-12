@@ -19,7 +19,7 @@ function adminDetail() {
     .then(res => {
       username.value = res.data.username;
     })
-    .catch(e => {
+    .catch(error => {
       globalStore.router.push('/');
     })
 
@@ -62,9 +62,13 @@ const buttonConfig = {
 </script>
 
 <template>
-  <div class="main-container">
-    <div class="page-title">This is Admin page</div>
-    <div class="username-label">{{ username }} 관리자님</div>
+  <div class="main">
+    <div class="home-greeting-container">
+      <h1>안녕하세요 {{ auth.member?.name }}님 😊</h1>
+    </div>
+    <div>
+      여기에는 통계 같은 자료
+    </div>
     <div class="button-section">
       <CommonButton
         class="member-list-button"
@@ -92,25 +96,9 @@ const buttonConfig = {
 
 <style scoped>
 
-.main-container {
+.home-greeting-container {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 20px;
-  width: 80%;
-  height: 98vh;
-  padding: 50% 5% 5% 5%;
-  border-radius: 10px;
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.username-label {
-  font-size: 18px;
-  font-weight: bold;
+  justify-content: center;
 }
 
 .button-section {

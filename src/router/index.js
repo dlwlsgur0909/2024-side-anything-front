@@ -34,7 +34,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'Admin',
-      component: () => import('../views/AdminView.vue'),
+      component: () => import('../views/AdminHomeView.vue'),
     },
     {
       path: '/social-join',
