@@ -10,7 +10,7 @@ import CommonAlert from './components/common/CommonAlert.vue';
 import CommonConfirm from './components/common/CommonConfirm.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';
 
-import TopMenu from './components/menu/TopMenu.vue';
+import Menu from './components/menu/Menu.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -26,7 +26,7 @@ globalStore.spinner = spinner;
 </script>
 
 <template>
-  <TopMenu 
+  <Menu 
     v-if="auth.isLogin && auth.member.isProfileCompleted"
   />
   <div class="wrapper">

@@ -19,7 +19,7 @@ const customAxios = () => {
                 globalStore.spinner.startSpinner();
             }
             
-            const accessToken = localStorage.getItem('ACCESS');
+            const accessToken = JSON.parse(localStorage.getItem('ACCESS')).accessToken;
             config.headers['Authorization'] = `Bearer ${accessToken}`;
             return config;
         },

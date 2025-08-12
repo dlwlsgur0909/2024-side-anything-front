@@ -3,11 +3,10 @@ import axios from 'axios';
 import globalStore from './globalStore.js';
 
 export const useAuthStore = defineStore({
-	
     id: 'auth',
     state: () => ({
 		member: null,
-        isLogin: !!localStorage.getItem('ACCESS'), // 로그인 여부
+        isLogin: false // 로그인 여부
     }),
     actions: {
         setMember(member) {
@@ -17,7 +16,11 @@ export const useAuthStore = defineStore({
 				localStorage.removeItem("ACCESS");
             }else {
 				this.isLogin = true;
-				localStorage.setItem('ACCESS', member.accessToken)
+				const item = {
+					accessToken: member.accessToken,
+					expiration: new Date().getTime() + (60 * 60 * 1000)
+				}
+				localStorage.setItem('ACCESS', JSON.stringify(item));
             }
         },
 		// 로그인 
@@ -90,7 +93,22 @@ export const useAuthStore = defineStore({
 				.catch(e => {
 					globalStore.alert.openAlert(e.response.data.errorMessage);
 				})
+		},
+		// LocalStorage 토큰 만료 검증
+		checkExpiration() {
+		    
+			let result = false;
+
+			if(!!localStorage.getItem('ACCESS')) {
+				const now = new Date().getTime();
+  				const expiration = JSON.parse(localStorage.getItem('ACCESS')).expiration;
+
+				result = expiration > now;
+			}
+			
+			return result;
 		}
+
     }
 
 })

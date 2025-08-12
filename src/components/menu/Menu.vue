@@ -101,7 +101,8 @@ window.addEventListener('resize', () => {
           동행
         </div>
   
-        <div class="top-menu-item"
+        <div 
+          class="top-menu-item"
           :class="selectedMenu === 'CHAT' ? 'top-menu-item-selected' : ''"
           @click="onClickChat()"
         >
@@ -157,7 +158,13 @@ window.addEventListener('resize', () => {
               동행
             </div>
       
-            <div class="side-menu-item">자유게시판</div>
+            <div 
+              class="side-menu-item"
+              :class="selectedMenu === 'CHAT' ? 'top-menu-item-selected' : ''"
+              @click="onClickChat()"
+            >
+                채팅
+            </div>
           </div>
         </div>
       </transition>

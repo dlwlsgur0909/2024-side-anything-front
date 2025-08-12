@@ -63,9 +63,6 @@ const buttonConfig = {
 
 <template>
   <div class="main-container">
-    <div con>
-
-    </div>
     <div class="page-title">This is Admin page</div>
     <div class="username-label">{{ username }} 관리자님</div>
     <div class="button-section">

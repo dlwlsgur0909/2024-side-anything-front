@@ -38,8 +38,12 @@ function login() {
   auth.login(request,
     (data) => {
       auth.setMember(data);
-      globalStore.router.push('/');
       globalStore.spinner.stopSpinner();
+      if(data.role === 'USER') {
+        globalStore.router.push('/');
+      }else if(data.role === 'ADMIN') {
+        globalStore.router.push('/admin');
+      }
     },
     async (error) => {
       if(error.response.data.errorCode === 403) {
