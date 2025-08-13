@@ -11,6 +11,7 @@ import CommonConfirm from './components/common/CommonConfirm.vue';
 import CommonSpinner from './components/common/CommonSpinner.vue';
 
 import Menu from './components/menu/Menu.vue';
+import AdminMenu from './components/menu/AdminMenu.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -23,11 +24,20 @@ globalStore.alert = alert;
 globalStore.confirm = confirm;
 globalStore.spinner = spinner;
 
+function displayMenu(role) {
+  return auth.isLogin && 
+         auth.member.isProfileCompleted && 
+         auth.member.role === role;
+}
+
 </script>
 
 <template>
   <Menu 
-    v-if="auth.isLogin && auth.member.isProfileCompleted"
+    v-if="displayMenu('USER')"
+  />
+  <AdminMenu
+    v-if="displayMenu('ADMIN')"
   />
   <div class="wrapper">
     <div class="main-container">
