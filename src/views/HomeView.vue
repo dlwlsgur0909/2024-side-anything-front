@@ -1,10 +1,41 @@
 <script setup>
 
+import { ref, inject, onMounted } from 'vue';
 import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 import CommonButton from '@/components/common/CommonButton.vue';
 
 const auth = useAuthStore();
+const customAxios = inject('customAxios');
+
+
+const myCompanionPostList = ref([]);
+const myCompanionApplicationList = ref([]);
+
+// 내 동행 신청 목록
+function getMyCompanionApplicationList() {
+  customAxios
+    .get('/companions/my-applications')
+    .then(res => {
+      myCompanionApplicationList.value = res.data;
+    })
+    .catch(error => {})
+}
+
+// 내 동행 모집 목록
+function getMyCompanionPostList() {
+  customAxios
+    .get('/companions/my-posts')
+    .then(res => {
+      myCompanionPostList.value = res.data;
+    })
+    .catch(error => {})
+}
+
+onMounted(() => {
+  getMyCompanionApplicationList();
+  getMyCompanionPostList();
+})
 
 // 내 동행 모집 페이지 이동
 function goToMyCompanionPostList() {
@@ -33,6 +64,11 @@ const buttonConfig = {
     fontColor: '#fff',
     backgroundColor: '#000'
   },
+  myInfo: {
+    label: '내 정보',
+    fontColor: '#fff',
+    backgroundColor: '#000'
+  },
   logout: {
     label: '로그아웃',
     fontColor: '#fff',
@@ -47,20 +83,14 @@ const buttonConfig = {
     <div class="home-greeting-container">
       <h1>안녕하세요 {{ auth.member?.name }}님 😊</h1>
     </div>
+
     <div class="my-menu">
       <CommonButton
-        class="my-companion-post-button"
-        @click="goToMyCompanionPostList()"
-        :label="buttonConfig.myCompanionPost.label"
-        :fontColor="buttonConfig.myCompanionPost.fontColor"
-        :backgroundColor="buttonConfig.myCompanionPost.backgroundColor"
-      />
-      <CommonButton
-        class="my-companion-application-button"
-        @click="goToMyCompanionApplicationList()"
-        :label="buttonConfig.myCompanionApplication.label"
-        :fontColor="buttonConfig.myCompanionApplication.fontColor"
-        :backgroundColor="buttonConfig.myCompanionApplication.backgroundColor"
+        class="my-info-button"
+        @click="auth.logout()"
+        :label="buttonConfig.myInfo.label"
+        :fontColor="buttonConfig.myInfo.fontColor"
+        :backgroundColor="buttonConfig.myInfo.backgroundColor"
       />
       <CommonButton
         class="logout-button"
@@ -70,8 +100,31 @@ const buttonConfig = {
         :backgroundColor="buttonConfig.logout.backgroundColor"
       />
     </div>
-    <div>
-      포트폴리오 목록 (등록일/조회수/좋아요 기준 top 5) 
+
+    <div class="monthly-recommended-place">
+      <span class="title-label">이 달의 추천 여행지</span>
+    </div>
+
+    <div class="my-companion-application">
+      <span class="title-label">내 동행 신청</span>
+      <CommonButton
+        class="my-companion-application-button"
+        @click="goToMyCompanionApplicationList()"
+        :label="buttonConfig.myCompanionApplication.label"
+        :fontColor="buttonConfig.myCompanionApplication.fontColor"
+        :backgroundColor="buttonConfig.myCompanionApplication.backgroundColor"
+      />
+    </div>
+    
+    <div class="my-companion-post">
+      <span class="title-label">내 동행 모집</span>
+      <CommonButton
+        class="my-companion-post-button"
+        @click="goToMyCompanionPostList()"
+        :label="buttonConfig.myCompanionPost.label"
+        :fontColor="buttonConfig.myCompanionPost.fontColor"
+        :backgroundColor="buttonConfig.myCompanionPost.backgroundColor"
+      />
     </div>
     <button @click="admin()">관리자</button>
   </div>
@@ -90,8 +143,25 @@ const buttonConfig = {
   gap: 20px;
 }
 
-.my-companion-post-button,
-.my-companion-application-button,
+.monthly-recommended-place {
+  border: 1px solid red;
+}
+
+.my-companion-application {
+  border: 1px solid red;
+}
+
+.my-companion-post {
+  border: 1px solid red;
+}
+
+.title-label {
+  font-size: 16px;
+  font-weight: 700;
+  border: 1px solid blue;
+}
+
+.my-info-button,
 .logout-button {
   flex: 1;
 }
@@ -104,6 +174,7 @@ const buttonConfig = {
 
   .my-info-button,
   .my-portfolio-button,
+  .my-info-button,
   .logout-button {
     width: 30%;
   }
