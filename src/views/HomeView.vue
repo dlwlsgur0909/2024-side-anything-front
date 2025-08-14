@@ -108,10 +108,11 @@ const buttonConfig = {
         <div class="list-content" v-for="(application) in myCompanionApplicationList" :key="application.id">
           <span class="post-title">{{ application.postTitle }}</span>
           <span class="post-location">{{ application.postLocation }}</span>
-          <CommonStatusLabel
-            class="status"
-            :status="application.applicationStatus"
-          />
+          <span class="status">
+            <CommonStatusLabel
+              :status="application.applicationStatus"
+            />
+          </span>
         </div>
       </div>
       <span class="no-content" v-else>아직 신청한 동행이 없습니다😢</span>
@@ -128,10 +129,11 @@ const buttonConfig = {
         <div class="list-content" v-for="(post) in myCompanionPostList" :key="post.id">
           <span class="post-title">{{ post.title }}</span>
           <span class="post-location">{{ post.location }}</span>
-          <CommonStatusLabel
-            class="status"
-            :status="post.status"
-          />
+          <span class="status">
+            <CommonStatusLabel
+              :status="post.status"
+            />
+          </span>
         </div>
       </div>
       <span class="no-content" v-else>아직 등록한 동행이 없습니다😢</span>
@@ -193,7 +195,7 @@ const buttonConfig = {
 }
 
 .post-title-header {
-  flex: 7;
+  flex: 6;
   text-align: center;
   font-weight: 600;
 }
@@ -205,7 +207,7 @@ const buttonConfig = {
 }
 
 .status-header {
-  flex: 1;
+  flex: 2;
   text-align: center;
   font-weight: 600;
 }
@@ -215,7 +217,7 @@ const buttonConfig = {
 }
 
 .post-title {
-  flex: 7;
+  flex: 6;
   text-align: center;
 }
 
@@ -224,10 +226,17 @@ const buttonConfig = {
   text-align: center;
 }
 
+.status {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
 .no-content {
   font-weight: 600;
   text-align: center;
 }
+
 
 .my-info-button,
 .logout-button {
@@ -240,8 +249,6 @@ const buttonConfig = {
     align-items: center;
   }
 
-  .my-info-button,
-  .my-portfolio-button,
   .my-info-button,
   .logout-button {
     width: 30%;
