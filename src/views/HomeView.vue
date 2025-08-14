@@ -105,7 +105,6 @@ const buttonConfig = {
           <span class="post-location-header">장소</span>
           <span class="status-header">상태</span>
         </div>
-
         <div class="list-content" v-for="(application) in myCompanionApplicationList" :key="application.id">
           <span class="post-title">{{ application.postTitle }}</span>
           <span class="post-location">{{ application.postLocation }}</span>
@@ -126,7 +125,6 @@ const buttonConfig = {
           <span class="post-location-header">장소</span>
           <span class="status-header">상태</span>
         </div>
-
         <div class="list-content" v-for="(post) in myCompanionPostList" :key="post.id">
           <span class="post-title">{{ post.title }}</span>
           <span class="post-location">{{ post.location }}</span>
@@ -138,8 +136,6 @@ const buttonConfig = {
       </div>
       <span class="no-content" v-else>아직 등록한 동행이 없습니다😢</span>
     </div>
-
-    <button @click="admin()">관리자</button>
   </div>
 </template>
 
