@@ -4,6 +4,7 @@ import { ref, inject, onMounted } from 'vue';
 import { useAuthStore } from '../stores/authStore.js';
 import globalStore from '../stores/globalStore.js';
 import CommonButton from '@/components/common/CommonButton.vue';
+import CommonStatusLabel from '@/components/common/CommonStatusLabel.vue';
 
 const auth = useAuthStore();
 const customAxios = inject('customAxios');
@@ -17,7 +18,7 @@ function getMyCompanionApplicationList() {
   customAxios
     .get('/companions/my-applications')
     .then(res => {
-      myCompanionApplicationList.value = res.data;
+      myCompanionApplicationList.value = res.data.applicationList
     })
     .catch(error => {})
 }
@@ -27,11 +28,12 @@ function getMyCompanionPostList() {
   customAxios
     .get('/companions/my-posts')
     .then(res => {
-      myCompanionPostList.value = res.data;
+      myCompanionPostList.value = res.data.postList;
     })
     .catch(error => {})
 }
 
+// 초기 데이터 로드
 onMounted(() => {
   getMyCompanionApplicationList();
   getMyCompanionPostList();
@@ -54,16 +56,6 @@ function admin() {
 
 // 버튼 설정
 const buttonConfig = {
-  myCompanionPost: {
-    label: '내 동행 모집',
-    fontColor: '#fff',
-    backgroundColor: '#000'
-  },
-  myCompanionApplication: {
-    label: '내 동행 신청',
-    fontColor: '#fff',
-    backgroundColor: '#000'
-  },
   myInfo: {
     label: '내 정보',
     fontColor: '#fff',
@@ -102,30 +94,51 @@ const buttonConfig = {
     </div>
 
     <div class="monthly-recommended-place">
-      <span class="title-label">이 달의 추천 여행지</span>
+      <span class="title-label">이달의 추천 여행지</span>
     </div>
 
     <div class="my-companion-application">
-      <span class="title-label">내 동행 신청</span>
-      <CommonButton
-        class="my-companion-application-button"
-        @click="goToMyCompanionApplicationList()"
-        :label="buttonConfig.myCompanionApplication.label"
-        :fontColor="buttonConfig.myCompanionApplication.fontColor"
-        :backgroundColor="buttonConfig.myCompanionApplication.backgroundColor"
-      />
+      <span class="title-label" @click="goToMyCompanionApplicationList()">내 동행 신청</span>
+      <div class="my-companion-application-list" v-if="myCompanionApplicationList.length > 0">
+        <div class="list-header">
+          <span class="post-title-header">동행명</span>
+          <span class="post-location-header">장소</span>
+          <span class="status-header">상태</span>
+        </div>
+
+        <div class="list-content" v-for="(application) in myCompanionApplicationList" :key="application.id">
+          <span class="post-title">{{ application.postTitle }}</span>
+          <span class="post-location">{{ application.postLocation }}</span>
+          <CommonStatusLabel
+            class="status"
+            :status="application.applicationStatus"
+          />
+        </div>
+      </div>
+      <span class="no-content" v-else>아직 신청한 동행이 없습니다😢</span>
     </div>
     
     <div class="my-companion-post">
-      <span class="title-label">내 동행 모집</span>
-      <CommonButton
-        class="my-companion-post-button"
-        @click="goToMyCompanionPostList()"
-        :label="buttonConfig.myCompanionPost.label"
-        :fontColor="buttonConfig.myCompanionPost.fontColor"
-        :backgroundColor="buttonConfig.myCompanionPost.backgroundColor"
-      />
+      <span class="title-label" @click="goToMyCompanionPostList()">내 동행 모집</span>
+      <div class="my-companion-post-list" v-if="myCompanionPostList.length > 0">
+        <div class="list-header">
+          <span class="post-title-header">동행명</span>
+          <span class="post-location-header">장소</span>
+          <span class="status-header">상태</span>
+        </div>
+
+        <div class="list-content" v-for="(post) in myCompanionPostList" :key="post.id">
+          <span class="post-title">{{ post.title }}</span>
+          <span class="post-location">{{ post.location }}</span>
+          <CommonStatusLabel
+            class="status"
+            :status="post.status"
+          />
+        </div>
+      </div>
+      <span class="no-content" v-else>아직 등록한 동행이 없습니다😢</span>
     </div>
+
     <button @click="admin()">관리자</button>
   </div>
 </template>
@@ -144,21 +157,80 @@ const buttonConfig = {
 }
 
 .monthly-recommended-place {
+  display: flex;
+  flex-direction: column;
   border: 1px solid red;
 }
 
 .my-companion-application {
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
 }
 
 .my-companion-post {
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
 }
 
 .title-label {
+  align-self: flex-start;
   font-size: 16px;
   font-weight: 700;
-  border: 1px solid blue;
+  cursor: pointer;
+}
+
+.title-label:hover {
+  color: #524FE1;
+}
+
+.my-companion-application-list,
+.my-companion-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.list-header {
+  display: flex;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #000;
+}
+
+.post-title-header {
+  flex: 7;
+  text-align: center;
+  font-weight: 600;
+}
+
+.post-location-header {
+  flex: 2;
+  text-align: center;
+  font-weight: 600;
+}
+
+.status-header {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+}
+
+.list-content {
+  display: flex;
+}
+
+.post-title {
+  flex: 7;
+  text-align: center;
+}
+
+.post-location {
+  flex: 2;
+  text-align: center;
+}
+
+.no-content {
+  font-weight: 600;
+  text-align: center;
 }
 
 .my-info-button,
